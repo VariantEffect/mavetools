@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 requirements = [
-    "fqfa>=1.1.0",
+    "fqfa>=1.2.1",
     "mavehgvs",
 ]
 # fqfa requires backported dataclasses in Python 3.6
