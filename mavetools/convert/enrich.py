@@ -4,6 +4,8 @@ from mavehgvs import Variant, MaveHgvsParseError
 from fqfa import infer_sequence_type, translate_dna
 from fqfa.constants import AA_CODES
 
+__all__ = ["seqid_to_variant"]
+
 
 def seqid_to_variant(seqid: str, wtseq: str) -> Variant:
     """Convert an Enrich seqid string to a mavehgvs Variant object.
