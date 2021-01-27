@@ -32,7 +32,7 @@ def seqid_to_variant(seqid: str, wtseq: str) -> Variant:
     ValueError
         If the seqid is not in the expected format.
     ValueError
-        If the wild-type sequence is not valid for the given seqid.
+        If the wild-type sequence is not valid for the given seqid or contains partial codons.
 
     """
     try:
@@ -51,7 +51,9 @@ def seqid_to_variant(seqid: str, wtseq: str) -> Variant:
 
     wtseq_type = infer_sequence_type(wtseq, report_iupac=True)
     if wtseq_type == "dna":
-        wtseq = translate_dna(wtseq)
+        wtseq, remainder = translate_dna(wtseq)
+        if remainder is not None:
+            raise ValueError("wild-type sequence contains incomplete codons")
     elif wtseq_type == "protein":
         pass
     else:
@@ -62,7 +64,15 @@ def seqid_to_variant(seqid: str, wtseq: str) -> Variant:
 
     variant_dicts = list()
     for pos, aa in zip(positions, alt_amino_acids):
-        variant_dicts.append({"vtype": "sub", "positions": pos, "sequences": (AA_CODES[wtseq[pos - 1]], aa)})
+        variant_dicts.append(
+            {
+                "variant_type": "sub",
+                "prefix": "p",
+                "position": pos,
+                "target": AA_CODES[wtseq[pos - 1]],
+                "variant": aa,
+            }
+        )
 
     if len(variant_dicts) == 1:
         return Variant(variant_dicts[0], targetseq=wtseq)
