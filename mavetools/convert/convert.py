@@ -33,12 +33,19 @@ def codon_sub_to_mavehgvs(
     ------
     ValueError
         If either codon is not valid.
+    ValueError
+        If the position is less than 1.
 
     """
     if len(target_codon) != 3 or not dna_bases_validator(target_codon):
         raise ValueError("invalid target codon")
     if len(variant_codon) != 3 or not dna_bases_validator(variant_codon):
         raise ValueError("invalid variant codon")
+    try:
+        if aa_position < 1:
+            raise ValueError("invalid amino acid position")
+    except TypeError:  # aa_position isn't numeric
+        raise ValueError("invalid amino acid position")
 
     if target_codon == variant_codon:
         variant_string = "c.="
