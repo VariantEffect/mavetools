@@ -1,18 +1,17 @@
-import setuptools
+from setuptools import find_packages, setup
 import sys
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requirements = [
-    "fqfa>=1.2.1",
-    "mavehgvs",
-]
+with open('requirements.txt') as f:
+    requirements = f.readlines()
+
 # fqfa requires backported dataclasses in Python 3.6
 if sys.version_info.major == 3 and sys.version_info.minor == 6:
     requirements.append("dataclasses")
 
-setuptools.setup(
+setup(
     name="mavetools",
     version="0.0.1",
     author="Alan F Rubin",
@@ -23,7 +22,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/VariantEffect/mavetools",
-    packages=setuptools.find_packages(),
+    packages=find_packages(),
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Science/Research",
@@ -32,7 +31,7 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     install_requires=requirements,
     test_suite="tests",
 )
