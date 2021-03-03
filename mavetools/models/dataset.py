@@ -35,9 +35,8 @@ class Dataset(TimeStamped, Urn):
     short_description: str = attr.ib(kw_only=True)
     title: str = attr.ib(kw_only=True)
     keywords: List[Keyword] = attr.ib(kw_only=True)
-    sra_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
-    # TODO: change this once you know what this is supposed to be
-    doi_ids: List[Any] = attr.ib(kw_only=True)
+    sra_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    doi_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
     pubmed_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
     contributors: List[str] = attr.ib(kw_only=True)
 
@@ -53,6 +52,6 @@ class NewDataset():
     method_text: Optional[str] = attr.ib(kw_only=True, default=None)
     keywords: Optional[List[Keyword]] = attr.ib(kw_only=True, default=None)
     # TODO: change this once you know what this is supposed to be
-    doi_ids: Optional[List[Any]] = attr.ib(kw_only=True, default=None)
+    doi_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
     sra_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
-    pubmed_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    pubmed_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
