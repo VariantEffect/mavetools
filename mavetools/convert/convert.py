@@ -9,6 +9,7 @@ def codon_sub_to_mavehgvs(
     variant_codon: str,
     aa_position: int,
     target_id: Optional[str] = None,
+    prefer_delins: bool = False,
 ) -> str:
     """Create a MAVE-HGVS coding variant string describing the change between two codons.
 
@@ -23,6 +24,11 @@ def codon_sub_to_mavehgvs(
         This will be used to calculate the nucleotide positions.
     target_id : Optional[str]
         Optional target identifier for the resulting variant.
+        Default ``None``.
+    prefer_delins : bool
+        If True, consecutive two-base changes will be described as a deletion-insertion;
+        otherwise they will be described as two single-nucleotide substitutions.
+        Default ``False``.
 
     Returns
     -------
@@ -64,13 +70,25 @@ def codon_sub_to_mavehgvs(
                     f"{variant_pos + 2}{target_codon[2]}>{variant_codon[2]}]"
                 )
             elif changes[0]:  # delins of first two bases
-                variant_string = (
-                    f"c.{variant_pos}_{variant_pos + 1}delins{variant_codon[:2]}"
-                )
+                if prefer_delins:
+                    variant_string = (
+                        f"c.{variant_pos}_{variant_pos + 1}delins{variant_codon[:2]}"
+                    )
+                else:
+                    variant_string = (
+                        f"c.[{variant_pos}{target_codon[0]}>{variant_codon[0]};"
+                        f"{variant_pos + 1}{target_codon[1]}>{variant_codon[1]}]"
+                    )
             else:  # delins of last two bases
-                variant_string = (
-                    f"c.{variant_pos + 1}_{variant_pos + 2}delins{variant_codon[1:]}"
-                )
+                if prefer_delins:
+                    variant_string = (
+                        f"c.{variant_pos + 1}_{variant_pos + 2}delins{variant_codon[1:]}"
+                    )
+                else:
+                    variant_string = (
+                        f"c.[{variant_pos + 1}{target_codon[1]}>{variant_codon[1]};"
+                        f"{variant_pos + 2}{target_codon[2]}>{variant_codon[2]}]"
+                    )
         elif sum(changes) == 3:  # full codon delins
             variant_string = f"c.{variant_pos}_{variant_pos + 2}delins{variant_codon}"
         else:  # pragma: nocover
