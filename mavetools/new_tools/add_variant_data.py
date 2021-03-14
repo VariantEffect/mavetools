@@ -3,6 +3,7 @@ import numpy as np
 import re
 from mavetools.new_tools.df_to_pandas import df_to_pandas
 
+
 def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
     """
     This function takes in a score or count dataframe and a target sequence and converts coding
@@ -61,12 +62,17 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
         # identify location and get codon number associated with loc
         codon_location = df_with_variant_data["hgvs_nt"][i]
-        # if first and third base of codon changed
+
+        # check for alternative hgvs format _______
+        # count will be 3 if in  alternative hgvs format
+        count = [letter for letter in codon_location if letter == ">"]
+
         if codon_location.startswith("_wt"):
             # variant_codon is wild-type
             codon_number = None
             target_codon = None
-        elif codon_location[2] == "[":
+        elif codon_location[2] == "[" and count != 3:
+            # if first and third base of codon changed
             # isolate codon location
             codon_location = re.split("\[", codon_location)[1]
             codon_location = int(re.split("[a-zA-Z.>;_]", codon_location)[0])
@@ -81,9 +87,6 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             codon_number = round((codon_location/3)+0.5)
             # use codon_number to get target_codon from target_seq
             target_codon = target_seq[(codon_number - 1) * 3:codon_number * 3]
-
-
-
 
         # determine sequence of variant_codon
 
@@ -111,7 +114,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             sub_two = None
             sub_three = None
 
-        elif hgvs[-1] == "]":
+        elif hgvs[-1] == "]" and count != 3:
             # variant_codon has two nucleotide substitutions, non-adjacent
             # get indices of nucleotide substitutions
             sub = re.split("\[", hgvs)[1]
@@ -140,7 +143,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
                 sub_two_nuc = sub_nucs[1]
                 # set other possible indices for codon substitution to None
                 sub_three = None
-            else: # variant has three adjacent nucleotide substitutions
+            else:  # variant has three adjacent nucleotide substitutions
                 # assign additional nucleotide substitution indices
                 sub_two = sub_one + 1
                 sub_three = sub_two + 1
@@ -151,7 +154,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
         # now that we have the type of change, and stored data for change, get variant_codon
         # but only assign variant_codon if nucleotide substitution occurred
-        if sub_one is not None:
+        if sub_one is not None and count != 3:
             variant_codon = ""
 
             # set first nucleotide of variant_codon
@@ -176,6 +179,9 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             else:
                 variant_codon = variant_codon + target_codon[2]
 
+        # get target_codon, codon_number, and variant codon for alternative hgvs format
+        target_codon, codon_number, variant_codon = parse_additional_hgvs_format(hgvs)
+
         # add values for target_codon, codon_number, and variant_codon to this row
         df_with_variant_data.at[i, "target_codon"] = target_codon
         df_with_variant_data.at[i, "codon_number"] = codon_number
@@ -186,3 +192,34 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
         return df_with_variant_data, meta_dict
     else:
         return df_with_variant_data
+
+
+def parse_additional_hgvs_format(hgvs):
+    """
+    This helper function takes in an hgvs formatted string in _______ format and returns the values
+    for target_codon, codon_number, and variant_codon
+
+    Parameters
+    ----------
+    hgvs (string): hgvs formatted string
+
+    Returns
+    -------
+    target_codon (string): codon at codon_number in reference sequence
+    codon_number (int): location in reference sequence of codon
+    variant_codon (string): new sequence of codon after mutation
+    """
+
+    # get letters in string to get target_codon and variant codon
+    nucleotides = [letter for letter in hgvs if letter in "ACTG"]
+    target_codon = nucleotides[0] + nucleotides[2] + nucleotides[4]
+    variant_codon = nucleotides[1] + nucleotides[3] + nucleotides[5]
+
+    # use regex to isolate numbers to get codon_number
+    # isolate codon location
+    codon_location = re.split("\[", hgvs)[1]
+    codon_location = int(re.split("[a-zA-Z.>;_]", codon_location)[0])
+    # now that we have codon_location, get codon_number
+    codon_number = round((codon_location / 3) + 0.5)
+
+    return target_codon, codon_number, variant_codon
