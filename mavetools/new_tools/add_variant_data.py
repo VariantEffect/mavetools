@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import re
 from mavetools.new_tools.df_to_pandas import df_to_pandas
+from collections import Counter
 
 
 def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
@@ -64,25 +65,25 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
         codon_location = df_with_variant_data["hgvs_nt"][i]
 
         # check for alternative hgvs format _______
-        # count will be 3 if in  alternative hgvs format
-        count = [letter for letter in codon_location if letter == ">"]
+        # changes will be 3 if in  alternative hgvs format
+        changes = [letter for letter in codon_location if letter in "=>"]
 
         if codon_location.startswith("_wt"):
             # variant_codon is wild-type
             codon_number = None
             target_codon = None
-        elif codon_location[2] == "[" and count != 3:
+        elif codon_location[2] == "[":
             # if first and third base of codon changed
             # isolate codon location
             codon_location = re.split("\[", codon_location)[1]
-            codon_location = int(re.split("[a-zA-Z.>;_]", codon_location)[0])
+            codon_location = int(re.split("[a-zA-Z.>;_=]", codon_location)[0])
             # now that we have codon_location, get codon_number
             codon_number = round((codon_location / 3) + 0.5)
             # use codon_number to get target_codon from target_seq
             target_codon = target_seq[(codon_number - 1) * 3:codon_number * 3]
         else:  # any other variant change
             # isolate codon location
-            codon_location = int(re.split("[a-zA-Z.>;_]", codon_location)[2])
+            codon_location = int(re.split("[a-zA-Z.>;_=]", codon_location)[2])
             # now that we have codon_location, get codon_number
             codon_number = round((codon_location/3)+0.5)
             # use codon_number to get target_codon from target_seq
@@ -98,6 +99,14 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             variant_codon = target_codon
             sub_one = None  # no nucleotide substitutions
 
+        elif len(changes) == 3:
+            # get substitutions for alternative hgvs format
+            # check for wild-type in alternative hgvs format
+            if changes[0] == "=" and changes[1] == "=" and changes[2] == "=":
+                variant_codon = target_codon
+            else:  # get other changes
+                sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = parse_additional_hgvs_format(hgvs)
+
         elif hgvs.endswith("del"):
             # target_codon was deleted
             variant_codon = None
@@ -106,7 +115,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
         elif hgvs[-2] == ">":
             # variant_codon has one nucleotide substitution
             # get index of nucleotide substitution
-            sub_one = int(re.split("[a-zA-Z.>;]", hgvs)[2])  # location of nucleotide in target_seq
+            sub_one = int(re.split("[a-zA-Z.>;=]", hgvs)[2])  # location of nucleotide in target_seq
             sub_one = (sub_one % 3) - 1 # index of nucleotide substitution
             # get nucleotide of substitution
             sub_one_nuc = hgvs[-1]
@@ -114,27 +123,27 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             sub_two = None
             sub_three = None
 
-        elif hgvs[-1] == "]" and count != 3:
+        elif hgvs[-1] == "]":  # and len(changes) != 3:  # do not do for alternative hgvs format
             # variant_codon has two nucleotide substitutions, non-adjacent
             # get indices of nucleotide substitutions
             sub = re.split("\[", hgvs)[1]
-            sub = re.split("[a-zA-Z.>;]", sub)
+            sub = re.split("[a-zA-Z.>;=]", sub)
             sub_one, sub_two = int(sub[0]), int(sub[4])  # location of nucleotides in target_seq
             sub_one, sub_two = (sub_one % 3) - 1, (sub_two % 3) - 1  # indices of nucleotide substitutions
             # get nucleotides of substitutions
             sub_nuc = hgvs.split("]")[0]
-            sub_nuc = re.split("[a-z0-9.>;]", sub_nuc)
+            sub_nuc = re.split("[a-z0-9.>;=]", sub_nuc)
             sub_one_nuc, sub_two_nuc = sub_nuc[4], sub_nuc[7]
             # set other possible indices for codon substitution to None
             sub_three = None
 
-        else:
+        else:  # len(changes) != 3:  # any change leftover that is not in alternative format
             # variant_codon has two or three adjacent nucleotide substitutions
             # get index of first codon substitution
-            sub_one = int(re.split("[a-zA-Z.>;_]", hgvs)[2])  # location of first substitution in target_seq
-            sub_one = (sub_one % 3) - 1 # index of first nucleotide substitution
+            sub_one = int(re.split("[a-zA-Z.>;_=]", hgvs)[2])  # location of first substitution in target_seq
+            sub_one = (sub_one % 3) - 1  # index of first nucleotide substitution
             # get string of substituted nucleotides
-            sub_nucs = re.split("[a-z0-9.>;_]", hgvs)[-1]
+            sub_nucs = re.split("[a-z0-9.>;_=]", hgvs)[-1]
             if len(sub_nucs) == 2:  # variant codon has two adjacent nucleotide substitutions
                 # assign additional nucleotide substitution indices
                 sub_two = sub_one + 1
@@ -154,7 +163,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
         # now that we have the type of change, and stored data for change, get variant_codon
         # but only assign variant_codon if nucleotide substitution occurred
-        if sub_one is not None and count != 3:
+        if sub_one is not None:
             variant_codon = ""
 
             # set first nucleotide of variant_codon
@@ -170,17 +179,14 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             else:
                 variant_codon = variant_codon + target_codon[1]
             # set third nucleotide of variant_codon
-            if sub_one == 2:
+            if sub_one == -1 or sub_one == 2:
                 variant_codon = variant_codon + sub_one_nuc
-            elif sub_two == 2:
+            elif sub_two == -1 or sub_two == 2:
                 variant_codon = variant_codon + sub_two_nuc
-            elif sub_three == 2:
+            elif sub_three == -1 or sub_three == 2:
                 variant_codon = variant_codon + sub_three_nuc
             else:
                 variant_codon = variant_codon + target_codon[2]
-
-        # get target_codon, codon_number, and variant codon for alternative hgvs format
-        target_codon, codon_number, variant_codon = parse_additional_hgvs_format(hgvs)
 
         # add values for target_codon, codon_number, and variant_codon to this row
         df_with_variant_data.at[i, "target_codon"] = target_codon
@@ -196,8 +202,8 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
 def parse_additional_hgvs_format(hgvs):
     """
-    This helper function takes in an hgvs formatted string in _______ format and returns the values
-    for target_codon, codon_number, and variant_codon
+    This helper function takes in an hgvs formatted string in _______ format and returns the indeces in
+    the codon that the substitutions occurred and the variant nucleotide
 
     Parameters
     ----------
@@ -205,21 +211,89 @@ def parse_additional_hgvs_format(hgvs):
 
     Returns
     -------
-    target_codon (string): codon at codon_number in reference sequence
-    codon_number (int): location in reference sequence of codon
-    variant_codon (string): new sequence of codon after mutation
+    sub_one, sub_two, sub_three (int): index of nucleotide substitution in codon, None if no substitution
+    sub_one_nuc, sub_two_nuc, sub_three_nuc (string): variant nucleotide, None if no substitution
     """
 
-    # get letters in string to get target_codon and variant codon
-    nucleotides = [letter for letter in hgvs if letter in "ACTG"]
-    target_codon = nucleotides[0] + nucleotides[2] + nucleotides[4]
-    variant_codon = nucleotides[1] + nucleotides[3] + nucleotides[5]
+    # determine which bases had a change
+    changes = [letter for letter in hgvs if letter in "=>"]
+    # count instances of changes
+    count = Counter(changes)
+    count = count[">"]
 
-    # use regex to isolate numbers to get codon_number
-    # isolate codon location
-    codon_location = re.split("\[", hgvs)[1]
-    codon_location = int(re.split("[a-zA-Z.>;_]", codon_location)[0])
-    # now that we have codon_location, get codon_number
-    codon_number = round((codon_location / 3) + 0.5)
+    if count == 0:
+        # variant_codon is wild-type
+        sub_one = None  # no nucleotide substitutions
+        sub_two = None
+        sub_three = None
+        sub_one_nuc = None
+        sub_two_nuc = None
+        sub_three_nuc = None
 
-    return target_codon, codon_number, variant_codon
+    elif count == 1:
+        # variant_codon has one nucleotide substitution
+        # get indices of nucleotide substitutions
+        sub = re.split("\[", hgvs)[1]
+        sub = re.split("[a-zA-Z.>;=]", sub)
+        # get nucleotides of substitutions
+        sub_nuc = hgvs.split("]")[0]
+        sub_nuc = re.split("\[", sub_nuc)[1]
+        sub_nuc = re.split("[a-z0-9.>;=]", sub_nuc)
+        sub_nuc = [letter for letter in sub_nuc if letter in 'ACTG' and letter != ""]
+        if changes[0] == ">" and changes[1] == "=" and changes[2] == "=":
+            sub_one = int(sub[0])
+        if changes[0] == "=" and changes[1] == ">" and changes[2] == "=":
+            sub_one = int(sub[2])
+        if changes[0] == "=" and changes[1] == "=" and changes[2] == ">":
+            sub_one = int(sub[4])
+        sub_one = (sub_one % 3) - 1  # index of nucleotide substitution
+        sub_one_nuc = sub_nuc[1]
+        # set other possible indices for codon substitution to None
+        sub_two = None
+        sub_two_nuc = None
+        sub_three = None
+        sub_three_nuc = None
+
+    elif count == 2:
+        # variant_codon has two nucleotide substitutions
+        # get indices of nucleotide substitutions
+        sub = re.split("\[", hgvs)[1]
+        sub = re.split("[a-zA-Z.>;=]", sub)
+        # get nucleotides of substitutions
+        sub_nuc = hgvs.split("]")[0]
+        sub_nuc = re.split("\[", sub_nuc)[1]
+        sub_nuc = re.split("[a-z0-9.>;=]", sub_nuc)
+        sub_nuc = [letter for letter in sub_nuc if letter in 'ACTG' and letter != ""]
+        if changes[0] == ">" and changes[1] == ">" and changes[2] == "=":
+            sub_one, sub_two = int(sub[0]), int(sub[4])
+        if changes[0] == ">" and changes[1] == "=" and changes[2] == ">":
+            sub_one, sub_two = int(sub[0]), int(sub[6])
+        if changes[0] == "=" and changes[1] == ">" and changes[2] == ">":
+            sub_one, sub_two = int(sub[2]), int(sub[6])
+        sub_one = (sub_one % 3) - 1  # index of nucleotide substitution
+        sub_two = (sub_two % 3) - 1  # index of nucleotide substitution
+        sub_one_nuc, sub_two_nuc = sub_nuc[1], sub_nuc[3]
+        # set other possible indices for codon substitution to None
+        sub_three = None
+        sub_three_nuc = None
+
+    elif count == 3:
+        # variant_codon has three nucleotide substitutions
+        # get indices of nucleotide substitutions
+        sub = re.split("\[", hgvs)[1]
+        sub = re.split("[a-zA-Z.>;=]", sub)
+        # get nucleotides of substitutions
+        sub_nuc = hgvs.split("]")[0]
+        sub_nuc = re.split("\[", sub_nuc)[1]
+        sub_nuc = re.split("[a-z0-9.>;=]", sub_nuc)
+        sub_nuc = [letter for letter in sub_nuc if letter in 'ACTG' and letter != ""]
+        sub_one, sub_two, sub_three = int(sub[0]), int(sub[4]), int(sub[8])
+        sub_one_nuc, sub_two_nuc, sub_three_nuc = sub_nuc[1], sub_nuc[3], sub_nuc[5]
+        sub_one = (sub_one % 3) - 1  # index of nucleotide substitution
+        sub_two = (sub_two % 3) - 1  # index of nucleotide substitution
+        sub_three = (sub_three % 3) - 1  # index of nucleotide substitution
+
+    else:
+        return None
+
+    return sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc
