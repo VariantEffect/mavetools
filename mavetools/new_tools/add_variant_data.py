@@ -101,11 +101,10 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
         elif len(changes) == 3:
             # get substitutions for alternative hgvs format
+            sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = parse_additional_hgvs_format(hgvs)
             # check for wild-type in alternative hgvs format
-            if changes[0] == "=" and changes[1] == "=" and changes[2] == "=":
+            if sub_one is None and sub_two is None and sub_three is None:
                 variant_codon = target_codon
-            else:  # get other changes
-                sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = parse_additional_hgvs_format(hgvs)
 
         elif hgvs.endswith("del"):
             # target_codon was deleted
