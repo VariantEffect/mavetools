@@ -4,6 +4,8 @@ from mavetools.new_tools.df_to_pandas import df_to_pandas
 
 class Test(TestCase):
 
+    # scenario 1 - call function on urn mavedb 00000001-a-1_scores
+
     # typical case - first argument is valid
     def test_df_to_pandas(self):
         results = df_to_pandas("urn mavedb 00000001-a-1_scores.csv")
