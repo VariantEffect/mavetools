@@ -27,7 +27,7 @@ def df_to_pandas(df, drop_accession=False):
     if not df.endswith(".csv"):
         raise ValueError("df must be csv file")
     # if drop_accession is not bool
-    if drop_accession is not bool:
+    if not isinstance(drop_accession, bool):
         raise ValueError("drop_accession must be boolean value")
 
     # convert df to pandas df
