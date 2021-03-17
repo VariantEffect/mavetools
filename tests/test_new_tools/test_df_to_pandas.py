@@ -16,15 +16,19 @@ class Test(TestCase):
         results = df_to_pandas("urn mavedb 00000001-a-1_scores.csv", True)
         self.assertTrue(results[0].iat[0, 1] == "p.Pro73Gln")
 
+    # edge case - invalid second argument
+    def test_df_to_pandas_invalid_second_arg(self):
+         with self.assertRaises(TypeError):
+             df_to_pandas("realfile.csv", 4)
+
+    # scenario 2 - call function on invalid filename
+
     # edge case - invalid first argument
     def test_df_to_pandas_invalid_first_arg(self):
          with self.assertRaises(ValueError):
              df_to_pandas("notarealfile")
 
-    # edge case - invalid second argument
-    def test_df_to_pandas_invalid_second_arg(self):
-         with self.assertRaises(TypeError):
-             df_to_pandas("realfile.csv", 4)
+    # scenario 3 - call function without arguments
 
     # edge case - missing first argument
     def test_df_to_pandas_missing_arguments(self):
