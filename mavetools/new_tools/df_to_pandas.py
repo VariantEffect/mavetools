@@ -20,7 +20,8 @@ def df_to_pandas(df, drop_accession=False):
     Raises
     ______
     ValueError: if first argument is not in filename.csv format
-    ValueError: if second argument is not bool
+    TypeError: if second argument is not bool
+    TypeError: if no arguments are passed
     """
 
     # if df is not in filename.csv format
@@ -28,7 +29,10 @@ def df_to_pandas(df, drop_accession=False):
         raise ValueError("df must be csv file")
     # if drop_accession is not bool
     if not isinstance(drop_accession, bool):
-        raise ValueError("drop_accession must be boolean value")
+        raise TypeError("drop_accession must be boolean value")
+    # if no arguments are passed
+    if df is None:
+        raise TypeError("df must be csv file")
 
     # convert df to pandas df
     df_pandas = pd.read_csv(df, skiprows=4)
