@@ -64,8 +64,8 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
         # identify location and get codon number associated with loc
         codon_location = df_with_variant_data["hgvs_nt"][i]
 
-        # check for alternative hgvs format _______
-        # changes will be 3 if in  alternative hgvs format
+        # check for alternative hgvs format: c.[1C>A;2=;3=]
+        # changes will be 3 if in alternative hgvs format
         changes = [letter for letter in codon_location if letter in "=>"]
 
         if codon_location.startswith("_wt"):
@@ -100,7 +100,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             sub_one = None  # no nucleotide substitutions
 
         elif len(changes) == 3:
-            # get substitutions for alternative hgvs format
+            # get substitutions for alternative hgvs format: c.[1C>A;2=;3=]
             sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = parse_additional_hgvs_format(hgvs)
             # check for wild-type in alternative hgvs format
             if sub_one is None and sub_two is None and sub_three is None:
@@ -201,8 +201,8 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
 def parse_additional_hgvs_format(hgvs):
     """
-    This helper function takes in an hgvs formatted string in _______ format and returns the indeces in
-    the codon that the substitutions occurred and the variant nucleotide
+    This helper function takes in an hgvs formatted string in c.[1C>A;2=;3=] format and returns the
+    indices in the codon that the substitutions occurred as well as the variant nucleotide
 
     Parameters
     ----------
