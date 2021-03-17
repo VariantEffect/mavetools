@@ -32,7 +32,7 @@ def df_to_pandas(df, drop_accession=False):
         raise TypeError("drop_accession must be boolean value")
     # if no arguments are passed
     if df is None:
-        raise TypeError("df must be csv file")
+        raise TypeError("no arguments passed")
 
     # convert df to pandas df
     df_pandas = pd.read_csv(df, skiprows=4)
