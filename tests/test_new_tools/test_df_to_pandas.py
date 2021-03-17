@@ -23,8 +23,10 @@ class Test(TestCase):
 
     # edge case - invalid second argument
     def test_df_to_pandas_invalid_second_arg(self):
-         with self.assertRaises(ValueError):
+         with self.assertRaises(TypeError):
              df_to_pandas("realfile.csv", 4)
 
     # edge case - missing first argument
-
+    def test_df_to_pandas_missing_arguments(self):
+        with self.assertRaises(TypeError):
+            df_to_pandas()
