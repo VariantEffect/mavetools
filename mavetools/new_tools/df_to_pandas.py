@@ -19,20 +19,29 @@ def df_to_pandas(df, drop_accession=False):
 
     Raises
     ______
-    ValueError: if first argument is not in filename.csv format
-    TypeError: if second argument is not bool
-    TypeError: if no arguments are passed
+    TypeError:
+        if first argument is not string
+        if second argument is not bool
+        if no arguments are passed
+    ValueError:
+        if first argument is not in filename.csv format
     """
-
-    # if df is not in filename.csv format
-    if not df.endswith(".csv"):
-        raise ValueError("df must be csv file")
+    # check for TypeError
+    # if first argument is not string
+    if not isinstance(df, str):
+        raise TypeError("df must be string")
     # if drop_accession is not bool
     if not isinstance(drop_accession, bool):
         raise TypeError("drop_accession must be boolean value")
     # if no arguments are passed
     if df is None:
         raise TypeError("no arguments passed")
+
+    # check for ValueError
+    # if df is not in filename.csv format
+    if not df.endswith(".csv"):
+        raise ValueError("df must be csv file")
+
 
     # convert df to pandas df
     df_pandas = pd.read_csv(df, skiprows=4)
