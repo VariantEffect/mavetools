@@ -129,7 +129,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             sub_two = None
             sub_three = None
 
-        elif hgvs[-1] == "]":  # and len(changes) != 3:  # do not do for alternative hgvs format
+        elif hgvs[-1] == "]":
             # variant_codon has two nucleotide substitutions, non-adjacent
             # get indices of nucleotide substitutions
             sub = re.split("\[", hgvs)[1]
@@ -143,7 +143,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             # set other possible indices for codon substitution to None
             sub_three = None
 
-        else:  # len(changes) != 3:  # any change leftover that is not in alternative format
+        else:
             # variant_codon has two or three adjacent nucleotide substitutions
             # get index of first codon substitution
             sub_one = int(re.split("[a-zA-Z.>;_=]", hgvs)[2])  # location of first substitution in target_seq
