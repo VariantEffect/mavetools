@@ -2,6 +2,7 @@ from unittest import TestCase
 import pandas as pd
 from mavetools.new_tools.df_to_pandas import df_to_pandas
 
+
 class Test(TestCase):
 
     # scenario 1 - call function on urn mavedb 00000001-a-1_scores
@@ -18,15 +19,15 @@ class Test(TestCase):
 
     # edge case - invalid second argument
     def test_df_to_pandas_invalid_second_arg(self):
-         with self.assertRaises(TypeError):
-             df_to_pandas("realfile.csv", 4)
+        with self.assertRaises(TypeError):
+            df_to_pandas("urn mavedb 00000001-a-1_scores.csv", 4)
 
     # scenario 2 - call function on invalid filename
 
     # edge case - invalid first argument
     def test_df_to_pandas_invalid_first_arg(self):
-         with self.assertRaises(ValueError):
-             df_to_pandas("notarealfile")
+        with self.assertRaises(ValueError):
+            df_to_pandas("notarealfile")
 
     # scenario 3 - call function without arguments
 
