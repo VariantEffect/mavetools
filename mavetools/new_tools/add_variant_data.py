@@ -8,7 +8,8 @@ from collections import Counter
 def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
     """
     This function takes in a score or count dataframe and a target sequence and converts coding
-    variants into codon changes.
+    variants into codon changes. These changes are stored in three additional columns: target_codon,
+    codon_number, and variant_codon.
 
     Parameters
     __________
@@ -28,27 +29,33 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
 
     Raises
     ______
-    ValueError: if filename is not in "filename.csv" format
-    ValueError: if target_seq is not string of solely characters ACTG
-    ValueError: if drop_accession or ret_meta are not bool
+    TypeError:
+        if drop_accession or ret_meta are not bool
+        if target_seq is not string
+    ValueError:
+        if filename is not in "filename.csv" format
+        if target_seq is not made solely of characters ACTG
     """
+
+    # check for TypeError
+    # if target_seq is not string
+    if not isinstance(target_seq, str):
+        raise TypeError("target_seq must be string")
+    # if drop_accession is not bool
+    if not isinstance(drop_accession, bool):
+        raise TypeError("drop_accession must be boolean value")
+    # if ret_meta is not bool
+    if not isinstance(ret_meta, bool):
+        raise TypeError("ret_meta must be boolean value")
 
     # check for ValueError
     # if df is not in filename.csv format
     if not df.endswith(".csv"):
         raise ValueError("df must be csv file")
-    # if target_seq is not string containing solely characters ACTG
-    if not isinstance(target_seq, str):
-        raise ValueError("target_seq must be string")
+    # if target_seq is not made solely of characters ACTG
     check_chars = [letter in "ACTG" for letter in target_seq]
     if False in check_chars:
         raise ValueError("target_seq is invalid")
-    # if drop_accession is not bool
-    if not isinstance(drop_accession, bool):
-        raise ValueError("drop_accession must be boolean value")
-    # if ret_meta is not bool
-    if not isinstance(ret_meta, bool):
-        raise ValueError("ret_meta must be boolean value")
 
     # format df in pandas according to arguments
     df_with_variant_data, meta_dict = df_to_pandas(df, drop_accession)
