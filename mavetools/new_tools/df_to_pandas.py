@@ -44,7 +44,6 @@ def df_to_pandas(df, drop_accession=False):
     if not df.endswith(".csv"):
         raise ValueError("df must be csv file")
 
-
     # convert df to pandas df
     df_pandas = pd.read_csv(df, skiprows=4)
 
