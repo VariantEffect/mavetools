@@ -122,7 +122,7 @@ def add_variant_data(df, target_seq, drop_accession=False, ret_meta=False):
             # variant_codon has one nucleotide substitution
             # get index of nucleotide substitution
             sub_one = int(re.split("[a-zA-Z.>;=]", hgvs)[2])  # location of nucleotide in target_seq
-            sub_one = (sub_one % 3) - 1 # index of nucleotide substitution
+            sub_one = (sub_one % 3) - 1  # index of nucleotide substitution
             # get nucleotide of substitution
             sub_one_nuc = hgvs[-1]
             # set other possible indices for codon substitution to None
