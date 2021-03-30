@@ -4,8 +4,8 @@ import re
 
 def legacy_to_mave_hgvs(hgvs):
     """
-    This helper function takes in an hgvs formatted string in c.[1C>A;2=;3=] format and returns the
-    indices in the codon that the substitutions occurred as well as the variant nucleotide
+    This function takes in an hgvs formatted string in c.[1C>A;2=;3=] (legacy) format and returns the
+    indices in the codon that the substitutions occurred as well as the variant nucleotides.
 
     Parameters
     ----------
