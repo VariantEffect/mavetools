@@ -1,8 +1,6 @@
-import pandas as pd
-import numpy as np
 import re
 from mavetools.mavedf.df_to_pandas import df_to_pandas
-from mavetools.mavedf.legacy_to_mave_hgvs import legacy_to_mave_hgvs
+from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs
 
 
 class MaveDf:
