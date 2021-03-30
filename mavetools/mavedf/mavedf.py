@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
 import re
-from mavetools.mavedf.df_to_pandas import df_to_pandas, get_meta_data
+from mavetools.mavedf.df_to_pandas import df_to_pandas
 from mavetools.mavedf.legacy_to_mave_hgvs import legacy_to_mave_hgvs
 
 
 class MaveDf:
 
-    def __init__(self, df, drop_accession=False):
+    def __init__(self, df):
         """
         Constructor
         This function instantiates the MaveDf object and assigns values to the
@@ -16,13 +16,9 @@ class MaveDf:
         Parameters
         ----------
         df (string): the filename.csv to be converted to pandas df
-        drop_accession (bool): True if user wants to drop the accession numbers
-            default value = False
         """
         # convert df to pandas
-        self.pandas_df = df_to_pandas(df, drop_accession)
-        # get metadata from df
-        self.meta_dict = get_meta_data(df)
+        self.pandas_df, self.meta_dict = df_to_pandas(df, ret_meta=True)
 
     def drop_accession(self):
         """
