@@ -7,7 +7,8 @@ from csv import reader
 def df_to_pandas(df, ret_meta=False):
     """
     This function converts a dataframe downloaded from MaveDB into a pandas dataframe and returns
-    the new data frame. The user has the option to drop the accession numbers.
+    the new data frame and the metadata formatted as a dictionary if desired. The user has the
+    option to drop the accession numbers.
 
     Parameters
     ----------
