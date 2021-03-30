@@ -1,7 +1,7 @@
 from unittest import TestCase
 import pandas as pd
 from io import StringIO
-from mavetools.new_tools.df_to_pandas import df_to_pandas
+from mavetools.mavedf.df_to_pandas import df_to_pandas
 
 
 class Test(TestCase):
@@ -17,29 +17,7 @@ class Test(TestCase):
                         "accession,hgvs_nt,hgvs_pro,score\n"
                         "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
         results = df_to_pandas(data)
-        self.assertTrue(results[0].iat[0, 2] == "p.Phe2=")
-
-    # typical case - first argument is valid, second argument passed
-    def test_df_to_pandas_drop_accession(self):
-        data = StringIO("# Accession:\n"
-                        "# Downloaded (UTC):\n"
-                        "# Licence:\n"
-                        "# Licence URL:\n"
-                        "accession,hgvs_nt,hgvs_pro,score\n"
-                        "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
-        results = df_to_pandas(data, True)
-        self.assertTrue(results[0].iat[0, 1] == "p.Phe2=")
-
-    # edge case - invalid second argument
-    def test_df_to_pandas_invalid_second_arg(self):
-        data = StringIO("# Accession:\n"
-                        "# Downloaded (UTC):\n"
-                        "# Licence:\n"
-                        "# Licence URL:\n"
-                        "accession,hgvs_nt,hgvs_pro,score\n"
-                        "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
-        with self.assertRaises(TypeError):
-            df_to_pandas(data, 4)
+        self.assertTrue(results.iat[0, 2] == "p.Phe2=")
 
     # scenario 2 - call function on invalid filename
 
