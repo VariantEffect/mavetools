@@ -16,15 +16,15 @@ class Test(TestCase):
                         "# Licence URL:\n"
                         "accession,hgvs_nt,hgvs_pro,score\n"
                         "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
-        results = df_to_pandas(data)
-        self.assertTrue(results.iat[0, 2] == "p.Phe2=")
+        results = df_to_pandas(data, True)
+        self.assertTrue(results[0].iat[0, 2] == "p.Phe2=")
 
     # scenario 2 - call function on invalid filename
 
     # edge case - invalid first argument
-    #def test_df_to_pandas_invalid_first_arg(self):
-    #    with self.assertRaises(ValueError):
-    #        df_to_pandas("notarealfile")
+    def test_df_to_pandas_invalid_first_arg(self):
+        with self.assertRaises(ValueError):
+            df_to_pandas("notarealfile")
 
     # scenario 3 - call function without arguments
 
