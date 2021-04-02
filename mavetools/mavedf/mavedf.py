@@ -67,12 +67,10 @@ class MaveDf:
             # changes will be 3 if in alternative hgvs format
             changes = [letter for letter in codon_location if letter in "=>"]
 
-            if codon_location.startswith("_wt"):
-                # variant_codon is wild-type
+            if codon_location.startswith("_wt"):  # variant_codon is wild-type
                 codon_number = None
                 target_codon = None
-            elif codon_location[2] == "[":
-                # if first and third base of codon changed
+            elif codon_location[2] == "[":  # if first and third base of codon changed
                 # isolate codon location
                 codon_location = re.split("\[", codon_location)[1]
                 codon_location = int(re.split("[a-zA-Z.>;_=]", codon_location)[0])
@@ -93,25 +91,22 @@ class MaveDf:
             # get hgvs_nt
             hgvs = self.pandas_df["hgvs_nt"][i]
 
-            if hgvs.startswith("_wt"):
-                # variant_codon is wild-type
+            if hgvs.startswith("_wt"):  # variant_codon is wild-type
                 variant_codon = target_codon
                 sub_one = None  # no nucleotide substitutions
 
-            elif len(changes) == 3:
+            elif len(changes) == 3:  # hgvs is in legacy format
                 # get substitutions for alternative hgvs format: c.[1C>A;2=;3=]
                 sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = legacy_to_mave_hgvs(hgvs)
                 # check for wild-type in alternative hgvs format
                 if sub_one is None and sub_two is None and sub_three is None:
                     variant_codon = target_codon
 
-            elif hgvs.endswith("del"):
-                # target_codon was deleted
+            elif hgvs.endswith("del"):  # target_codon was deleted
                 variant_codon = None
                 sub_one = None  # no nucleotide substitutions
 
-            elif hgvs[-2] == ">":
-                # variant_codon has one nucleotide substitution
+            elif hgvs[-2] == ">":  # variant_codon has one nucleotide substitution
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get index of nucleotide substitution
@@ -122,8 +117,7 @@ class MaveDf:
                 sub_two = None
                 sub_three = None
 
-            elif hgvs[-1] == "]":
-                # variant_codon has two nucleotide substitutions, non-adjacent
+            elif hgvs[-1] == "]":  # variant_codon has two nucleotide substitutions, non-adjacent
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get indices of nucleotide substitutions
@@ -135,8 +129,7 @@ class MaveDf:
                 # set other possible indices for codon substitution to None
                 sub_three = None
 
-            else:
-                # variant_codon has two or three adjacent nucleotide substitutions
+            else:  # variant_codon has two or three adjacent nucleotide substitutions
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 variant_codon = variant.sequence
