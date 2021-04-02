@@ -18,7 +18,6 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TTT")
 
-
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
