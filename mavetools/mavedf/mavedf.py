@@ -1,6 +1,7 @@
 import re
 from mavetools.mavedf.df_to_pandas import df_to_pandas
 from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs
+from mavehgvs.variant import Variant
 
 
 class MaveDf:
@@ -111,36 +112,38 @@ class MaveDf:
 
             elif hgvs[-2] == ">":
                 # variant_codon has one nucleotide substitution
+                # instantiate Variant object
+                variant = Variant(hgvs)
                 # get index of nucleotide substitution
-                sub_one = int(re.split("[a-zA-Z.>;=]", hgvs)[2])  # location of nucleotide in target_seq
-                sub_one = (sub_one % 3) - 1  # index of nucleotide substitution
+                sub_one = int(str(variant.positions)) % 3 - 1
                 # get nucleotide of substitution
-                sub_one_nuc = hgvs[-1]
+                sub_one_nuc = variant.sequence[1]
                 # set other possible indices for codon substitution to None
                 sub_two = None
                 sub_three = None
 
             elif hgvs[-1] == "]":
                 # variant_codon has two nucleotide substitutions, non-adjacent
+                # instantiate Variant object
+                variant = Variant(hgvs)
                 # get indices of nucleotide substitutions
-                sub = re.split("\[", hgvs)[1]
-                sub = re.split("[a-zA-Z.>;=]", sub)
-                sub_one, sub_two = int(sub[0]), int(sub[4])  # location of nucleotides in target_seq
-                sub_one, sub_two = (sub_one % 3) - 1, (sub_two % 3) - 1  # indices of nucleotide substitutions
+                sub_one = int(str(variant.positions[0])) % 3 - 1
+                sub_two = int(str(variant.positions[1])) % 3 - 1
                 # get nucleotides of substitutions
-                sub_nuc = hgvs.split("]")[0]
-                sub_nuc = re.split("[a-z0-9.>;=]", sub_nuc)
-                sub_one_nuc, sub_two_nuc = sub_nuc[4], sub_nuc[7]
+                sub_one_nuc = variant.sequence[0][1]
+                sub_two_nuc = variant.sequence[1][1]
                 # set other possible indices for codon substitution to None
                 sub_three = None
 
             else:
                 # variant_codon has two or three adjacent nucleotide substitutions
+                # instantiate Variant object
+                variant = Variant(hgvs)
+                variant_codon = variant.sequence
                 # get index of first codon substitution
-                sub_one = int(re.split("[a-zA-Z.>;_=]", hgvs)[2])  # location of first substitution in target_seq
-                sub_one = (sub_one % 3) - 1  # index of first nucleotide substitution
+                sub_one = int(str(variant.positions[0])) % 3 - 1
                 # get string of substituted nucleotides
-                sub_nucs = re.split("[a-z0-9.>;_=]", hgvs)[-1]
+                sub_nucs = variant.sequence
                 if len(sub_nucs) == 2:  # variant codon has two adjacent nucleotide substitutions
                     # assign additional nucleotide substitution indices
                     sub_two = sub_one + 1
