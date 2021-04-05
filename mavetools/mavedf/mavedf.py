@@ -1,6 +1,6 @@
 import re
 from mavetools.mavedf.df_to_pandas import df_to_pandas
-from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs
+from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
 
 
@@ -60,29 +60,27 @@ class MaveDf:
         # iterate through df and parse hgvs_nt column to get data
         for i in range(len(self.pandas_df["hgvs_nt"])):
 
+            # check for legacy hgvs format (i.e., c.[1C>A;2=;3=]) and update if needed
+            self.pandas_df["hgvs_nt"][i] = legacy_to_mave_hgvs_nt(self.pandas_df["hgvs_nt"][i], target_seq)
+
             # identify location and get codon number associated with loc
             codon_location = self.pandas_df["hgvs_nt"][i]
-
-            # check for alternative hgvs format: c.[1C>A;2=;3=]
-            # changes will be 3 if in alternative hgvs format
-            changes = [letter for letter in codon_location if letter in "=>"]
 
             if codon_location.startswith("_wt"):  # variant_codon is wild-type
                 codon_number = None
                 target_codon = None
-            elif codon_location[2] == "[":  # if first and third base of codon changed
-                # isolate codon location
-                codon_location = re.split("\[", codon_location)[1]
-                codon_location = int(re.split("[a-zA-Z.>;_=]", codon_location)[0])
-                # now that we have codon_location, get codon_number
-                codon_number = round((codon_location / 3) + 0.5)
-                # use codon_number to get target_codon from target_seq
-                target_codon = target_seq[(codon_number - 1) * 3:codon_number * 3]
             else:  # any other variant change
-                # isolate codon location
-                codon_location = int(re.split("[a-zA-Z.>;_=]", codon_location)[2])
-                # now that we have codon_location, get codon_number
-                codon_number = round((codon_location/3)+0.5)
+                # instantiate Variant object
+                variant = Variant(codon_location)
+                # get variant position and convert to int
+                if type(variant.positions) == list:  # multiple positions values exist
+                    variant_position = int(str(variant.positions[0]))
+                elif type(variant.positions) == tuple:
+                    variant_position = int(str(variant.positions[0]))
+                else:  # only one value for positions
+                    variant_position = int(str(variant.positions))
+                # now that we have the variant_position, get codon_number
+                codon_number = round((variant_position / 3) + 0.5)
                 # use codon_number to get target_codon from target_seq
                 target_codon = target_seq[(codon_number - 1) * 3:codon_number * 3]
 
@@ -94,13 +92,6 @@ class MaveDf:
             if hgvs.startswith("_wt"):  # variant_codon is wild-type
                 variant_codon = target_codon
                 sub_one = None  # no nucleotide substitutions
-
-            elif len(changes) == 3:  # hgvs is in legacy format
-                # get substitutions for alternative hgvs format: c.[1C>A;2=;3=]
-                sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = legacy_to_mave_hgvs(hgvs)
-                # check for wild-type in alternative hgvs format
-                if sub_one is None and sub_two is None and sub_three is None:
-                    variant_codon = target_codon
 
             elif hgvs.endswith("del"):  # target_codon was deleted
                 variant_codon = None

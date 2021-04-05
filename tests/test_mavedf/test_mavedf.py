@@ -16,7 +16,7 @@ class Test(TestCase):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         df = MaveDf(data)
         df.add_variant_data(target_seq)
-        self.assertEqual(df.pandas_df["variant_codon"][0], "TTT")
+        self.assertEqual(df.pandas_df["variant_codon"][0], None)  # TTT but no way to know after converting from legacy
 
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
