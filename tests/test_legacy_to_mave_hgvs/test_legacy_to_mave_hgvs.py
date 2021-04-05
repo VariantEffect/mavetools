@@ -19,5 +19,3 @@ class Test(TestCase):
         self.assertEqual(legacy_to_mave_hgvs_nt("c.[7=;8G>A;9T>A]", target_seq), "c.8_9delinsAA")
         # test three base change
         self.assertEqual(legacy_to_mave_hgvs_nt("c.[7G>C;8G>T;9T>C]", target_seq), "c.7_9delinsCTC")
-
-        # self.fail()
