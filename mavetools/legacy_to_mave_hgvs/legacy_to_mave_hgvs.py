@@ -118,7 +118,7 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     # determine which bases had a change
     changes = [letter for letter in hgvs_legacy if letter in "=>"]
 
-    # if changes < 3, not in hgvs format
+    # if changes < 3, already in standard_hgvs format
     if len(changes) < 3:
         return hgvs_legacy
 
