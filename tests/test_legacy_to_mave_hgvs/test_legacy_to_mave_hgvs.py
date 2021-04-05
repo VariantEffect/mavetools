@@ -1,6 +1,7 @@
 from unittest import TestCase
 from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
 
+
 class Test(TestCase):
     def test_legacy_to_mave_hgvs_nt(self):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
