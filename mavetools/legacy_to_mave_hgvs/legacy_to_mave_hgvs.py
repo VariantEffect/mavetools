@@ -120,8 +120,6 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     count = Counter(changes)
     count = count[">"]
 
-    # ********* how to account for deletions?
-
     if count == 0:
         # variant_codon is wild-type
         standard_hgvs = "_wt"
