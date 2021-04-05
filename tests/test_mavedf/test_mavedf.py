@@ -5,8 +5,9 @@ from mavetools.mavedf.mavedf import MaveDf
 
 class Test(TestCase):
 
-    # typical case - no bases of codon changed
+    # scenario 1 - no bases of codon changed
     def test_no_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -18,6 +19,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], None)  # TTT but no way to know after converting from legacy
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -29,8 +31,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], None)
 
-    # typical case - first base of codon changed
+    # scenario 2 - first base of codon changed
     def test_first_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -42,6 +45,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "AAA")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -53,8 +57,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TTG")
 
-    # typical case - second base of codon changed
+    # scenario 3 - second base of codon changed
     def test_second_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -66,6 +71,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TGT")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -77,8 +83,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "AGA")
 
-    # typical case - third base of codon changed
+    # scenario 4 - third base of codon changed
     def test_third_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -90,6 +97,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TTG")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -101,8 +109,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "ACT")
 
-    # typical case - first and second bases of codon changed
+    # scenario 5 - first and second bases of codon changed
     def test_first_second_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -114,6 +123,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "ATA")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -125,8 +135,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TGG")
 
-    # typical case - first and third bases of codon changed
+    # scenario 6 - first and third bases of codon changed
     def test_first_third_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -138,6 +149,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "GTG")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -149,8 +161,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TTT")
 
-    # typical case - second and third bases of codon changed
+    # scenario 7 - second and third bases of codon changed
     def test_second_third_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -162,6 +175,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TAC")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -173,8 +187,9 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "ACT")
 
-    # typical case - all three bases of codon changed
+    # scenario 8 - all three bases of codon changed
     def test_all_base_change(self):
+        # edge case - legacy hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -186,6 +201,7 @@ class Test(TestCase):
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "AGT")
 
+        # typical case - standard hgvs format
         data = StringIO("# Accession:\n"
                         "# Downloaded (UTC):\n"
                         "# Licence:\n"
@@ -196,33 +212,3 @@ class Test(TestCase):
         df = MaveDf(data)
         df.add_variant_data(target_seq)
         self.assertEqual(df.pandas_df["variant_codon"][0], "TAT")
-
-    # scenario 1 - call function on urn mavedb 00000011-a-1_scores
-""""
-    # typical case - test drop_accession and ret_meta
-    def test_add_variant_data_drop_accession(self):
-        target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
-        results = add_variant_data("urn mavedb 00000011-a-1_scores.csv", target_seq, True, True)
-        self.assertEquals(results[0].iat[0, 0], "c.[1C>A;2=;3=]")
-
-    # edge case - invalid second or third argument boolean
-    def test_add_variant_data_not_boolean_arg(self):
-        with self.assertRaises(TypeError):
-            target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
-            add_variant_data("urn mavedb 00000011-a-1_scores.csv", target_seq, drop_accession="cat")
-        with self.assertRaises(TypeError):
-            target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
-            add_variant_data("urn mavedb 00000011-a-1_scores.csv", target_seq, ret_meta="cat")
-
-    # test helper functions
-
-    # test parse_additional_hgvs_format
-    def test_add_variant_data_parser(self):
-        sub_one, sub_two, sub_three, sub_one_nuc, sub_two_nuc, sub_three_nuc = parse_additional_hgvs_format(
-            "c.[1C>A;2=;3=]")
-        self.assertEquals(sub_one, 0)
-        self.assertEquals(sub_two, None)
-        self.assertEquals(sub_three, None)
-        self.assertEquals(sub_one_nuc, "A")
-        self.assertEquals(sub_two_nuc, None)
-        self.assertEquals(sub_three_nuc, None) """
