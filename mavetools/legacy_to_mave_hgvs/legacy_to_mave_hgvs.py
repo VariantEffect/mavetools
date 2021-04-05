@@ -103,7 +103,8 @@ def legacy_to_mave_hgvs(hgvs):
 def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     """
     This function converts a legacy hgvs_nt formatted string (i.e., c.[1C>A;2=;3=]) and converts it
-    to the standard format (i.e., c.1delinsA)
+    to the standard format (i.e., c.1delinsA). If string is already in standard format, the input
+    string is returned as-is.
 
     Parameters
     ----------
@@ -116,6 +117,11 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     """
     # determine which bases had a change
     changes = [letter for letter in hgvs_legacy if letter in "=>"]
+
+    # if changes < 3, not in hgvs format
+    if len(changes) < 3:
+        return hgvs_legacy
+
     # count instances of changes
     count = Counter(changes)
     count = count[">"]
