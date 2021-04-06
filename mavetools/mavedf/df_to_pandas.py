@@ -24,16 +24,20 @@ def df_to_pandas(df, ret_meta=False):
     Raises
     ______
     TypeError:
-        if argument is not string
+        if df is not string
+        if ret_meta is not bool
         if no arguments are passed
     ValueError:
         if first argument is not in filename.csv format
     """
     # check for TypeError
-    # if first argument is not string
+    # if df is not string
     if not isinstance(df, str):
         if not isinstance(df, _io.StringIO):  # account for StringIO object in test file
             raise TypeError("df must be string in filename.csv format")
+    # if ret_meta is not bool
+    if not isinstance(ret_meta, bool):
+        raise TypeError("ret_meta must be bool")
 
     # check for ValueError
     # if df is not in filename.csv format
