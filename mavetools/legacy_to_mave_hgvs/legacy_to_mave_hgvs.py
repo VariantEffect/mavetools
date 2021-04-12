@@ -16,6 +16,7 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     Returns
     -------
     standard_hgvs (string): standard format hgvs string
+    empty string if input string is in invalid format
     """
     # determine which bases had a change
     changes = [letter for letter in hgvs_legacy if letter in "=>"]
@@ -96,6 +97,6 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
         standard_hgvs = "c." + str(sub_one) + "_" + str(sub_three) + "delins" + sub_one_nuc + sub_two_nuc + sub_three_nuc
 
     else:
-        return None
+        return ""
 
     return standard_hgvs
