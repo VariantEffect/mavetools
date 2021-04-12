@@ -1,4 +1,3 @@
-import re
 from mavetools.mavedf.df_to_pandas import df_to_pandas
 from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
