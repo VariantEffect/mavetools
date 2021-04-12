@@ -2,6 +2,7 @@ import re
 from mavetools.mavedf.df_to_pandas import df_to_pandas
 from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
+from mavetools.mavedf.mutation_type import *
 
 
 class MaveDf:
@@ -66,9 +67,9 @@ class MaveDf:
             # get hgvs_nt
             hgvs = self.pandas_df["hgvs_nt"][i]
 
-            # identify variant position and get codon number associated with it
+            # identify variant_position and get codon_number associated with it
 
-            if hgvs.startswith("_wt"):  # variant_codon is wild-type
+            if is_wild_type(hgvs):  # variant_codon is wild-type
                 codon_number = None
                 target_codon = None
             else:  # any other variant change
@@ -88,13 +89,13 @@ class MaveDf:
 
             # determine sequence of variant_codon
 
-            if hgvs.startswith("_wt"):  # variant_codon is wild-type
+            if is_wild_type(hgvs):  # variant_codon is wild-type
                 variant_codon = target_codon
                 sub_one = None  # no nucleotide substitutions
-            elif hgvs.endswith("del"):  # target_codon was deleted
+            elif is_deletion(hgvs):  # target_codon was deleted
                 variant_codon = None
                 sub_one = None  # no nucleotide substitutions
-            elif hgvs[-2] == ">":  # variant_codon has one nucleotide substitution
+            elif is_substitution_one_base(hgvs):  # variant_codon has one nucleotide substitution
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get index of nucleotide substitution
@@ -104,7 +105,7 @@ class MaveDf:
                 # set other possible indices for codon substitution to None
                 sub_two = None
                 sub_three = None
-            elif hgvs[-1] == "]":  # variant_codon has two nucleotide substitutions, non-adjacent
+            elif is_substitution_two_bases_nonadjacent(hgvs):  # variant has two nucleotide substitutions, non-adjacent
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get indices of nucleotide substitutions
@@ -141,6 +142,7 @@ class MaveDf:
                     sub_three_nuc = sub_nucs[2]
 
             # using data generated above (substituted nucleotides and indices in codon), construct variant_codon
+
             # only assign variant_codon if nucleotide substitution occurred
             if sub_one is not None:
                 # declare and initialize variant_codon
