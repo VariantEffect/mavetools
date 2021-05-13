@@ -9,7 +9,7 @@ class MaveDf:
     def __init__(self, df):
         """
         Constructor
-        This function instantiates the MaveDf object and assigns values to the
+        This method instantiates the MaveDf object and assigns values to the
         attributes pandas_df and meta_dict
 
         Parameters
@@ -29,6 +29,7 @@ class MaveDf:
         """
         This method takes in a target sequence and converts coding variants into codon changes.
         These changes are stored in three additional MaveDf columns: target_codon, codon_number, and variant_codon.
+        This method also updates the hgvs from legacy to mave hgvs, if it is not already done.
 
         Parameters
         __________
