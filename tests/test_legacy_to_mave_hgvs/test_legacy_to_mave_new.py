@@ -1,5 +1,5 @@
 from unittest import TestCase
-from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
+from mavetools.legacy_to_mave_hgvs.legacy_to_mave_new import legacy_to_mave_hgvs_nt
 
 
 class Test(TestCase):
@@ -7,6 +7,7 @@ class Test(TestCase):
         # test no change
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         self.assertEqual(legacy_to_mave_hgvs_nt("c.[1=;2=;3=]", target_seq), "_wt")
+        self.assertEqual(legacy_to_mave_hgvs_nt("n.2=", target_seq), "_wt")
 
     def test_one_base_change(self):
         # test one base change
@@ -28,3 +29,16 @@ class Test(TestCase):
         # test three base change
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         self.assertEqual(legacy_to_mave_hgvs_nt("c.[7G>C;8G>T;9T>C]", target_seq), "c.7_9delinsCTC")
+
+    def test_four_base_change(self):
+        # test four base change
+        target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;7G>C;8G>T;9T>C]", target_seq), "c.[1C>A;7_9delinsCTC]")
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;2A>C;3A>T;4T>C]", target_seq), "c.[1_3delinsACT;4T>C]")
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;2A>C;8G>T;9T>C]", target_seq), "c.[1_2delinsAC;8_9delinsTC]")
+
+    def test_five_base_change(self):
+        # test five base change
+        target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;7G>C;8G>T;9T>C;10T>G]", target_seq),
+                         "c.[1C>A;7_9delinsCTC;10T>G]")

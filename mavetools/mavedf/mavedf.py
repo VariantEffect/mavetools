@@ -1,5 +1,7 @@
+from mavetools.legacy_to_mave_hgvs.mavevariant import MaveVariant
 from mavetools.mavedf.df_to_pandas import df_to_pandas
-from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
+#from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
+from mavetools.legacy_to_mave_hgvs.legacy_to_mave_new import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
 from mavetools.mavedf.mutation_type import *
 
@@ -63,6 +65,12 @@ class MaveDf:
 
             # check for legacy hgvs format (i.e., c.[1C>A;2=;3=]) and update if needed
             self.pandas_df["hgvs_nt"][i] = legacy_to_mave_hgvs_nt(self.pandas_df["hgvs_nt"][i], target_seq)
+
+            # new implementation
+            # instantiate mavevariant
+            #variant = MaveVariant(self.pandas_df["hgvs_nt"][i], target_seq)
+            #self.pandas_df["hgvs_nt"][i] = variant.mave_hgvs
+            print("variant = " + self.pandas_df["hgvs_nt"][i])
 
             # get hgvs_nt
             hgvs = self.pandas_df["hgvs_nt"][i]

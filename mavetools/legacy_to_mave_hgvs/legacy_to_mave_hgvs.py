@@ -18,6 +18,12 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
     standard_hgvs (string): standard format hgvs string
     empty string if input string is in invalid format
     """
+    ######################################################
+    # program does not work for changes in different codons
+    # examples
+    # c.[36A>C;53G>C;59T>A] #### this is actually okay!
+    # can my script accurately determine whether or not the format is already in mave_hgvs?
+
     # determine which bases had a change
     changes = [letter for letter in hgvs_legacy if letter in "=>"]
 
@@ -100,3 +106,11 @@ def legacy_to_mave_hgvs_nt(hgvs_legacy, target_seq):
         return ""
 
     return standard_hgvs
+
+# meta data format
+
+# 3 mutations in different codons
+
+# > 3 mutations
+
+# determine whether mutations are adjacent
