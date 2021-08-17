@@ -10,7 +10,8 @@ base_url = os.getenv('MAVEDB_BASE_URL', '')
 experiment_urn = 'urn:mavedb:00000001-a'
 
 # Generate a new auth_token in your profile and post it here
-auth_token = 'AseyaNLLhqv9jAm0joMkq2oqB0bw3GKxTclkT2NtG340RF6CfdM2UC3j8Fv4RpbQ'
+#auth_token = 'AseyaNLLhqv9jAm0joMkq2oqB0bw3GKxTclkT2NtG340RF6CfdM2UC3j8Fv4RpbQ'
+auth_token = 'ccc13d11f3bf7963a51056dd109209bffdf68e1a'
 client = Client(base_url, auth_token=auth_token) if base_url else Client(auth_token=auth_token)
 
 
