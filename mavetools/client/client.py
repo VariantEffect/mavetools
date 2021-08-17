@@ -3,8 +3,17 @@ import logging
 import requests
 import sys
 
+
 class Client():
     def __init__(self, base_url='http://127.0.0.1:8000/api/', auth_token=''):
+        """
+        Instantiates the Client object
+
+        Parameters
+        ----------
+        base_url:
+        auth_token:
+        """
         self.base_url = base_url
         if auth_token:
             self.auth_token = auth_token
@@ -47,13 +56,29 @@ class Client():
         return model_class.deserialize(r.json())
 
     def post_model_instance(self, model_instance):
+        '''
+        Posts instance of model to MaveDB
+
+        Parameters
+        ----------
+        model_instance
+
+        Returns
+        -------
+        ???
+        '''
+
+        # save object type of model_instance
         model_class = type(model_instance)
         model_url = f"{self.base_url}{model_class.api_url()}/"
         payload, files = model_instance.post_payload()
+
+        # check for existance of self.auth_token, raise error if does not exist
         if not self.auth_token:
             error_message = 'Need to include an auth token for POST requests!'
             logging.error(error_message)
             raise AuthTokenMissingException(error_message)
+
         try:
             r = requests.post(
                 model_url,
@@ -67,4 +92,6 @@ class Client():
         except requests.exceptions.HTTPError as e:
             logging.error(r.text)
             sys.exit(1)
+
+        # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {model_instance}!")
