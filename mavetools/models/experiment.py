@@ -12,9 +12,21 @@ class Experiment(APIObject, Dataset):
     scoresets: List[str] = attr.ib(kw_only=True, default=None)
 
     def api_url() -> str:
+        """
+
+        Returns
+        -------
+
+        """
         return 'experiments/'
 
     def api_id_field() -> str:
+        """
+
+        Returns
+        -------
+
+        """
         return 'urn'
 
     def deserialize(json_dict):
@@ -29,6 +41,12 @@ class NewExperiment(NewDataset):
     experimentset: str = attr.ib(kw_only=True, default=None)
 
     def api_url() -> str:
+        """
+
+        Returns
+        -------
+
+        """
         return 'experiments'
 
     def post_payload(self):
