@@ -57,7 +57,7 @@ class Client():
 
     def post_model_instance(self, model_instance):
         '''
-        Posts instance of model to MaveDB
+        Using a POST, hit an API endpoint to post a resource. Performs HTTP POST request.
 
         Parameters
         ----------
