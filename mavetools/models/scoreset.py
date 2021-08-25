@@ -27,6 +27,12 @@ class ScoreSet(APIObject, Dataset):
     is_meta_analysis: bool = attr.ib(kw_only=True)
 
     def api_url() -> str:
+        """
+
+        Returns
+        -------
+        API endpoint
+        """
         return 'scoresets/'
 
     def api_id_field() -> str:
