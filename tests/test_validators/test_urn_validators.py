@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from ..models import generate_tmp_urn
+from tests.test_validators.for_urn_validators.models import generate_tmp_urn
 
-from ..validators import (
+from mavetools.validators.urn_validators import (
     validate_mavedb_urn,
     validate_mavedb_urn_experiment,
     validate_mavedb_urn_experimentset,
