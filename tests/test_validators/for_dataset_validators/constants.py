@@ -1,7 +1,7 @@
 """
 Constant definitions for application `experiment`.
 """
-from urn.validators import (
+from mavetools.validators.urn_validators import (
     MAVEDB_EXPERIMENTSET_URN_PATTERN,
     MAVEDB_EXPERIMENT_URN_PATTERN,
     MAVEDB_SCORESET_URN_PATTERN,
