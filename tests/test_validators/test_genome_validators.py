@@ -1,7 +1,20 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from core.utilities import null_values_list
+#from core.utilities import null_values_list
+# Used in CSV formatting
+NA_value = "NA"
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
+)
 
 from ..models import WildTypeSequence
 from ..factories import (
