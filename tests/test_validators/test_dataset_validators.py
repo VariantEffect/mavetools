@@ -1,11 +1,13 @@
+
 from io import BytesIO, StringIO
+from unittest import TestCase
+
 
 import pandas as pd
 
-from django.test import TestCase
-from django.core.exceptions import ValidationError
-
-#from core.utilities import null_values_list
+#from django.test import TestCase
+#from django.core.exceptions import ValidationError
+from cfgv import ValidationError
 
 from tests.test_validators.for_dataset_validators import constants
 
@@ -19,6 +21,21 @@ from mavetools.validators.dataset_validators import (
     validate_scoreset_json,
     validate_datasets_define_same_variants,
     WordLimitValidator,
+)
+
+#from core.utilities import null_values_list\
+# Used in CSV formatting
+NA_value = "NA"
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
 )
 
 
@@ -118,6 +135,7 @@ class TestAtLeastOneNumericColumnValidator(TestCase):
     """
 
     def test_raises_validationerror_when_less_than_2_values_in_column(self):
+        #TODO test has failed
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValidationError):
             header = read_header_from_io(file)
@@ -141,12 +159,14 @@ class TestHgvsInHeaderValidator(TestCase):
     """
 
     def test_raises_validationerror_when_neither_hgvs_col_in_column(self):
+        #TODO test has failed
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValidationError):
             header = read_header_from_io(file)
             validate_has_hgvs_in_header(header)
 
     def test_hgvs_must_be_lowercase(self):
+        #TODO test has failed
         file = BytesIO(
             "{},score,count\n".format(
                 constants.hgvs_nt_column.upper()
@@ -255,11 +275,13 @@ class TestValidateScoreSetCountDataInputValidator(TestCase):
     """
 
     def test_raises_validationerror_when_hgvs_not_in_column(self):
+        #TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValidationError):
             validate_scoreset_count_data_input(file)
 
     def test_raises_validationerror_no_numeric_column(self):
+        #TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValidationError):
             validate_scoreset_count_data_input(file)
@@ -282,11 +304,13 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
     """
 
     def test_raises_validationerror_when_hgvs_not_in_column(self):
+        #TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValidationError):
             validate_scoreset_score_data_input(file)
 
     def test_raises_validationerror_no_numeric_column(self):
+        #TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValidationError):
             validate_scoreset_score_data_input(file)
@@ -302,12 +326,14 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
                 validate_scoreset_score_data_input(file)
 
     def test_validatation_error_score_not_in_header(self):
+        #TODO test has failed (resolved)
         file = BytesIO("{},count\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValidationError):
             validate_scoreset_score_data_input(file)
 
 
 class TestValidateScoreSetJsonValidator(TestCase):
+    #TODO all tests have failed (resolved)
     """
     Test to ensure that a scoreset json field is properly formatted.
     """
