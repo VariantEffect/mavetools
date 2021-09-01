@@ -11,8 +11,7 @@ from django.core.validators import FileExtensionValidator
 
 from core.utilities import is_null, readable_null_values
 
-from . import constants
-
+from tests.test_validators.for_dataset_validators import constants
 
 validate_csv_extension = FileExtensionValidator(allowed_extensions=["csv"])
 validate_gz_extension = FileExtensionValidator(allowed_extensions=["gz"])

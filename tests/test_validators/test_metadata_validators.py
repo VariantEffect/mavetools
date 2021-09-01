@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from ..validators import (
+from mavetools.validators.metadata_validators import (
     validate_doi_identifier,
     validate_doi_list,
     validate_keyword,
