@@ -26,6 +26,8 @@ null_values_re = re.compile(
     r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
     flags=re.IGNORECASE,
 )
+
+
 def is_null(value):
     """Returns True if a stripped/lowercase value in in `nan_col_values`."""
     value = str(value).strip().lower()
@@ -46,6 +48,103 @@ min_end_validator = MinValueValidator(
     1, message=_("End coordinate must be a positive integer.")
 )
 
+class WildTypeSequence():
+    """
+    Basic model specifying a wild-type sequence.
+
+    Parameters
+    ----------
+    sequence : `models.CharField`
+        The wild type DNA sequence that is related to the `target`. Will
+        be converted to upper-case upon instantiation.
+
+    sequence_type : `models.CharField`
+        Protein sequence (amino acids) or DNA (nucleotides)
+    """
+
+    class SequenceType:
+        DNA = "dna"
+        PROTEIN = "protein"
+        INFER = "infer"
+
+        @classmethod
+        def detect_sequence_type(cls, sequence):
+            if sequence_is_dna(sequence):
+                return cls.DNA
+            elif sequence_is_protein(sequence):
+                return cls.PROTEIN
+            else:
+                raise ValueError(
+                    f"Unknown sequence '{sequence}'. It is not protein or DNA."
+                )
+
+        @classmethod
+        def is_protein(cls, value):
+            return value == cls.PROTEIN
+
+        @classmethod
+        def is_dna(cls, value):
+            return value == cls.DNA
+
+        @classmethod
+        def choices(cls):
+            return [
+                (cls.INFER, "Infer"),
+                (cls.DNA, "DNA"),
+                (cls.PROTEIN, "Protein"),
+            ]
+
+    class Meta:
+        verbose_name = "Reference sequence"
+        verbose_name_plural = "Reference sequences"
+
+    def __str__(self):
+        return self.get_sequence()
+
+    #sequence = models.TextField(
+    #    default=None,
+    #    blank=False,
+    #    null=False,
+    #    verbose_name="Reference sequence",
+    #    validators=[validate_wildtype_sequence],
+    #)
+    #sequence_type = models.CharField(
+    #    blank=True,
+    #    null=False,
+    #    default=SequenceType.INFER,
+    #    verbose_name="Reference sequence type",
+    #    max_length=32,
+    #    choices=SequenceType.choices(),
+    #)
+
+    @property
+    def is_dna(self):
+        return self.__class__.SequenceType.is_dna(self.sequence_type)
+
+    @property
+    def is_protein(self):
+        return self.__class__.SequenceType.is_protein(self.sequence_type)
+
+    def save(self, *args, **kwargs):
+        if self.sequence is not None:
+            self.sequence = self.sequence.upper()
+            self.sequence_type = (
+                (
+                    self.__class__.SequenceType.detect_sequence_type(
+                        self.sequence
+                    )
+                )
+                if self.__class__.SequenceType.INFER
+                else self.sequence_type
+            )
+
+        return super().save(*args, **kwargs)
+
+    def get_sequence(self):
+        return self.sequence.upper()
+
+    def is_attached(self):
+        return getattr(self, "target", None) is not None
 
 # GenomicInterval
 # ------------------------------------------------------------------------- #
@@ -97,7 +196,7 @@ def validate_unique_intervals(intervals):
 # WildTypeSequence
 # ------------------------------------------------------------------------- #
 def validate_wildtype_sequence(seq, as_type="any"):
-    from .models import WildTypeSequence
+    #from .models import WildTypeSequence
 
     # Explicitly check for these cases as they are also valid AA sequences.
     if is_null(seq):
