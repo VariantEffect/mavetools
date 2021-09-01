@@ -9,8 +9,7 @@ Validator functions for the fields of the following classes:
 Most validators should validate one specific field, unless fields need
 to be validated against each other.
 """
-from core.utilities import is_null
-
+from typing import re
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
@@ -19,6 +18,19 @@ from fqfa.validator.validator import (
     dna_bases_validator,
     amino_acids_validator,
 )
+
+#from core.utilities import is_null
+# Used in CSV formatting
+NA_value = "NA"
+null_values_re = re.compile(
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
+    flags=re.IGNORECASE,
+)
+def is_null(value):
+    """Returns True if a stripped/lowercase value in in `nan_col_values`."""
+    value = str(value).strip().lower()
+    return null_values_re.fullmatch(value) or not value
+
 
 AA_LETTERS = "ABCDEFGHIKLMNPQRSTVWXYZ"
 DNA_LETTERS = "ATCG"
