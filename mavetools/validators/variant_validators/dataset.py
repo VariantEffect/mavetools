@@ -11,12 +11,32 @@ from mavehgvs import MaveHgvsParseError, Variant
 from fqfa.util.translate import translate_dna
 from fqfa.util.infer import infer_sequence_type
 
-import dataset.constants
-from core.utilities import (
-    is_null,
-    null_values_list,
-    null_values_re,
-    readable_null_values,
+from mavetools.validators.for_variant_validators.constants import (
+    hgvs_nt_column,
+    hgvs_splice_column,
+    hgvs_pro_column,
+    required_score_column
+    #constants
+)
+#from core.utilities import (
+#    is_null,
+#    null_values_list,
+#    null_values_re,
+#    readable_null_values,
+#)
+# Used in CSV formatting
+NA_value = "NA"
+
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
 )
 
 
@@ -26,9 +46,9 @@ class MaveDataset:
         COUNTS = "counts"
 
     class HGVSColumns:
-        NUCLEOTIDE: str = dataset.constants.hgvs_nt_column
-        TRANSCRIPT: str = dataset.constants.hgvs_splice_column
-        PROTEIN: str = dataset.constants.hgvs_pro_column
+        NUCLEOTIDE: str = hgvs_nt_column
+        TRANSCRIPT: str = hgvs_splice_column
+        PROTEIN: str = hgvs_pro_column
 
         @classmethod
         def options(cls) -> List[str]:
