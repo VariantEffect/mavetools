@@ -3,11 +3,22 @@ import idutils
 
 from django.core.exceptions import ValidationError
 
-from core.utilities import is_null
+#from core.utilities import is_null
+
+# code prep for validators
+NA_value = "NA"
+null_values_re = re.compile(
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
+    flags=re.IGNORECASE,
+)
+def is_null(value):
+    """Returns True if a stripped/lowercase value in in `nan_col_values`."""
+    value = str(value).strip().lower()
+    return null_values_re.fullmatch(value) or not value
 
 
 def validate_sra_identifier(identifier):
-    from .models import ExternalIdentifier
+    #from .models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
