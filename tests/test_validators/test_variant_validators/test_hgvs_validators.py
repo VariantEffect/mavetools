@@ -1,10 +1,26 @@
-from django.test import TestCase
-from django.core.exceptions import ValidationError
+#from django.test import TestCase
+#from django.core.exceptions import ValidationError
 
-from core.utilities import null_values_list
+#from core.utilities import null_values_list
+from unittest import TestCase
 
-from ..validators import hgvs
+from cfgv import ValidationError
 
+from mavetools.validators.variant_validators import hgvs
+# Used in CSV formatting
+NA_value = "NA"
+
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
+)
 
 class TestValidateHgvsString(TestCase):
     def test_passes_on_null(self):
