@@ -643,7 +643,7 @@ class MaveDataset:
 
 class MaveScoresDataset(MaveDataset):
     class AdditionalColumns:
-        SCORES = dataset.constants.required_score_column
+        SCORES = required_score_column
 
         @classmethod
         def options(cls) -> List[str]:
