@@ -1,28 +1,18 @@
-from django.test import TestCase
-from django.core.exceptions import ValidationError
+from unittest import TestCase
 
-#from core.utilities import null_values_list
-# Used in CSV formatting
-NA_value = "NA"
-null_values_list = (
-    "nan",
-    "na",
-    "none",
-    "",
-    "undefined",
-    "n/a",
-    "null",
-    "nil",
-    NA_value,
-)
+from cfgv import ValidationError
+#from django.test import TestCase
+#from django.core.exceptions import ValidationError
+from mavetools.validators.genome_validators import WildTypeSequence
 
-from ..models import WildTypeSequence
-from ..factories import (
-    ReferenceMapFactory,
-    ReferenceGenomeFactory,
-    GenomicIntervalFactory,
-)
-from ..validators import (
+#from mavetools.validators.genome_factories import (
+#    ReferenceMapFactory,
+#    ReferenceGenomeFactory,
+#    GenomicIntervalFactory,
+#)
+
+
+from mavetools.validators.genome_validators import (
     validate_interval_start_lteq_end,
     validate_wildtype_sequence,
     validate_gene_name,
@@ -40,6 +30,20 @@ from ..validators import (
     sequence_is_dna,
 )
 
+#from core.utilities import null_values_list
+# Used in CSV formatting
+NA_value = "NA"
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
+)
 
 class TestIntervalValidators(TestCase):
     """
@@ -60,6 +64,7 @@ class TestIntervalValidators(TestCase):
         validate_interval_start_lteq_end(start=1, end=1)
 
     def test_ve_duplicate_interval_chromosome_case_ignored(self):
+        #FIXME
         interval = GenomicIntervalFactory()
         intervals = [
             GenomicIntervalFactory(
@@ -199,6 +204,7 @@ class TestReferenceGenomeValidators(TestCase):
                 validate_genome_short_name(v)
 
     def test_ve_reference_genome_has_no_external_identifiers(self):
+        #FIXME
         referencegenome = ReferenceGenomeFactory(genome_id=None)
         with self.assertRaises(ValidationError):
             validate_reference_genome_has_one_external_identifier(
@@ -206,6 +212,7 @@ class TestReferenceGenomeValidators(TestCase):
             )
 
     def test_passes_reference_genome_has_one_external_identifiers(self):
+        #FIXME
         referencegenome = ReferenceGenomeFactory()
         validate_reference_genome_has_one_external_identifier(referencegenome)
 
@@ -220,6 +227,7 @@ class TestReferenceMapValidators(TestCase):
     """
 
     def test_ve_reference_map_does_not_have_a_unique_genome(self):
+        #FIXME
         reference_map1 = ReferenceMapFactory()
         reference_map2 = ReferenceMapFactory(
             genome=reference_map1.get_reference_genome(),
@@ -231,6 +239,7 @@ class TestReferenceMapValidators(TestCase):
             )
 
     def test_ve_duplicate_intervals_in_list(self):
+        #FIXME
         interval = GenomicIntervalFactory()
         intervals = [
             GenomicIntervalFactory(
@@ -245,6 +254,7 @@ class TestReferenceMapValidators(TestCase):
             validate_unique_intervals(intervals)
 
     def test_ve_no_intervals_associated_with_reference_map(self):
+        #FIXME
         reference_map = ReferenceMapFactory()
         GenomicIntervalFactory(reference_map=reference_map)
         validate_map_has_at_least_one_interval(reference_map)  # passes
@@ -254,6 +264,7 @@ class TestReferenceMapValidators(TestCase):
             validate_map_has_at_least_one_interval(reference_map)
 
     def test_ve_missing_primary_maps(self):
+        #FIXME
         reference_map = ReferenceMapFactory()
         validate_one_primary_map([reference_map])  # passes
 
@@ -263,6 +274,7 @@ class TestReferenceMapValidators(TestCase):
             validate_one_primary_map([reference_map])
 
     def test_ve_target_has_two_primary_reference_maps(self):
+        #FIXME
         reference_map1 = ReferenceMapFactory()
         reference_map2 = ReferenceMapFactory()
         with self.assertRaises(ValidationError):
