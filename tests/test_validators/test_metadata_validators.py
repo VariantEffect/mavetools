@@ -1,5 +1,8 @@
-from django.test import TestCase
-from django.core.exceptions import ValidationError
+#from django.test import TestCase
+#from django.core.exceptions import ValidationError
+from unittest import TestCase
+
+from cfgv import ValidationError
 
 from mavetools.validators.metadata_validators import (
     validate_doi_identifier,
