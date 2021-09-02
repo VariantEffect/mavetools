@@ -1,20 +1,64 @@
 from io import BytesIO, StringIO
+from unittest import TestCase
+from random import choice
 
 import pandas as pd
-from django.core.exceptions import ValidationError
-from django.test import TestCase
+#from django.core.exceptions import ValidationError
+#from django.test import TestCase
+from cfgv import ValidationError
 from pandas.testing import assert_index_equal, assert_frame_equal
 
-from core.utilities import null_values_list
-from dataset import constants
+#from dataset import constants
+from mavetools.validators.for_variant_validators import constants
 
-from ..factories import generate_hgvs, VariantFactory
-from ..validators import (
+#from ..factories import generate_hgvs, VariantFactory
+from mavetools.validators.variant_validators import (
     MaveDataset,
     validate_columns_match,
     validate_variant_json,
     validate_hgvs_string,
 )
+
+def generate_hgvs(prefix: str = "c") -> str:
+    """Generates a random hgvs string from a small sample."""
+    if prefix == "p":
+        # Subset of 3-letter codes, chosen at random.
+        amino_acids = [
+            "Ala",
+            "Leu",
+            "Gly",
+            "Val",
+            "Tyr",
+            "Met",
+            "Cys",
+            "His",
+            "Glu",
+            "Phe",
+        ]
+        ref = choice(amino_acids)
+        alt = choice(amino_acids)
+        return f"{prefix}.{ref}{choice(range(1, 100))}{alt}"
+    else:
+        alt = choice("ATCG")
+        ref = choice("ATCG")
+        return f"{prefix}.{choice(range(1, 100))}{ref}>{alt}"
+
+
+#from core.utilities import null_values_list
+# Used in CSV formatting
+NA_value = "NA"
+null_values_list = (
+    "nan",
+    "na",
+    "none",
+    "",
+    "undefined",
+    "n/a",
+    "null",
+    "nil",
+    NA_value,
+)
+
 
 
 class TestValidateMatchingColumns(TestCase):
