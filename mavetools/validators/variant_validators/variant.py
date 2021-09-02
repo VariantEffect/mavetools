@@ -2,7 +2,7 @@ from typing import Dict
 
 from django.core.exceptions import ValidationError
 
-from dataset.constants import (
+from mavetools.validators.for_variant_validators.constants import (
     variant_score_data,
     variant_count_data,
     required_score_column,
