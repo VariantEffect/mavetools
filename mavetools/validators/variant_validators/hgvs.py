@@ -1,18 +1,34 @@
 from functools import partial
 from typing import Optional, Union
+import re
 
-from django.core.exceptions import ValidationError
-
+#from django.core.exceptions import ValidationError
+from cfgv import ValidationError
 from mavehgvs import Variant, MaveHgvsParseError
 
-from core.utilities import is_null
-from dataset.constants import (
+#from core.utilities import is_null
+# Used in CSV formatting
+NA_value = "NA"
+null_values_re = re.compile(
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
+    flags=re.IGNORECASE,
+)
+def is_null(value):
+    """Returns True if a stripped/lowercase value in in `nan_col_values`."""
+    value = str(value).strip().lower()
+    return null_values_re.fullmatch(value) or not value
+
+from mavetools.validators.for_variant_validators.constants import (
     hgvs_nt_column,
     hgvs_splice_column,
     hgvs_pro_column,
 )
 
-
+#from core.utilities import is_null
+def is_null(value):
+    """Returns True if a stripped/lowercase value in in `nan_col_values`."""
+    value = str(value).strip().lower()
+    return null_values_re.fullmatch(value) or not value
 def validate_hgvs_string(
     value: Union[str, bytes],
     column: Optional[str] = None,
