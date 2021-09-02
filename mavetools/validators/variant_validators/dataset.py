@@ -38,6 +38,21 @@ null_values_list = (
     "nil",
     NA_value,
 )
+null_values_re = re.compile(
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
+    flags=re.IGNORECASE,
+)
+readable_null_values = [
+    "'{}'".format(v)
+    for v in set([v.lower() for v in null_values_list])
+    if v.strip()
+] + ["whitespace"]
+
+def is_null(value):
+    """Returns True if a stripped/lowercase value in in `nan_col_values`."""
+    value = str(value).strip().lower()
+    return null_values_re.fullmatch(value) or not value
+
 
 
 class MaveDataset:
