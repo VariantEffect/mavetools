@@ -9,11 +9,11 @@ Validator functions for the fields of the following classes:
 Most validators should validate one specific field, unless fields need
 to be validated against each other.
 """
-from typing import re
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
-from django.utils.translation import ugettext_lazy as _
-
+import re
+#from django.core.exceptions import ValidationError
+#from django.core.validators import MinValueValidator
+#from django.utils.translation import ugettext_lazy as _
+from cfgv import ValidationError
 from fqfa.validator.validator import (
     dna_bases_validator,
     amino_acids_validator,
@@ -41,12 +41,13 @@ DNA_SEQ_PATTERN = fr"[{DNA_LETTERS}]+"
 AA_SEQ_PATTERN = fr"[{AA_LETTERS}]+"
 
 
-min_start_validator = MinValueValidator(
-    1, message=_("Start coordinate must be a positive integer.")
-)
-min_end_validator = MinValueValidator(
-    1, message=_("End coordinate must be a positive integer.")
-)
+#min_start_validator = MinValueValidator(
+#    1, message=_("Start coordinate must be a positive integer.")
+#)
+#min_end_validator = MinValueValidator(
+#    1, message=_("End coordinate must be a positive integer.")
+#)
+
 
 class WildTypeSequence():
     """
@@ -201,7 +202,7 @@ def validate_wildtype_sequence(seq, as_type="any"):
     # Explicitly check for these cases as they are also valid AA sequences.
     if is_null(seq):
         raise ValidationError(
-            "'%(seq)s' is not a valid wild type sequence.", params={"seq": seq}
+            "'%(seq)s' is not a valid wild type sequence."#, params={"seq": seq}
         )
 
     seq = seq.upper()
@@ -210,20 +211,20 @@ def validate_wildtype_sequence(seq, as_type="any"):
 
     if as_type == WildTypeSequence.SequenceType.DNA and not is_dna:
         raise ValidationError(
-            "'%(seq)s' is not a valid DNA reference sequence.",
-            params={"seq": seq},
+            "'%(seq)s' is not a valid DNA reference sequence."#,
+            #params={"seq": seq},
         )
     elif as_type == WildTypeSequence.SequenceType.PROTEIN and not is_aa:
         raise ValidationError(
-            "'%(seq)s' is not a valid protein reference sequence.",
-            params={"seq": seq},
+            "'%(seq)s' is not a valid protein reference sequence."#,
+            #params={"seq": seq},
         )
     elif (as_type == "any" or WildTypeSequence.SequenceType.INFER) and not (
         is_dna or is_aa
     ):
         raise ValidationError(
-            "'%(seq)s' is not a valid DNA or protein reference sequence.",
-            params={"seq": seq},
+            "'%(seq)s' is not a valid DNA or protein reference sequence."#,
+            #params={"seq": seq},
         )
 
 
@@ -295,7 +296,7 @@ def validate_one_primary_map(reference_maps):
     primary_count = sum(a.is_primary_reference_map() for a in reference_maps)
     if primary_count > 1 or primary_count < 1:
         raise ValidationError(
-            ("A target must have one primary reference map.")
+            "A target must have one primary reference map."
         )
 
 
