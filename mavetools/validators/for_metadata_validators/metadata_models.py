@@ -3,17 +3,17 @@ import idutils
 import metapub
 from eutils import EutilsNCBIError
 
-from django.db import models
+#from django.db import models
 
-#import genome.models as genome_models
+import mavetools.validators.for_metadata_validators.genome_models as genome_models
 
 #from core.models import TimeStampedModel
 
-#from metadata.validators import (
-#    validate_ensembl_identifier,
-#    validate_refseq_identifier,
-#    validate_uniprot_identifier,
-#)
+from mavetools.validators.metadata_validators import (
+    validate_ensembl_identifier,
+    validate_refseq_identifier,
+    validate_uniprot_identifier,
+)
 
 
 RELATED_FIELD_NAME = "associated_{}s"
@@ -55,7 +55,7 @@ def _is_attached(instance):
     )
 
 
-class Keyword(TimeStampedModel):
+class Keyword():
     """
     This class represents a keyword that can be associated with an
     experiment or scoreset.
@@ -115,7 +115,7 @@ class Keyword(TimeStampedModel):
         return _is_attached(self)
 
 
-class ExternalIdentifier(TimeStampedModel):
+class ExternalIdentifier():
     """
     This class represents a textual representation of an identifier from an
     external database that can be associated with a target in an experiment.
