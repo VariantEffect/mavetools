@@ -1,5 +1,8 @@
-from django.test import TestCase
-from django.core.exceptions import ValidationError
+#from django.test import TestCase
+#from django.core.exceptions import ValidationError
+from unittest import TestCase
+
+from cfgv import ValidationError
 
 from tests.test_validators.for_urn_validators.models import generate_tmp_urn
 
@@ -11,9 +14,9 @@ from mavetools.validators.urn_validators import (
     validate_mavedb_urn_variant,
 )
 
-from variant.factories import VariantFactory
+#from variant.factories import VariantFactory
 
-from dataset.utilities import publish_dataset
+#from dataset.utilities import publish_dataset
 
 
 class TestURNValidators(TestCase):
