@@ -1,11 +1,13 @@
 import re
 import idutils
 
-from django.core.exceptions import ValidationError
+#from django.core.exceptions import ValidationError
 
 #from core.utilities import is_null
 
 # code prep for validators
+from cfgv import ValidationError
+
 NA_value = "NA"
 null_values_re = re.compile(
     r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
@@ -18,7 +20,7 @@ def is_null(value):
 
 
 def validate_sra_identifier(identifier):
-    #from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -39,7 +41,7 @@ def validate_sra_identifier(identifier):
 
 
 def validate_keyword(kw):
-    from .models import Keyword
+    from mavetools.validators.for_metadata_validators.metadata_models import Keyword
 
     if isinstance(kw, Keyword):
         kw = kw.text
@@ -51,7 +53,7 @@ def validate_keyword(kw):
 
 
 def validate_pubmed_identifier(identifier):
-    from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -63,8 +65,8 @@ def validate_pubmed_identifier(identifier):
 
 
 def validate_doi_identifier(identifier):
-    from .models import ExternalIdentifier
-
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    print(type(identifier))
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_doi(identifier):
@@ -74,7 +76,7 @@ def validate_doi_identifier(identifier):
 
 
 def validate_ensembl_identifier(identifier):
-    from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -86,7 +88,7 @@ def validate_ensembl_identifier(identifier):
 
 
 def validate_uniprot_identifier(identifier):
-    from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -98,7 +100,7 @@ def validate_uniprot_identifier(identifier):
 
 
 def validate_refseq_identifier(identifier):
-    from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -110,7 +112,7 @@ def validate_refseq_identifier(identifier):
 
 
 def validate_genome_identifier(identifier):
-    from .models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
