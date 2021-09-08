@@ -95,15 +95,8 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
         # update dictionary
         mave_hgvs_dict.update({key: current_list})
 
-        # if key in self.mave_hgvs_dict:  # first check if key exists
-        # if it does, update the value
-        #    value_list.insert(0, self.mave_hgvs_dict.get(key))
-        # add correct key : value pair to dictionary
-        # self.mave_hgvs_dict.update({key: value_list})
-        # print(self.mave_hgvs_dict)
     # start constructing string from leading chars saved earlier
     constructing_mave_hgvs = leading_chars + "["
-    # print(self.mave_hgvs_dict)
     # loop through dictionary in sorted order and continue constructing mave_hgvs string
     for key in sorted(mave_hgvs_dict):  # look at all values for each codon number
         # get the value (list of tuples) for this key (codon number)
@@ -112,19 +105,14 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
         adjacent_values = []  # [(start, end, value)]
         in_construction = False  # keep track of when constructing delins
         for value in mave_hgvs_dict[key]:
-            # print("VALUE : " + str(value))
             if len(adjacent_values) == 0:
-                # print(value)
                 # add value to adjacent values
                 if type(value) == tuple:
                     adjacent_values.append(value)
                 else:  # value is in list form
                     adjacent_values.append(value[0])
-                # print(adjacent_values)
             else:  # check if next value is adjacent to previous
-                # print(value)
                 if adjacent_values[-1][0] - value[0] == -1:  # value is adjacent to previous value
-                    # print(value)
                     # add value to adjacent values
                     adjacent_values.append(value)
                 else:  # value is not adjacent to previous values
@@ -151,7 +139,6 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
                     adjacent_values.append(value)
 
         # now we have gone through all values, add last values remaining in adjacent values to string
-        # print("len " + str(len(adjacent_values)))
         if len(adjacent_values) == 1:
             constructing_mave_hgvs = constructing_mave_hgvs + \
                                      str(adjacent_values[0][0]) + \
@@ -160,8 +147,6 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
                                      adjacent_values[0][2] + \
                                      ";"
         else:  # more than one value in adjacent_values
-            # print(adjacent_values)
-            # print(adjacent_values[0])
             constructing_mave_hgvs = constructing_mave_hgvs + \
                                      str(adjacent_values[0][0]) + \
                                      "_" + \
@@ -178,10 +163,10 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
     # constructing_mave_hgvs[-1] = "]"
     # string consructed, assign to mave_hgvs
     mave_hgvs = constructing_mave_hgvs[:-1] + "]"
-    # make sure brakcets are only there when needed
+    # make sure brackets are only there when needed
     count = Counter(mave_hgvs)
     count = count[";"]
     if count == 0:  # remove brackets
         mave_hgvs = leading_chars + mave_hgvs[3:-1]
-    # print(self.mave_hgvs)
+
     return mave_hgvs
