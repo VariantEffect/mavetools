@@ -204,7 +204,7 @@ class MaveVariant:
         count = count[";"]
         if count == 0:  # remove brackets
             self.mave_hgvs = leading_chars + self.mave_hgvs[3:-1]
-        #print(self.mave_hgvs)
+
         return 1
 
     def validate_target_seq(self):
