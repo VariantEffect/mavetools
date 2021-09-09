@@ -175,7 +175,6 @@ class MaveVariant:
                         adjacent_values.append(value)
 
             # now we have gone through all values, add last values remaining in adjacent values to string
-            #print("len " + str(len(adjacent_values)))
             if len(adjacent_values) == 1:
                 constructing_mave_hgvs = constructing_mave_hgvs + \
                                          str(adjacent_values[0][0]) + \
@@ -184,8 +183,6 @@ class MaveVariant:
                                          adjacent_values[0][2] + \
                                          ";"
             else:  # more than one value in adjacent_values
-                #print(adjacent_values)
-                #print(adjacent_values[0])
                 constructing_mave_hgvs = constructing_mave_hgvs + \
                                          str(adjacent_values[0][0]) + \
                                          "_" + \
