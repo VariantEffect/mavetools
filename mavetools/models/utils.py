@@ -7,10 +7,33 @@ from .licence import Licence
 
 
 def attrs_filter(attr, value):
+    """
+    ???
+    Parameters
+    ----------
+    attr
+    value
+
+    Returns
+    -------
+
+    """
     return value is not None
 
 
 def attrs_serializer(inst, field, value):
+    """
+    ???
+    Parameters
+    ----------
+    inst
+    field
+    value
+
+    Returns
+    -------
+
+    """
     if isinstance(value, str):
         if os.path.isfile(value):
             ext = os.path.splitext(value)[1]
@@ -21,6 +44,18 @@ def attrs_serializer(inst, field, value):
 
 
 def prepare_for_encoding(nested_dict):
+    """
+    Prepares data for encoding by converting the data in the provided nested_dict into
+    a json_dict and file_dict
+    Parameters
+    ----------
+    nested_dict (dictionary): data to be converted
+
+    Returns
+    -------
+    json_dict
+    file_dict
+    """
     json_dict = {}
     file_dict = {}
     for k, v in nested_dict.items():
