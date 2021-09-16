@@ -7,12 +7,15 @@ import sys
 class Client():
     def __init__(self, base_url='http://127.0.0.1:8000/api/', auth_token=''):
         """
-        Instantiates the Client object
+        Instantiates the Client object and sets the values for base_url and
+        auth_token
 
         Parameters
         ----------
-        base_url:
-        auth_token:
+        base_url: the url in which the api endpoint exists
+            default: 'http://127.0.0.1:8000/api/'
+        auth_token: authorizes POST requests via the API and MaveDB
+            default: ''
         """
         self.base_url = base_url
         if auth_token:
@@ -32,6 +35,7 @@ class Client():
         ----------
         model_class : ModelClass
             The model class we want to which we want to cast the response.
+            (e.g., Experiment or Scoreset)
         instance_id : str
             The id of the object we are retrieving.
 
@@ -56,17 +60,20 @@ class Client():
         return model_class.deserialize(r.json())
 
     def post_model_instance(self, model_instance):
-        '''
-        Using a POST, hit an API endpoint to post a resource. Performs HTTP POST request.
+        """
+        Using a POST, hit an API endpoint to post a resource.
+        Performs HTTP POST request.
 
         Parameters
         ----------
         model_instance
+            instance of model that will be POSTed
 
         Returns
         -------
-        ???
-        '''
+        AuthTokenMissingException
+            If the auth_token is missing
+        """
 
         # save object type of model_instance
         model_class = type(model_instance)
@@ -79,7 +86,7 @@ class Client():
             logging.error(error_message)
             raise AuthTokenMissingException(error_message)
 
-        try:
+        try:  # to post data
             r = requests.post(
                 model_url,
                 data={
