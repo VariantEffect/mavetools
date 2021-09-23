@@ -3,13 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to mavetools's documentation!
+mavetools
 =====================================
+mavetools is a pure Python Library for bioinformatics and computational biology.
+It features useful tools that can be applied to MAVE data, such as that available
+at https://www.mavedb.org/.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   convert
+   legacy_to_mave_hgvs
+   mavedf
+   validators
 
 
 Indices and tables
