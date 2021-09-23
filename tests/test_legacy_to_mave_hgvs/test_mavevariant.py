@@ -1,5 +1,5 @@
 from unittest import TestCase
-from mavetools.legacy_to_mave_hgvs.mavevariant import MaveVariant
+from mavetools.mavevariant.mavevariant import MaveVariant
 
 
 class Test(TestCase):
