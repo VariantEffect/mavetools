@@ -1,7 +1,7 @@
-from mavetools.legacy_to_mave_hgvs.mavevariant import MaveVariant
+from mavetools.mavevariant.mavevariant import MaveVariant
 from mavetools.mavedf.df_to_pandas import df_to_pandas
-#from mavetools.legacy_to_mave_hgvs.legacy_to_mave_hgvs import legacy_to_mave_hgvs_nt
-from mavetools.legacy_to_mave_hgvs.legacy_to_mave_new import legacy_to_mave_hgvs_nt
+#from mavetools.mavevariant.mavevariant import legacy_to_mave_hgvs_nt
+from mavetools.mavevariant.legacy_to_mave_new import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
 from mavetools.mavedf.mutation_type import *
 
