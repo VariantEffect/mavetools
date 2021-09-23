@@ -5,14 +5,7 @@ import re
 from cfgv import ValidationError
 from numpy.testing import assert_array_equal
 
-#from django.utils.translation import ugettext
-#from django.utils.deconstruct import deconstructible
-#from django.core.exceptions import ValidationError
-#from django.core.validators import FileExtensionValidator
-
 from tests.test_validators.for_dataset_validators import constants
-
-#from core.utilities import is_null, readable_null_values
 
 
 def is_null(value):
@@ -39,18 +32,12 @@ null_values_re = re.compile(
     flags=re.IGNORECASE,
 )
 readable_null_values = [
-    "'{}'".format(v)
-    for v in set([v.lower() for v in null_values_list])
-    if v.strip()
-] + ["whitespace"]
+                           "'{}'".format(v)
+                           for v in set([v.lower() for v in null_values_list])
+                           if v.strip()
+                       ] + ["whitespace"]
 
 
-#validate_csv_extension = FileExtensionValidator(allowed_extensions=["csv"])
-#validate_gz_extension = FileExtensionValidator(allowed_extensions=["gz"])
-#validate_json_extension = FileExtensionValidator(allowed_extensions=["json"])
-
-
-#@deconstructible
 class WordLimitValidator:
     message = "This field is limited to {} words."
     code = "invalid"
@@ -107,7 +94,7 @@ def validate_has_hgvs_in_header(header, label=None, msg=None):
             "col_p": constants.hgvs_pro_column,
         }
     if not set(header) & set(constants.hgvs_columns):
-        raise ValidationError(msg)#, params=params)
+        raise ValidationError(msg)
 
 
 def validate_at_least_one_additional_column(header, label=None, msg=None):
@@ -126,7 +113,7 @@ def validate_at_least_one_additional_column(header, label=None, msg=None):
                 )
             )
             params = {"label": label}
-        raise ValidationError(msg)#, params=params)
+        raise ValidationError(msg)
 
 
 def validate_header_contains_no_null_columns(header, label=None, msg=None):
@@ -193,13 +180,10 @@ def validate_scoreset_score_data_input(file):
     validate_at_least_one_additional_column(header, label="Score")
 
     if constants.required_score_column not in header:
-        raise ValidationError("Error test"
-            #ugettext(
-            #    "Score data file is missing the required column '%(col)s'. "
-            #    "Columns are case-sensitive and must be comma delimited."
-            #),
-            #params={"col": constants.required_score_column},
-        )
+        raise ValidationError("Score data file is missing the required column "
+                              + constants.required_score_column + "." +
+                              "Columns are case-sensitive and must be comma delimited."
+                              )
 
 
 def validate_scoreset_count_data_input(file):
@@ -234,41 +218,25 @@ def validate_scoreset_json(dict_):
 
     for key in required_columns:
         if key not in dict_.keys():
-            raise ValidationError("Error test"
-                #ugettext(
-                #    "Scoreset data is missing the required key " "'%(key)s'."
-                #),
-                #params={"key": key},
-            )
+            raise ValidationError("Scoreset data is missing the required key " + key)
 
         columns = dict_[key]
         if not all([isinstance(c, str) for c in columns]):
-            raise ValidationError("Error test")#ugettext("Header values must be strings."))
+            raise ValidationError("Header values must be strings.")
 
         if not isinstance(columns, list):
             type_ = type(columns).__name__
-            raise ValidationError("Error test"
-                #ugettext("Value for %(key)s must be a list not %(type)s."),
-                #params={"key": key.replace("_", " "), "type": type_},
-            )
+            raise ValidationError("Value for " + key.replace("_", " ") + " must be a list not " + type_)
 
         # Check score columns is not-empty and at least contains hgvs and score
         if key == constants.score_columns:
             if constants.required_score_column not in columns:
-                raise ValidationError("Error test"
-                    #ugettext(
-                    #    "Missing required column '%(col)s' for "
-                    #    "score dataset."
-                    #),
-                    #params={"col": constants.required_score_column},
-                )
+                raise ValidationError("Missing required column constants.required_score_column "
+                                      "for score dataset.")
 
-    # Check there are not unexptected columns supplied to the scoreset json
+    # Check there are not unexpected columns supplied to the scoreset json
     # field.
     extras = [k for k in dict_.keys() if k not in set(required_columns)]
     if len(extras) > 0:
         extras = [k for k in dict_.keys() if k not in required_columns]
-        raise ValidationError("Error test"
-            #ugettext("Encountered unexpected keys '%(extras)s'."),
-            #params={"extras": extras},
-        )
+        raise ValidationError("Encountered unexpected keys extras")
