@@ -14,7 +14,7 @@ at https://www.mavedb.org/.
    :caption: Contents:
 
    convert
-   legacy_to_mave_hgvs
+   mavevariant
    mavedf
    validators
 
