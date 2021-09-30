@@ -4,6 +4,9 @@ import re
 
 
 class MaveVariant:
+    """
+    This class lskjflsfsjfls
+    """
 
     def __init__(self, legacy_hgvs, target_seq):
         """
@@ -12,8 +15,10 @@ class MaveVariant:
 
         Parameters
         ----------
-        legacy_mave (string): the legacy formatted hgvs string to be converted
-        target_seq (string): target sequence
+        legacy_mave : string
+            the legacy formatted hgvs string to be converted
+        target_seq : string
+            target sequence
         """
         # save legacy_hgvs and target_seq as itself in constructor
         self.legacy_hgvs = legacy_hgvs
@@ -37,12 +42,14 @@ class MaveVariant:
 
         Parameters
         ----------
-        self: MaveHgvsVariant object
+        self
+            MaveHgvsVariant object
 
         Returns
         -------
-        0 (int) if no conversion was necessary
-        1 (int) if legacy_hgvs was converted
+        int
+            0 if no conversion was necessary,
+            1 if legacy_hgvs was converted
         """
         # first check for _wt
         if self.legacy_hgvs == "_wt":
