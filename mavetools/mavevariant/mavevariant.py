@@ -42,12 +42,11 @@ class MaveVariant:
 
         Parameters
         ----------
-        self
-            MaveHgvsVariant object
+        self : MaveVariant
 
         Returns
         -------
-        int
+        : int
             0 if no conversion was necessary,
             1 if legacy_hgvs was converted
         """
