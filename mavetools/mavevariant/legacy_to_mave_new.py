@@ -11,13 +11,16 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
 
     Parameters
     ----------
-    hgvs_legacy (string): legacy format hgvs string
-    target_seq (string): target sequence
+    hgvs_legacy : string
+        legacy format hgvs string
+    target_seq : string
+        target sequence
 
     Returns
     -------
-    mave_hgvs (string): standard format hgvs string
-    empty string if input string is in invalid format
+    mave_hgvs : string
+        standard format hgvs string
+        empty string if input string is in invalid format
     """
     # dictionary to keep track of changes
     mave_hgvs_dict = dict()
