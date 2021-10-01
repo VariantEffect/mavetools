@@ -8,7 +8,8 @@ from mavetools.mavedf.mutation_type import *
 
 class MaveDf:
     """
-    This class...
+    The MaveDf object consists of a meta_data attribute, a pandas_df attribute, and various functions
+    designed to manipulate the pandas_df attribute.
     """
 
     def __init__(self, df):
