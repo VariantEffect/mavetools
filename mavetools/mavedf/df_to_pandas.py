@@ -11,22 +11,26 @@ def df_to_pandas(df, ret_meta=False):
 
     Parameters
     ----------
-    df (string): the filename.csv to be converted to pandas df
-    ret_meta (bool): True if user wants metadata
+    df : string
+        the filename.csv to be converted to pandas df
+    ret_meta : bool
+        True if user wants metadata,
         default value = False
 
     Returns
     -------
-    df_pandas (pandas.df): the converted df
-    meta_dict (dictionary): dictionary containing formatted metadata (comments) at the top of df
+    df_pandas : pandas.df
+        the converted df
+    meta_dict : dict
+        dictionary containing formatted metadata (comments) at the top of df
 
     Raises
     ______
-    TypeError:
-        if df is not string
-        if ret_meta is not bool
+    TypeError
+        if df is not string,
+        if ret_meta is not bool, or
         if no arguments are passed
-    ValueError:
+    ValueError
         if first argument is not in filename.csv format
     """
     # check for TypeError
