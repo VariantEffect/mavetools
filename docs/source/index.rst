@@ -13,8 +13,10 @@ at https://www.mavedb.org/.
    :maxdepth: 2
    :caption: Contents:
 
-   mavevariant
+   convert
    mavedf
+   mavevariant
+   validators
 
 
 Indices and tables
