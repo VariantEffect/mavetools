@@ -44,9 +44,9 @@ class MaveDf:
 
         Raises
         ______
-        TypeError:
+        TypeError
             if target_seq is not string
-        ValueError:
+        ValueError
             if target_seq is not made solely of characters ACTG
         """
         # check for TypeError
