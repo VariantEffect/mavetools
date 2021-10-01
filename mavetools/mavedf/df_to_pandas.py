@@ -27,8 +27,10 @@ def df_to_pandas(df, ret_meta=False):
     Raises
     ______
     TypeError
-        if df is not string,
-        if ret_meta is not bool, or
+        if df is not string
+    TypeError
+        if ret_meta is not bool
+    ValueError
         if no arguments are passed
     ValueError
         if first argument is not in filename.csv format
