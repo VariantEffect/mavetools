@@ -9,6 +9,15 @@ mavetools is a pure Python Library for bioinformatics and computational biology.
 It features useful tools that can be applied to MAVE data, such as that available
 at https://www.mavedb.org/.
 
+Install fqfa from mavetools using pip::
+
+    TBD
+
+Building a local copy of the documentation requires the following additional packages::
+
+    pip3 install sphinx
+    pip3 install renku-sphinx-theme
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
