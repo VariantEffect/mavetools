@@ -3,7 +3,7 @@ from collections import Counter
 import re
 
 
-def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
+def legacy_to_mave_hgvs_nt(legacy_hgvs):
     """
     This function converts a legacy hgvs_nt formatted string (i.e., c.[1C>A;2=;3=]) and converts it
     to the standard format (i.e., c.1delinsA). If string is already in standard format, the input
@@ -13,13 +13,11 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs, target_seq):
     ----------
     hgvs_legacy : string
         legacy format hgvs string
-    target_seq : string
-        target sequence
 
     Returns
     -------
     mave_hgvs : string
-        standard format hgvs string
+        standard format hgvs string or
         empty string if input string is in invalid format
     """
     # dictionary to keep track of changes
