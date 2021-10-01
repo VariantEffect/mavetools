@@ -5,11 +5,13 @@ def is_wild_type(hgvs):
 
     Parameters
     ----------
-    hgvs (string): hgvs formatted string
+    hgvs : string
+        hgvs formatted string
 
     Returns
     -------
-    wt (bool): True if hgvs string indicates wild type
+    wt : bool
+        True if hgvs string indicates wild type
     """
     wt = False
     if hgvs.startswith("_wt"):
@@ -24,11 +26,13 @@ def is_deletion(hgvs):
 
     Parameters
     ----------
-    hgvs (string): hgvs formatted string
+    hgvs : string
+        hgvs formatted string
 
     Returns
     -------
-    deletion (bool): True if hgvs string is indicates a deletion
+    deletion : bool
+        True if hgvs string is indicates a deletion
     """
     deletion = False
     if hgvs.endswith("del"):
@@ -43,11 +47,13 @@ def is_substitution_one_base(hgvs):
 
     Parameters
     ----------
-    hgvs (string): hgvs formatted string
+    hgvs : string
+        hgvs formatted string
 
     Returns
     -------
-    sub_one (bool): True if hgvs string is indicates a substitution at one base of codon
+    sub_one : bool
+        True if hgvs string is indicates a substitution at one base of codon
     """
     sub_one = False
     if hgvs[-2] == ">":
@@ -62,11 +68,13 @@ def is_substitution_two_bases_nonadjacent(hgvs):
 
     Parameters
     ----------
-    hgvs (string): hgvs formatted string
+    hgvs : string
+        hgvs formatted string
 
     Returns
     -------
-    sub_two (bool): True if hgvs string is indicates a substitution at one base of codon
+    sub_two : bool
+        True if hgvs string is indicates a substitution at one base of codon
     """
     sub_two = False
     if hgvs[-1] == "]":
