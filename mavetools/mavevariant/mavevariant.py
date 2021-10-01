@@ -8,7 +8,7 @@ class MaveVariant:
     This class lskjflsfsjfls
     """
 
-    def __init__(self, legacy_hgvs, target_seq):
+    def __init__(self, hgvs_string, target_seq, legacy_string=False):
         """
         Constructor
         This method instantiates the MaveVariant object
@@ -20,19 +20,28 @@ class MaveVariant:
         target_seq : string
             target sequence
         """
-        # save legacy_hgvs and target_seq as itself in constructor
-        self.legacy_hgvs = legacy_hgvs
+
+        # save target_seq as itself
         self.target_seq = target_seq
 
-        # make dictionary of lists of tuples
-        # key = codon number and
-        # value = list of (location_in_codon, old base, new base)
-        self.mave_hgvs_dict = dict()
+        if legacy_string:
+            # save legacy_hgvs and target_seq as itself in constructor
+            self.legacy_hgvs = hgvs_string
 
-        # default value for mave_hgvs is legacy_hgvs, changes when conversion is made
-        self.mave_hgvs = None
+            # make dictionary of lists of tuples
+            # key = codon number and
+            # value = list of (location_in_codon, old base, new base)
+            self.mave_hgvs_dict = dict()
 
-        self.legacy_to_mave_hgvs_nt()
+            # default value for mave_hgvs is None, changes when conversion is made
+            self.mave_hgvs = None
+
+            # set mave_hgvs
+            self.legacy_to_mave_hgvs_nt()
+        else:
+            # value for mave_hgvs is hgvs_string, changes when conversion is made
+            self.mave_hgvs = hgvs_string
+
 
     def legacy_to_mave_hgvs_nt(self):
         """
