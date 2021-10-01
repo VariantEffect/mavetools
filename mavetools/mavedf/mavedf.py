@@ -7,6 +7,9 @@ from mavetools.mavedf.mutation_type import *
 
 
 class MaveDf:
+    """
+    This class...
+    """
 
     def __init__(self, df):
         """
@@ -16,7 +19,8 @@ class MaveDf:
 
         Parameters
         ----------
-        df (string): the filename.csv to be converted to pandas df
+        df : string
+            the filename.csv to be converted to pandas df
         """
         # convert df to pandas
         self.pandas_df, self.meta_dict = df_to_pandas(df, ret_meta=True)
@@ -35,7 +39,8 @@ class MaveDf:
 
         Parameters
         __________
-        target_seq (string): target sequence
+        target_seq : string
+            target sequence
 
         Raises
         ______
