@@ -1,11 +1,11 @@
 from mavetools.validators import dataset_validators
 
 
-def validate_all():
+def validate_all(countfile=None, scorefile=None, scorejson=None):
     """
     By calling other helper functions, this function runs all of the validation code
     """
-    return None
+    validate_dataset(countfile, scorefile, scorejson)
 
 
 def validate_dataset(countfile=None, scorefile=None, scorejson=None):
@@ -21,6 +21,8 @@ def validate_dataset(countfile=None, scorefile=None, scorejson=None):
     # how to incorporate word limit validator?
 
     if scorefile is not None:
+        # open scorefile
+        open(scorefile)
         # this one returns header
         scoreheader = dataset_validators.read_header_from_io(file=scorefile)
 
@@ -31,9 +33,14 @@ def validate_dataset(countfile=None, scorefile=None, scorejson=None):
 
         dataset_validators.validate_scoreset_score_data_input(file=scorefile)
 
-        dataset_validators.validate_scoreset_json(dict_=scorejson)
+        if scorejson is not None:
+            # open scorejson
+            open(scorejson)
+            dataset_validators.validate_scoreset_json(dict_=scorejson)
 
     if countfile is not None:
+        # open countfile
+        open(countfile)
         countheader = dataset_validators.read_header_from_io(file=countfile)
 
         # if the header was returned, do these ones
