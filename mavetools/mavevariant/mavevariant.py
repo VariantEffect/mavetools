@@ -5,7 +5,8 @@ import re
 
 class MaveVariant:
     """
-    This class lskjflsfsjfls
+    The MaveVariant object consists consists of attributes for legacy and mave hgvs variant structures,
+    creating mave
     """
 
     def __init__(self, hgvs_string, target_seq, legacy_string=False):
