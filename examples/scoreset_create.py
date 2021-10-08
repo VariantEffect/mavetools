@@ -28,9 +28,9 @@ client = Client(base_url, auth_token=auth_token) if base_url else Client(auth_to
 test_file_dir = '/mavetools/tests/test_upload_scoreset/test_files'
 
 # validate
-validate_all(countfile=f"{test_file_dir}/test_count.csv",
-             scorefile=f"{test_file_dir}/test_score_data.csv",
-             scorejson=None)
+#validate_all(countfile=f"{test_file_dir}/test_count.csv",
+#             scorefile=f"{test_file_dir}/test_score_data.csv",
+#             scorejson=None)
 
 new_scoreset = NewScoreSet(
     title='test_title',
