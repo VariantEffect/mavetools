@@ -3,7 +3,7 @@ mavevdf
 
 mavedf features a MaveDf object and functions
 that can be performed on that object. It also features
-helper functions that may also be useful to the user.
+helper functions that may be useful to the user.
 
 .. automodule:: mavetools.mavedf.mavedf
    :members:
