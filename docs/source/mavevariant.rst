@@ -7,6 +7,3 @@ helper functions that may also be useful to the user.
 
 .. automodule:: mavetools.mavevariant.mavevariant
    :members:
-
-.. automodule:: mavetools.mavevariant.legacy_to_mave_new
-   :members:
