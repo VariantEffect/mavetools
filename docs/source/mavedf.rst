@@ -13,3 +13,6 @@ helper functions that may also be useful to the user.
 
 .. automodule:: mavetools.mavedf.mutation_type
    :members:
+
+.. automodule:: mavetools.mavedf.legacy_to_mave_new
+   :members:
