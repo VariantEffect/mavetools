@@ -40,9 +40,9 @@ Please install the following packages within your virtual environment:
 
 # Using Jupyter notebook
 
-You can make requests via the API, examples of which can be found at 
+You can make requests via the API, Jupyter notebook examples can be found at 
 `~/PycharmProjects/mavetools/docs/source` or on
-[github](https://github.com/VariantEffect/mavetools/tree/two_tools/docs/source) for Jupyter notebooks.
+[github](https://github.com/VariantEffect/mavetools/tree/two_tools/docs/source).
 
 To run your Jupyter notebook from Pycharm, navigate to one of the .ipynb files in the directory described above and click 
 the `Run All` (overlapped double green arrow) icon in the upper left of the editing window. You will notice  
