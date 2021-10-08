@@ -44,7 +44,7 @@ You can make requests via the API, examples of which can be found at
 `~/PycharmProjects/mavetools/docs/source` or on
 [github](https://github.com/VariantEffect/mavetools/tree/two_tools/docs/source) for Jupyter notebooks.
 
-To run your Jupyter notebook, navigate to one of the .ipynb files in the directory described above and click 
+To run your Jupyter notebook from Pycharm, navigate to one of the .ipynb files in the directory described above and click 
 the `Run All` (overlapped double green arrow) icon in the upper left of the editing window. You will notice  
 a new tab called `Jupyter` available near your `Terminal` tab in Pycharm. Open this tab and select 
 the `Server: mavetools` window. As described in the red text, copy and paste the `localhost` link into your browser. 
