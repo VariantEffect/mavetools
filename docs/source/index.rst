@@ -9,7 +9,7 @@ mavetools is a pure Python Library for bioinformatics and computational biology.
 It features useful tools that can be applied to MAVE data, such as that available
 at https://www.mavedb.org/.
 
-Install fqfa from mavetools using pip::
+Install mavetools using pip::
 
     TBD
 
@@ -26,6 +26,10 @@ Building a local copy of the documentation requires the following additional pac
    mavedf
    mavevariant
    validators
+   experiment_create
+   experiment_get
+   scoreset_create
+   scoreset_get
 
 
 Indices and tables
