@@ -35,7 +35,9 @@ extensions = ['sphinx.ext.autodoc',
               "sphinx.ext.intersphinx",
               "sphinx.ext.autosectionlabel",
               "sphinx.ext.doctest",
+              "nbsphinx",
 ]
+nbsphinx_allow_errors = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
