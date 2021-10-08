@@ -41,8 +41,8 @@ Please install the following packages within your virtual environment:
 # Using Jupyter notebook
 
 You can make requests via the API, examples of which can be found at 
-`~/PycharmProjects/mavetools/docs/source` for Jupyter notebooks
-or alternatively at `~/PycharmProjects/examples` for .py files.
+`~/PycharmProjects/mavetools/docs/source` or on
+[github](https://github.com/VariantEffect/mavetools/tree/two_tools/docs/source) for Jupyter notebooks.
 
 To run your Jupyter notebook, navigate to one of the .ipynb files in the directory described above and click 
 the `Run All` (overlapped double green arrow) icon in the upper left of the editing window. You will notice  
