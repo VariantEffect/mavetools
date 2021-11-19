@@ -24,7 +24,6 @@ Building a local copy of the documentation requires the following additional pac
 
    convert
    mavedf
-   mavevariant
    validators
    experiment_create
    experiment_get
