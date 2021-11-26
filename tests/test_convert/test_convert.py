@@ -30,10 +30,7 @@ class TestCodonSubToMaveHgvs(unittest.TestCase):
                 self.assertEqual(s, str(v))
 
     def test_identical_codons(self):
-        valid_cases = [
-            (("ATG", "ATG", 1), "c.="),
-            (("ATG", "ATG", 11), "c.="),
-        ]
+        valid_cases = [(("ATG", "ATG", 1), "c.="), (("ATG", "ATG", 11), "c.=")]
         for t, s in valid_cases:
             with self.subTest(t=t, s=s):
                 v = codon_sub_to_mavehgvs(*t)
@@ -51,22 +48,14 @@ class TestCodonSubToMaveHgvs(unittest.TestCase):
                 self.assertEqual(f"YFG:{s}", str(v))
 
     def test_invalid_codon_length(self):
-        invalid_cases = [
-            ("AT", "TTG", 1),
-            ("ATG", "TTTT", 2),
-            ("ATGG", "CATA", 101),
-        ]
+        invalid_cases = [("AT", "TTG", 1), ("ATG", "TTTT", 2), ("ATGG", "CATA", 101)]
         for t in invalid_cases:
             with self.subTest(t=t):
                 with self.assertRaises(ValueError):
                     codon_sub_to_mavehgvs(*t)
 
     def test_invalid_codon_bases(self):
-        invalid_cases = [
-            ("NTG", "TTG", 1),
-            ("ATU", "TTT", 2),
-            ("ATG", "CNT", 101),
-        ]
+        invalid_cases = [("NTG", "TTG", 1), ("ATU", "TTT", 2), ("ATG", "CNT", 101)]
         for t in invalid_cases:
             with self.subTest(t=t):
                 with self.assertRaises(ValueError):
@@ -85,5 +74,5 @@ class TestCodonSubToMaveHgvs(unittest.TestCase):
                     codon_sub_to_mavehgvs(*t)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
