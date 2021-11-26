@@ -101,7 +101,6 @@ class TestAtLeastOneNumericColumnValidator(TestCase):
     """
 
     def test_raises_valuerror_when_less_than_2_values_in_column(self):
-        # TODO test has failed
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             header = read_header_from_io(file)
@@ -123,14 +122,12 @@ class TestHgvsInHeaderValidator(TestCase):
     """
 
     def test_raises_valuerror_when_neither_hgvs_col_in_column(self):
-        # TODO test has failed
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
             header = read_header_from_io(file)
             validate_has_hgvs_in_header(header)
 
     def test_hgvs_must_be_lowercase(self):
-        # TODO test has failed
         file = BytesIO(
             "{},score,count\n".format(constants.hgvs_nt_column.upper()).encode()
         )
@@ -233,13 +230,11 @@ class TestValidateScoreSetCountDataInputValidator(TestCase):
     """
 
     def test_raises_valuerror_when_hgvs_not_in_column(self):
-        # TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
             validate_scoreset_count_data_input(file)
 
     def test_raises_valuerror_no_numeric_column(self):
-        # TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             validate_scoreset_count_data_input(file)
@@ -260,13 +255,11 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
     """
 
     def test_raises_valuerror_when_hgvs_not_in_column(self):
-        # TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
             validate_scoreset_score_data_input(file)
 
     def test_raises_valuerror_no_numeric_column(self):
-        # TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             validate_scoreset_score_data_input(file)
@@ -280,14 +273,12 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
                 validate_scoreset_score_data_input(file)
 
     def test_validatation_error_score_not_in_header(self):
-        # TODO test has failed (resolved)
         file = BytesIO("{},count\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             validate_scoreset_score_data_input(file)
 
 
 class TestValidateScoreSetJsonValidator(TestCase):
-    # TODO all tests have failed (resolved)
     """
     Test to ensure that a scoreset json field is properly formatted.
     """
