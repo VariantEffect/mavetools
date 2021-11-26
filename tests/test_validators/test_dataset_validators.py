@@ -4,7 +4,7 @@ from unittest import TestCase
 
 import pandas as pd
 
-from tests.test_validators.for_dataset_validators import constants
+from mavetools.validators import constants
 
 from mavetools.validators.dataset_validators import (
     validate_scoreset_count_data_input,

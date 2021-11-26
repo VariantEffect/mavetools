@@ -4,7 +4,7 @@ import re
 
 from numpy.testing import assert_array_equal
 
-from tests.test_validators.for_dataset_validators import constants
+from mavetools.validators import constants
 
 
 def is_null(value):
