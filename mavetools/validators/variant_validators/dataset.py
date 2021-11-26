@@ -41,7 +41,7 @@ null_values_list = (
     NA_value,
 )
 null_values_re = re.compile(
-    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value), flags=re.IGNORECASE
+    r"^\s+$|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value), flags=re.IGNORECASE
 )
 readable_null_values = [
     "'{}'".format(v) for v in set([v.lower() for v in null_values_list]) if v.strip()
@@ -195,7 +195,10 @@ class MaveDataset:
             Replaces `np.NaN` with `None` for JSON compatibility.
         """
         if serializable:
-            return self._df.where(cond=pd.notnull(self._df), other=None, inplace=False)
+            # need to force "object" type to allow None values
+            return_df = self._df.astype(object, copy=True)
+            return_df.where(cond=pd.notnull(return_df), other=None, inplace=True)
+            return return_df
         return self._df.copy(deep=True)
 
     def match_other(self, other: "MaveDataset") -> Optional[bool]:
@@ -232,9 +235,8 @@ class MaveDataset:
         # Convert np.NaN values to None for consistency across all columns and
         # for compatibility in PostgresSQL queries. Replaces all values which
         # are considered null by pandas with None by masking pd.notnull cells.
-        return self._df.where(
-            cond=pd.notnull(self._df), other=None, inplace=False
-        ).to_dict(orient="index")
+
+        return self.data(serializable=True).to_dict(orient="index")
 
     def validate(
         self,

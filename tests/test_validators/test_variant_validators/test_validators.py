@@ -1,4 +1,5 @@
 from io import BytesIO, StringIO
+import unittest
 from unittest import TestCase
 from random import choice
 
@@ -782,5 +783,6 @@ class TestMaveDataset(TestCase):
         self.assertEqual(dataset.n_errors, 1)
         self.assertIn("multiple of 3", dataset.errors[0])
 
+    @unittest.expectedFailure
     def test_invalid_relaxed_ordering_check_fails(self):
         self.fail("Test is pending")
