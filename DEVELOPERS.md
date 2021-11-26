@@ -26,15 +26,12 @@ The following software is required:
 - Python 3.6 or higher
 - Git
 
-Please install the following packages within your virtual environment:
+Please install the following additional packages within your virtual environment to build the documentation and
+use the provided notebook examples:
 
 - jupyter
-- fqfa
-- mavehgvs
 - nbshpinx
-- pandas
 - Sphinx
-- attrs
 
 # Using Jupyter notebook
 
