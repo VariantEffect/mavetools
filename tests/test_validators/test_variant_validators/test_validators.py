@@ -3,13 +3,11 @@ from unittest import TestCase
 from random import choice
 
 import pandas as pd
-#from django.core.exceptions import ValidationError
-#from django.test import TestCase
-from cfgv import ValidationError
 from pandas.testing import assert_index_equal, assert_frame_equal
 
 #from dataset import constants
 from mavetools.validators.for_variant_validators import constants
+from mavetools.validators.exceptions import ValidationError
 
 #from ..factories import generate_hgvs, VariantFactory
 from mavetools.validators.variant_validators import (

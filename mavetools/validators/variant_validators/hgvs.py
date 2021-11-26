@@ -2,9 +2,8 @@ from functools import partial
 from typing import Optional, Union
 import re
 
-#from django.core.exceptions import ValidationError
-from cfgv import ValidationError
 from mavehgvs import Variant, MaveHgvsParseError
+from mavetools.validators.exceptions import ValidationError
 
 #from core.utilities import is_null
 # Used in CSV formatting

@@ -4,3 +4,4 @@ mavehgvs
 requests
 numpy
 pandas
+idutils

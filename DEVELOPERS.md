@@ -29,7 +29,6 @@ The following software is required:
 Please install the following packages within your virtual environment:
 
 - jupyter
-- cfgv
 - fqfa
 - mavehgvs
 - nbshpinx

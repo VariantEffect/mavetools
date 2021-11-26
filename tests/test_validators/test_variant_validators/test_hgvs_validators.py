@@ -1,12 +1,9 @@
-#from django.test import TestCase
-#from django.core.exceptions import ValidationError
-
 #from core.utilities import null_values_list
 from unittest import TestCase
 
-from cfgv import ValidationError
-
 from mavetools.validators.variant_validators import hgvs
+from mavetools.validators.exceptions import ValidationError
+
 # Used in CSV formatting
 NA_value = "NA"
 

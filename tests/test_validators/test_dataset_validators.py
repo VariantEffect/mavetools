@@ -283,7 +283,7 @@ class TestValidateScoreSetJsonValidator(TestCase):
     Test to ensure that a scoreset json field is properly formatted.
     """
 
-    def test_validationerror_unexptected_columns(self):
+    def test_valueerror_unexptected_columns(self):
         field = {
             "extra_column": [],
             constants.score_columns: ["score"],
@@ -292,22 +292,22 @@ class TestValidateScoreSetJsonValidator(TestCase):
         with self.assertRaises(ValueError):
             validate_scoreset_json(field)
 
-    def test_validationerror_values_not_lists(self):
+    def test_valueerror_values_not_lists(self):
         field = {constants.score_columns: ["score"], constants.count_columns: {}}
         with self.assertRaises(ValueError):
             validate_scoreset_json(field)
 
-    def test_validationerror_list_values_not_strings(self):
+    def test_valueerror_list_values_not_strings(self):
         field = {constants.score_columns: [b"score"], constants.count_columns: []}
         with self.assertRaises(ValueError):
             validate_scoreset_json(field)
 
-    def test_validationerror_empty_score_columns(self):
+    def test_valueerror_empty_score_columns(self):
         field = {constants.score_columns: [], constants.count_columns: []}
         with self.assertRaises(ValueError):
             validate_scoreset_json(field)
 
-    def test_validationerror_missing_dict_columns(self):
+    def test_valueerror_missing_dict_columns(self):
         # constants.score_columns missing
         field = {constants.count_columns: []}
         with self.assertRaises(ValueError):
@@ -318,7 +318,7 @@ class TestValidateScoreSetJsonValidator(TestCase):
         with self.assertRaises(ValueError):
             validate_scoreset_json(field)
 
-    def test_validationerror_missing_header_columns(self):
+    def test_valueerror_missing_header_columns(self):
         # constants.score_columns columns missing 'score'
         field = {constants.score_columns: ["hgvs"], constants.count_columns: []}
         with self.assertRaises(ValueError):

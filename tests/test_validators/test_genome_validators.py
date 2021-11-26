@@ -1,8 +1,5 @@
 from unittest import TestCase
 
-from cfgv import ValidationError
-#from django.test import TestCase
-#from django.core.exceptions import ValidationError
 from mavetools.validators.genome_validators import WildTypeSequence
 
 #from mavetools.validators.genome_factories import (
@@ -29,6 +26,7 @@ from mavetools.validators.genome_validators import (
     sequence_is_protein,
     sequence_is_dna,
 )
+from mavetools.validators.exceptions import ValidationError
 
 #from core.utilities import null_values_list
 # Used in CSV formatting

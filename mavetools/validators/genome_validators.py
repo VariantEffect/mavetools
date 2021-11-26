@@ -10,14 +10,11 @@ Most validators should validate one specific field, unless fields need
 to be validated against each other.
 """
 import re
-#from django.core.exceptions import ValidationError
-#from django.core.validators import MinValueValidator
-#from django.utils.translation import ugettext_lazy as _
-from cfgv import ValidationError
 from fqfa.validator.validator import (
     dna_bases_validator,
     amino_acids_validator,
 )
+from mavetools.validators.exceptions import ValidationError
 
 #from core.utilities import is_null
 # Used in CSV formatting

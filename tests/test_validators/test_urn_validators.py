@@ -1,8 +1,4 @@
-#from django.test import TestCase
-#from django.core.exceptions import ValidationError
 from unittest import TestCase
-
-from cfgv import ValidationError
 
 from tests.test_validators.for_urn_validators.models import generate_tmp_urn
 
@@ -13,6 +9,7 @@ from mavetools.validators.urn_validators import (
     validate_mavedb_urn_scoreset,
     validate_mavedb_urn_variant,
 )
+from mavetools.validators.exceptions import ValidationError
 
 #from variant.factories import VariantFactory
 
@@ -25,7 +22,7 @@ class TestURNValidators(TestCase):
     :class:`variant.models.Variant` as the driver.
     """
 
-    def test_validationerror_malformed_experimentset_urn(self):
+    def test_valueerror_malformed_experimentset_urn(self):
         variant = VariantFactory()
         with self.assertRaises(ValidationError):
             validate_mavedb_urn_experimentset("not a urn pattern")
@@ -34,7 +31,7 @@ class TestURNValidators(TestCase):
             variant.scoreset.experiment.experimentset.urn
         )
 
-    def test_validationerror_malformed_experiment_urn(self):
+    def test_valueerror_malformed_experiment_urn(self):
         variant = VariantFactory()
         with self.assertRaises(ValidationError):
             validate_mavedb_urn_experiment("not a urn pattern")
@@ -48,21 +45,21 @@ class TestURNValidators(TestCase):
         experiment.refresh_from_db()
         validate_mavedb_urn_experiment(experiment.urn + "a")
 
-    def test_validationerror_malformed_scoreset_urn(self):
+    def test_valueerror_malformed_scoreset_urn(self):
         variant = VariantFactory()
         with self.assertRaises(ValidationError):
             validate_mavedb_urn_scoreset("not a urn pattern")
         # Should pass
         validate_mavedb_urn_scoreset(variant.scoreset.urn)
 
-    def test_validationerror_malformed_variant_urn(self):
+    def test_valueerror_malformed_variant_urn(self):
         variant = VariantFactory()
         with self.assertRaises(ValidationError):
             validate_mavedb_urn_variant(variant.urn + "extra")
         # Should pass
         validate_mavedb_urn_variant(variant.urn)
 
-    def test_validationerror_malformed_any_urn(self):
+    def test_valueerror_malformed_any_urn(self):
         with self.assertRaises(ValidationError):
             validate_mavedb_urn("urn:mavedb:0001")
 

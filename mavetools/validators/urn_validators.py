@@ -1,7 +1,5 @@
 import re
-
-#from django.core.exceptions import ValidationError
-from cfgv import ValidationError
+from mavetools.validators.exceptions import ValidationError
 
 MAVEDB_EXPERIMENTSET_URN_DIGITS = 8
 MAVEDB_TMP_URN_DIGITS = 16
