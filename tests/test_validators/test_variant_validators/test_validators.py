@@ -60,40 +60,6 @@ null_values_list = (
 )
 
 
-class TestValidateMatchingColumns(TestCase):
-    """
-    Tests the function :func:`validate_scoreset_columns_match_variant` which
-    throws a `ValidationError` if the keys of a variant's data do not match
-    the corresponding columns defined in the parent
-    :class:`dataset.models.scoreset.ScoreSet`.
-    """
-
-    def test_validation_error_non_matching_score_columns(self):
-        variant = VariantFactory()
-        with self.assertRaises(ValidationError):
-            variant.data[constants.variant_score_data] = {}
-            validate_columns_match(variant, variant.scoreset)
-
-    def test_validation_error_non_matching_count_columns(self):
-        variant = VariantFactory()
-        with self.assertRaises(ValidationError):
-            variant.data[constants.variant_count_data] = {"count": 1}
-            validate_columns_match(variant, variant.scoreset)
-
-    def test_compares_sorted_columns(self):
-        variant = VariantFactory()
-        variant.data[constants.variant_score_data] = {
-            "other": 1,
-            constants.required_score_column: 1,
-        }
-        variant.scoreset.dataset_columns[constants.score_columns] = [
-            constants.required_score_column,
-            "other",
-        ]
-        # This should pass
-        validate_columns_match(variant, variant.scoreset)
-
-
 class TestHGVSValidator(TestCase):
     """
     Tests the function :func:`validate_hgvs_string` to see if it is able
