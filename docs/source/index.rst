@@ -3,15 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-mavetools
+MaveTools
 =========
-mavetools is a pure Python Library for bioinformatics and computational biology.
+MaveTools is a pure Python Library for bioinformatics and computational biology.
 It features useful tools that can be applied to MAVE data, such as that available
 at https://www.mavedb.org/.
 
-Install mavetools using pip::
+Install MaveTools using pip::
 
-    TBD
+    pip3 install mavetools
 
 Building a local copy of the documentation requires the following additional packages::
 
