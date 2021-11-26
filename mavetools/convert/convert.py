@@ -9,7 +9,7 @@ def codon_sub_to_mavehgvs(
     variant_codon: str,
     aa_position: int,
     target_id: Optional[str] = None,
-    prefer_delins: bool = False,
+    prefer_delins: bool = True,
 ) -> str:
     """Create a MAVE-HGVS coding variant string describing the change between two codons.
 
@@ -28,7 +28,7 @@ def codon_sub_to_mavehgvs(
     prefer_delins : bool
         If True, consecutive two-base changes will be described as a deletion-insertion;
         otherwise they will be described as two single-nucleotide substitutions.
-        Default ``False``.
+        Default ``True``.
 
     Returns
     -------
