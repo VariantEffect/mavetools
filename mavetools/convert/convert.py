@@ -81,9 +81,7 @@ def codon_sub_to_mavehgvs(
                     )
             else:  # delins of last two bases
                 if prefer_delins:
-                    variant_string = (
-                        f"c.{variant_pos + 1}_{variant_pos + 2}delins{variant_codon[1:]}"
-                    )
+                    variant_string = f"c.{variant_pos + 1}_{variant_pos + 2}delins{variant_codon[1:]}"
                 else:
                     variant_string = (
                         f"c.[{variant_pos + 1}{target_codon[1]}>{variant_codon[1]};"

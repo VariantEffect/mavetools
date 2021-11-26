@@ -11,9 +11,9 @@ from mavetools.validators.urn_validators import (
 )
 from mavetools.validators.exceptions import ValidationError
 
-#from variant.factories import VariantFactory
+# from variant.factories import VariantFactory
 
-#from dataset.utilities import publish_dataset
+# from dataset.utilities import publish_dataset
 
 
 class TestURNValidators(TestCase):
@@ -27,9 +27,7 @@ class TestURNValidators(TestCase):
         with self.assertRaises(ValidationError):
             validate_mavedb_urn_experimentset("not a urn pattern")
         # Should pass
-        validate_mavedb_urn_experimentset(
-            variant.scoreset.experiment.experimentset.urn
-        )
+        validate_mavedb_urn_experimentset(variant.scoreset.experiment.experimentset.urn)
 
     def test_valueerror_malformed_experiment_urn(self):
         variant = VariantFactory()

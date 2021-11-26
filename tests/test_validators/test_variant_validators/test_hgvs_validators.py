@@ -1,4 +1,4 @@
-#from core.utilities import null_values_list
+# from core.utilities import null_values_list
 from unittest import TestCase
 
 from mavetools.validators.variant_validators import hgvs
@@ -18,6 +18,7 @@ null_values_list = (
     "nil",
     NA_value,
 )
+
 
 class TestValidateHgvsString(TestCase):
     def test_passes_on_null(self):
@@ -39,9 +40,7 @@ class TestValidateHgvsString(TestCase):
     def test_error_nt_is_not_g_when_splice_present(self):
         hgvs.validate_hgvs_string("c.1A>G", column="nt", splice_present=False)
         with self.assertRaises(ValidationError):
-            hgvs.validate_hgvs_string(
-                "c.1A>G", column="nt", splice_present=True
-            )
+            hgvs.validate_hgvs_string("c.1A>G", column="nt", splice_present=True)
 
     def test_error_does_not_match_nt(self):
         with self.assertRaises(ValidationError):

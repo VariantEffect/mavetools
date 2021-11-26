@@ -15,11 +15,9 @@ from .models.scoreset import ScoreSet
 User = get_user_model()
 
 
-
 @transaction.atomic
 def publish_dataset(
-    dataset: Union[ExperimentSet, Experiment, ScoreSet],
-    user: Optional[User] = None,
+    dataset: Union[ExperimentSet, Experiment, ScoreSet], user: Optional[User] = None
 ) -> Union[ExperimentSet, Experiment, ScoreSet]:
     """
     Publishes a dataset by traversing the parent tree. Assigns a public
@@ -67,9 +65,7 @@ def publish_dataset(
             child.urn = urn
             child.save()
     elif isinstance(dataset, models.experiment.Experiment):
-        experimentset = models.experimentset.assign_public_urn(
-            dataset.experimentset
-        )
+        experimentset = models.experimentset.assign_public_urn(dataset.experimentset)
         experiment = models.experiment.assign_public_urn(dataset)
     elif isinstance(dataset, models.experimentset.ExperimentSet):
         experimentset = models.experimentset.assign_public_urn(dataset)

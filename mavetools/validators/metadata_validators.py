@@ -5,9 +5,10 @@ from mavetools.validators.exceptions import ValidationError
 
 NA_value = "NA"
 null_values_re = re.compile(
-    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
-    flags=re.IGNORECASE,
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value), flags=re.IGNORECASE
 )
+
+
 def is_null(value):
     """Returns True if a stripped/lowercase value in in `nan_col_values`."""
     value = str(value).strip().lower()
@@ -15,7 +16,9 @@ def is_null(value):
 
 
 def validate_sra_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
@@ -48,66 +51,73 @@ def validate_keyword(kw):
 
 
 def validate_pubmed_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_pmid(identifier):
         raise ValidationError(
-            "%(id)s is not a valid PubMed identifier.",
-            params={"id": identifier},
+            "%(id)s is not a valid PubMed identifier.", params={"id": identifier}
         )
 
 
 def validate_doi_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
+
     print(type(identifier))
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_doi(identifier):
-        raise ValidationError(
-            "%(id)s is not a valid DOI.", params={"id": identifier}
-        )
+        raise ValidationError("%(id)s is not a valid DOI.", params={"id": identifier})
 
 
 def validate_ensembl_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_ensembl(identifier):
         raise ValidationError(
-            "%(id)s is not a valid Ensembl accession.",
-            params={"id": identifier},
+            "%(id)s is not a valid Ensembl accession.", params={"id": identifier}
         )
 
 
 def validate_uniprot_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_uniprot(identifier):
         raise ValidationError(
-            "%(id)s is not a valid UniProt accession.",
-            params={"id": identifier},
+            "%(id)s is not a valid UniProt accession.", params={"id": identifier}
         )
 
 
 def validate_refseq_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier
     if not idutils.is_refseq(identifier):
         raise ValidationError(
-            "%(id)s is not a valid RefSeq accession.",
-            params={"id": identifier},
+            "%(id)s is not a valid RefSeq accession.", params={"id": identifier}
         )
 
 
 def validate_genome_identifier(identifier):
-    from mavetools.validators.for_metadata_validators.metadata_models import ExternalIdentifier
+    from mavetools.validators.for_metadata_validators.metadata_models import (
+        ExternalIdentifier,
+    )
 
     if isinstance(identifier, ExternalIdentifier):
         identifier = identifier.identifier

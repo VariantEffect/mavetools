@@ -1,24 +1,24 @@
 from typing import Optional, Any
 
-#from django.db import models
+# from django.db import models
 
-#from core.models import TimeStampedModel
+# from core.models import TimeStampedModel
 
 from mavetools.validators.genome_validators import (
     validate_wildtype_sequence,
-    #min_start_validator,
+    # min_start_validator,
     validate_gene_name,
     validate_genome_short_name,
     validate_organism_name,
     validate_strand,
     validate_chromosome,
-    #min_end_validator,
+    # min_end_validator,
     sequence_is_protein,
     sequence_is_dna,
 )
 
 
-class TargetGene():
+class TargetGene:
     """
     Models a target gene, defining the wild-type sequence, a free-text name
     and a collection of reference_maps relating the gene to reference genomes,
@@ -228,13 +228,11 @@ class TargetGene():
                 genome.organism_name,
                 getattr(genome.genome_id, "identifier", ""),
             )
-        repr_ = str(
-            (self.name, self.wt_sequence.sequence, self.category) + genome
-        )
+        repr_ = str((self.name, self.wt_sequence.sequence, self.category) + genome)
         return hash(repr_)
 
 
-class ReferenceMap():
+class ReferenceMap:
     """
     Annotations define a collection of intervals within reference genome, which
     are to be used to define how a :class:`TargetGene` maps to a particular
@@ -342,7 +340,7 @@ class ReferenceMap():
         return self.is_primary
 
 
-class ReferenceGenome():
+class ReferenceGenome:
     """
     The :class:`ReferenceGenome` specifies fields describing a specific genome
     in terms of a short name, organism and various external identifiers.
@@ -422,9 +420,7 @@ class ReferenceGenome():
         return None
 
     def display_name(self):
-        return "{} | {}".format(
-            self.get_short_name(), self.get_organism_name()
-        )
+        return "{} | {}".format(self.get_short_name(), self.get_organism_name())
 
     def get_short_name(self):
         return self.short_name
@@ -440,7 +436,7 @@ class ReferenceGenome():
         return "<i>{}</i>".format(self.get_organism_name().capitalize())
 
 
-class GenomicInterval():
+class GenomicInterval:
     """
     Represents a specific region within the reference genome, including
     chromosome and strand. All intervals use 1-based indexing.
@@ -531,18 +527,8 @@ class GenomicInterval():
         Compares two intervals based on `start`, `end`, lowercase `chromosome`
         and `strand`.
         """
-        this = (
-            self.start,
-            self.end,
-            self.chromosome.lower(),
-            self.get_strand(),
-        )
-        other = (
-            other.start,
-            other.end,
-            other.chromosome.lower(),
-            other.get_strand(),
-        )
+        this = (self.start, self.end, self.chromosome.lower(), self.get_strand())
+        other = (other.start, other.end, other.chromosome.lower(), other.get_strand())
         return this == other
 
     def get_start(self, offset=0):
@@ -564,7 +550,7 @@ class GenomicInterval():
         self.reference_map = reference_map
 
 
-class WildTypeSequence():
+class WildTypeSequence:
     """
     Basic model specifying a wild-type sequence.
 
@@ -604,11 +590,7 @@ class WildTypeSequence():
 
         @classmethod
         def choices(cls):
-            return [
-                (cls.INFER, "Infer"),
-                (cls.DNA, "DNA"),
-                (cls.PROTEIN, "Protein"),
-            ]
+            return [(cls.INFER, "Infer"), (cls.DNA, "DNA"), (cls.PROTEIN, "Protein")]
 
     class Meta:
         verbose_name = "Reference sequence"
@@ -645,11 +627,7 @@ class WildTypeSequence():
         if self.sequence is not None:
             self.sequence = self.sequence.upper()
             self.sequence_type = (
-                (
-                    self.__class__.SequenceType.detect_sequence_type(
-                        self.sequence
-                    )
-                )
+                (self.__class__.SequenceType.detect_sequence_type(self.sequence))
                 if self.__class__.SequenceType.INFER
                 else self.sequence_type
             )

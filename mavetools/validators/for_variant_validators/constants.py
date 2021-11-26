@@ -41,9 +41,7 @@ variant_to_scoreset_column = {
     variant_score_data: score_columns,
     variant_count_data: count_columns,
 }
-scoreset_to_variant_column = {
-    v: k for k, v in variant_to_scoreset_column.items()
-}
+scoreset_to_variant_column = {v: k for k, v in variant_to_scoreset_column.items()}
 
 # Celery dataset status
 processing = "processing"

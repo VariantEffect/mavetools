@@ -18,6 +18,7 @@ from mavetools.validators.dataset_validators import (
     WordLimitValidator,
 )
 
+
 class TestWordLimitValidator(TestCase):
     def test_validation_error_more_than_word_limit(self):
         with self.assertRaises(ValueError):

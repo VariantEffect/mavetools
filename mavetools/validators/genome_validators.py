@@ -10,18 +10,14 @@ Most validators should validate one specific field, unless fields need
 to be validated against each other.
 """
 import re
-from fqfa.validator.validator import (
-    dna_bases_validator,
-    amino_acids_validator,
-)
+from fqfa.validator.validator import dna_bases_validator, amino_acids_validator
 from mavetools.validators.exceptions import ValidationError
 
-#from core.utilities import is_null
+# from core.utilities import is_null
 # Used in CSV formatting
 NA_value = "NA"
 null_values_re = re.compile(
-    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value),
-    flags=re.IGNORECASE,
+    r"\s+|none|nan|na|undefined|n/a|null|nil|{}".format(NA_value), flags=re.IGNORECASE
 )
 
 
@@ -38,15 +34,15 @@ DNA_SEQ_PATTERN = fr"[{DNA_LETTERS}]+"
 AA_SEQ_PATTERN = fr"[{AA_LETTERS}]+"
 
 
-#min_start_validator = MinValueValidator(
+# min_start_validator = MinValueValidator(
 #    1, message=_("Start coordinate must be a positive integer.")
-#)
-#min_end_validator = MinValueValidator(
+# )
+# min_end_validator = MinValueValidator(
 #    1, message=_("End coordinate must be a positive integer.")
-#)
+# )
 
 
-class WildTypeSequence():
+class WildTypeSequence:
     """
     Basic model specifying a wild-type sequence.
 
@@ -86,11 +82,7 @@ class WildTypeSequence():
 
         @classmethod
         def choices(cls):
-            return [
-                (cls.INFER, "Infer"),
-                (cls.DNA, "DNA"),
-                (cls.PROTEIN, "Protein"),
-            ]
+            return [(cls.INFER, "Infer"), (cls.DNA, "DNA"), (cls.PROTEIN, "Protein")]
 
     class Meta:
         verbose_name = "Reference sequence"
@@ -99,21 +91,21 @@ class WildTypeSequence():
     def __str__(self):
         return self.get_sequence()
 
-    #sequence = models.TextField(
+    # sequence = models.TextField(
     #    default=None,
     #    blank=False,
     #    null=False,
     #    verbose_name="Reference sequence",
     #    validators=[validate_wildtype_sequence],
-    #)
-    #sequence_type = models.CharField(
+    # )
+    # sequence_type = models.CharField(
     #    blank=True,
     #    null=False,
     #    default=SequenceType.INFER,
     #    verbose_name="Reference sequence type",
     #    max_length=32,
     #    choices=SequenceType.choices(),
-    #)
+    # )
 
     @property
     def is_dna(self):
@@ -127,11 +119,7 @@ class WildTypeSequence():
         if self.sequence is not None:
             self.sequence = self.sequence.upper()
             self.sequence_type = (
-                (
-                    self.__class__.SequenceType.detect_sequence_type(
-                        self.sequence
-                    )
-                )
+                (self.__class__.SequenceType.detect_sequence_type(self.sequence))
                 if self.__class__.SequenceType.INFER
                 else self.sequence_type
             )
@@ -143,6 +131,7 @@ class WildTypeSequence():
 
     def is_attached(self):
         return getattr(self, "target", None) is not None
+
 
 # GenomicInterval
 # ------------------------------------------------------------------------- #
@@ -161,9 +150,7 @@ def validate_interval_start_lteq_end(start, end):
 
 def validate_strand(value):
     if value not in ("+", "-"):
-        raise ValidationError(
-            "GenomicInterval strand must be either '+' or '-'"
-        )
+        raise ValidationError("GenomicInterval strand must be either '+' or '-'")
 
 
 def validate_chromosome(value):
@@ -186,20 +173,18 @@ def validate_unique_intervals(intervals):
             elif interval1 is interval2:
                 continue
             elif interval1.equals(interval2):
-                raise ValidationError(
-                    "You can not specify the same interval twice."
-                )
+                raise ValidationError("You can not specify the same interval twice.")
 
 
 # WildTypeSequence
 # ------------------------------------------------------------------------- #
 def validate_wildtype_sequence(seq, as_type="any"):
-    #from .models import WildTypeSequence
+    # from .models import WildTypeSequence
 
     # Explicitly check for these cases as they are also valid AA sequences.
     if is_null(seq):
         raise ValidationError(
-            "'%(seq)s' is not a valid wild type sequence."#, params={"seq": seq}
+            "'%(seq)s' is not a valid wild type sequence."  # , params={"seq": seq}
         )
 
     seq = seq.upper()
@@ -208,20 +193,20 @@ def validate_wildtype_sequence(seq, as_type="any"):
 
     if as_type == WildTypeSequence.SequenceType.DNA and not is_dna:
         raise ValidationError(
-            "'%(seq)s' is not a valid DNA reference sequence."#,
-            #params={"seq": seq},
+            "'%(seq)s' is not a valid DNA reference sequence."  # ,
+            # params={"seq": seq},
         )
     elif as_type == WildTypeSequence.SequenceType.PROTEIN and not is_aa:
         raise ValidationError(
-            "'%(seq)s' is not a valid protein reference sequence."#,
-            #params={"seq": seq},
+            "'%(seq)s' is not a valid protein reference sequence."  # ,
+            # params={"seq": seq},
         )
     elif (as_type == "any" or WildTypeSequence.SequenceType.INFER) and not (
         is_dna or is_aa
     ):
         raise ValidationError(
-            "'%(seq)s' is not a valid DNA or protein reference sequence."#,
-            #params={"seq": seq},
+            "'%(seq)s' is not a valid DNA or protein reference sequence."  # ,
+            # params={"seq": seq},
         )
 
 
@@ -253,8 +238,7 @@ def validate_organism_name(value):
 def validate_reference_genome_has_one_external_identifier(referencegenome):
     if not referencegenome.genome_id:
         raise ValidationError(
-            "Only one external identifier can be specified for a reference"
-            "genome."
+            "Only one external identifier can be specified for a reference" "genome."
         )
 
 
@@ -266,9 +250,7 @@ def validate_genome_short_name(value):
 # ReferenceMap
 # ------------------------------------------------------------------------- #
 def validate_map_has_unique_reference_genome(annotations):
-    genomes = set(
-        [str(a.get_reference_genome_name()).lower() for a in annotations]
-    )
+    genomes = set([str(a.get_reference_genome_name()).lower() for a in annotations])
     if len(genomes) < len(annotations):
         raise ValidationError(
             "Each reference map must specify a different reference genome."
@@ -292,9 +274,7 @@ def validate_at_least_one_map(reference_maps):
 def validate_one_primary_map(reference_maps):
     primary_count = sum(a.is_primary_reference_map() for a in reference_maps)
     if primary_count > 1 or primary_count < 1:
-        raise ValidationError(
-            "A target must have one primary reference map."
-        )
+        raise ValidationError("A target must have one primary reference map.")
 
 
 # TargetGene

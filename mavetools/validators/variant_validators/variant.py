@@ -41,9 +41,7 @@ def validate_variant_json(data: Dict[str, Dict]) -> None:
     expected_keys = [variant_score_data, variant_count_data]
     for key in expected_keys:
         if key not in data.keys():
-            raise ValidationError(
-                f"Missing the required key {key}"
-            )
+            raise ValidationError(f"Missing the required key {key}")
 
     if required_score_column not in data[variant_score_data]:
         raise ValidationError(
@@ -53,14 +51,10 @@ def validate_variant_json(data: Dict[str, Dict]) -> None:
     extras = [k for k in data.keys() if k not in set(expected_keys)]
     if len(extras) > 0:
         extras = [k for k in data.keys() if k not in expected_keys]
-        raise ValidationError(
-            "Encountered unexpected keys {extras}"
-        )
+        raise ValidationError("Encountered unexpected keys {extras}")
 
     # Check the correct data types are given.
     for key in expected_keys:
         if not isinstance(data[key], dict):
             type_ = type(data[key]).__name__
-            raise ValidationError(
-                f"Value for '{key}' must be a dict not {type_}."
-            )
+            raise ValidationError(f"Value for '{key}' must be a dict not {type_}.")

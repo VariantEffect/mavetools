@@ -3,11 +3,11 @@ import idutils
 import metapub
 from eutils import EutilsNCBIError
 
-#from django.db import models
+# from django.db import models
 
 import mavetools.validators.for_metadata_validators.genome_models as genome_models
 
-#from core.models import TimeStampedModel
+# from core.models import TimeStampedModel
 
 from mavetools.validators.metadata_validators import (
     validate_ensembl_identifier,
@@ -55,7 +55,7 @@ def _is_attached(instance):
     )
 
 
-class Keyword():
+class Keyword:
     """
     This class represents a keyword that can be associated with an
     experiment or scoreset.
@@ -115,7 +115,7 @@ class Keyword():
         return _is_attached(self)
 
 
-class ExternalIdentifier():
+class ExternalIdentifier:
     """
     This class represents a textual representation of an identifier from an
     external database that can be associated with a target in an experiment.
@@ -238,9 +238,7 @@ class SraIdentifier(ExternalIdentifier):
         elif idutils.is_arrayexpress_array(self.identifier):
             return idutils.to_url(self.identifier, scheme="arrayexpress_array")
         elif idutils.is_arrayexpress_experiment(self.identifier):
-            return idutils.to_url(
-                self.identifier, scheme="arrayexpress_experiment"
-            )
+            return idutils.to_url(self.identifier, scheme="arrayexpress_experiment")
         else:
             raise AttributeError(
                 "Invalid SRA, BioProject, GEO or ArrayExpress accession "
@@ -275,9 +273,7 @@ class PubmedIdentifier(ExternalIdentifier):
         try:
             article = fetch.article_by_pmid(self.identifier)
         except EutilsNCBIError:
-            reference = "Unable to retrieve PubMed ID " "'{}'".format(
-                self.identifier
-            )
+            reference = "Unable to retrieve PubMed ID " "'{}'".format(self.identifier)
         else:
             reference = article.citation_html
         return reference

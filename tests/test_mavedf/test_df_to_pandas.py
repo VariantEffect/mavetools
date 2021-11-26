@@ -9,32 +9,38 @@ class Test(TestCase):
     # scenario 1 - valid input file
     def test_df_to_pandas(self):
         # typical case - return metadata
-        data = StringIO("# Accession:\n"
-                        "# Downloaded (UTC):\n"
-                        "# Licence:\n"
-                        "# Licence URL:\n"
-                        "accession,hgvs_nt,hgvs_pro,score\n"
-                        "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
+        data = StringIO(
+            "# Accession:\n"
+            "# Downloaded (UTC):\n"
+            "# Licence:\n"
+            "# Licence URL:\n"
+            "accession,hgvs_nt,hgvs_pro,score\n"
+            "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0"
+        )
         results = df_to_pandas(data, True)
         self.assertTrue(results[0].iat[0, 2] == "p.Phe2=")
 
         # typical case - do not return metadata
-        data = StringIO("# Accession:\n"
-                        "# Downloaded (UTC):\n"
-                        "# Licence:\n"
-                        "# Licence URL:\n"
-                        "accession,hgvs_nt,hgvs_pro,score\n"
-                        "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
+        data = StringIO(
+            "# Accession:\n"
+            "# Downloaded (UTC):\n"
+            "# Licence:\n"
+            "# Licence URL:\n"
+            "accession,hgvs_nt,hgvs_pro,score\n"
+            "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0"
+        )
         results = df_to_pandas(data, False)
         self.assertTrue(results.iat[0, 2] == "p.Phe2=")
 
         # edge case - ret_meta is incorrect type
-        data = StringIO("# Accession:\n"
-                        "# Downloaded (UTC):\n"
-                        "# Licence:\n"
-                        "# Licence URL:\n"
-                        "accession,hgvs_nt,hgvs_pro,score\n"
-                        "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0")
+        data = StringIO(
+            "# Accession:\n"
+            "# Downloaded (UTC):\n"
+            "# Licence:\n"
+            "# Licence URL:\n"
+            "accession,hgvs_nt,hgvs_pro,score\n"
+            "urn:mavedb:00000011-a-1#27,c.[4=;5=;6=],p.Phe2=,0.0"
+        )
         with self.assertRaises(TypeError):
             df_to_pandas(data, "notabool")
 

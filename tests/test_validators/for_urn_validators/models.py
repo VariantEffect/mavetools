@@ -14,7 +14,5 @@ RANDOM_CHARS = string.ascii_lowercase + string.ascii_uppercase + string.digits
 
 def generate_tmp_urn():
     return "tmp:{}".format(
-        "".join(
-            [random.choice(RANDOM_CHARS) for _ in range(MAVEDB_TMP_URN_DIGITS)]
-        )
+        "".join([random.choice(RANDOM_CHARS) for _ in range(MAVEDB_TMP_URN_DIGITS)])
     )

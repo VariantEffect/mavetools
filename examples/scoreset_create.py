@@ -14,7 +14,7 @@ from mavetools.models.target import (
 # if the value does not exist, an empty string is returned instead
 from mavetools.validators.validate import validate_all
 
-base_url = os.getenv('MAVEDB_BASE_URL', '')
+base_url = os.getenv("MAVEDB_BASE_URL", "")
 # the urn of the scoreset and the experiment that that scoreset belongs to
 # what happens if the urn of the scoreset already exists?
 scoreset_urn = "urn:mavedb:00000001-a-1"
@@ -34,10 +34,10 @@ client = (
 # POST
 # Change this dir string as needed. It's currently configured for running
 # inside a Docker container that mounts the home directory as a volume.
-test_file_dir = '/mavetools/tests/test_upload_scoreset/test_files'
+test_file_dir = "/mavetools/tests/test_upload_scoreset/test_files"
 
 # validate
-#validate_all(countfile=f"{test_file_dir}/test_count.csv",
+# validate_all(countfile=f"{test_file_dir}/test_count.csv",
 #             scorefile=f"{test_file_dir}/test_score_data.csv",
 #             scorejson=None)
 
