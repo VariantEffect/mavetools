@@ -18,22 +18,6 @@ from mavetools.validators.dataset_validators import (
     WordLimitValidator,
 )
 
-# from core.utilities import null_values_list\
-# Used in CSV formatting
-NA_value = "NA"
-null_values_list = (
-    "nan",
-    "na",
-    "none",
-    "",
-    "undefined",
-    "n/a",
-    "null",
-    "nil",
-    NA_value,
-)
-
-
 class TestWordLimitValidator(TestCase):
     def test_validation_error_more_than_word_limit(self):
         with self.assertRaises(ValueError):
@@ -97,7 +81,7 @@ class TestNoNullInColumnsValidator(TestCase):
     """
 
     def test_raises_valuerror_when_null_values_in_column(self):
-        for value in null_values_list:
+        for value in constants.null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
             )
@@ -261,7 +245,7 @@ class TestValidateScoreSetCountDataInputValidator(TestCase):
             validate_scoreset_count_data_input(file)
 
     def test_raises_valuerror_when_null_values_in_column(self):
-        for value in null_values_list:
+        for value in constants.null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
             )
@@ -288,7 +272,7 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
             validate_scoreset_score_data_input(file)
 
     def test_raises_valuerror_when_null_values_in_column(self):
-        for value in null_values_list:
+        for value in constants.null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
             )
