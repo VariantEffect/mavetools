@@ -20,7 +20,7 @@ if sys.version_info.major == 3 and sys.version_info.minor == 6:
 
 setup(
     name="mavetools",
-    version="0.0.1",
+    version="0.1.0",
     author="Alan F Rubin",
     author_email="alan.rubin@wehi.edu.au",
     description=(
@@ -31,7 +31,7 @@ setup(
     url="https://github.com/VariantEffect/mavetools",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Programming Language :: Python :: 3",
