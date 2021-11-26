@@ -96,7 +96,7 @@ class TestNoNullInColumnsValidator(TestCase):
     such as '', None, null etc.
     """
 
-    def test_raises_validationerror_when_null_values_in_column(self):
+    def test_raises_valuerror_when_null_values_in_column(self):
         for value in null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
@@ -105,7 +105,7 @@ class TestNoNullInColumnsValidator(TestCase):
                 header = read_header_from_io(file)
                 validate_header_contains_no_null_columns(header)
 
-    def test_does_not_raise_validationerror_when_non_null_values_in_column(self,):
+    def test_does_not_raise_valuerror_when_non_null_values_in_column(self,):
         file = BytesIO("{},score\n".format(constants.hgvs_nt_column).encode())
         header = read_header_from_io(file)
         validate_header_contains_no_null_columns(header)  # Should pass
@@ -116,14 +116,14 @@ class TestAtLeastOneNumericColumnValidator(TestCase):
     Tests to ensure that an input file contains at least two columns.
     """
 
-    def test_raises_validationerror_when_less_than_2_values_in_column(self):
+    def test_raises_valuerror_when_less_than_2_values_in_column(self):
         # TODO test has failed
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             header = read_header_from_io(file)
             validate_at_least_one_additional_column(header)
 
-    def test_does_not_raise_validationerror_2_or_more_values_in_column(self):
+    def test_does_not_raise_valuerror_2_or_more_values_in_column(self):
         file = BytesIO("{},score,count\n".format(constants.hgvs_nt_column).encode())
         header = read_header_from_io(file)
         validate_at_least_one_additional_column(header)  # Should pass
@@ -138,7 +138,7 @@ class TestHgvsInHeaderValidator(TestCase):
     Tests that case-sensitive 'hgvs' is in the header of a file.
     """
 
-    def test_raises_validationerror_when_neither_hgvs_col_in_column(self):
+    def test_raises_valuerror_when_neither_hgvs_col_in_column(self):
         # TODO test has failed
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
@@ -154,7 +154,7 @@ class TestHgvsInHeaderValidator(TestCase):
             header = read_header_from_io(file)
             validate_has_hgvs_in_header(header)
 
-    def test_does_not_raise_validationerror_when_either_hgvs_in_column(self):
+    def test_does_not_raise_valuerror_when_either_hgvs_in_column(self):
         file = BytesIO("{},score,count\n".format(constants.hgvs_nt_column).encode())
         header = read_header_from_io(file)
         validate_has_hgvs_in_header(header)  # Should pass
@@ -248,19 +248,19 @@ class TestValidateScoreSetCountDataInputValidator(TestCase):
     input file is supplied.
     """
 
-    def test_raises_validationerror_when_hgvs_not_in_column(self):
+    def test_raises_valuerror_when_hgvs_not_in_column(self):
         # TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
             validate_scoreset_count_data_input(file)
 
-    def test_raises_validationerror_no_numeric_column(self):
+    def test_raises_valuerror_no_numeric_column(self):
         # TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             validate_scoreset_count_data_input(file)
 
-    def test_raises_validationerror_when_null_values_in_column(self):
+    def test_raises_valuerror_when_null_values_in_column(self):
         for value in null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
@@ -275,19 +275,19 @@ class TestValidateScoreSetScoreDataInputValidator(TestCase):
     input file is supplied.
     """
 
-    def test_raises_validationerror_when_hgvs_not_in_column(self):
+    def test_raises_valuerror_when_hgvs_not_in_column(self):
         # TODO test has failed (resolved)
         file = BytesIO("score,count\n".encode())
         with self.assertRaises(ValueError):
             validate_scoreset_score_data_input(file)
 
-    def test_raises_validationerror_no_numeric_column(self):
+    def test_raises_valuerror_no_numeric_column(self):
         # TODO test has failed (resolved)
         file = BytesIO("{}\n".format(constants.hgvs_nt_column).encode())
         with self.assertRaises(ValueError):
             validate_scoreset_score_data_input(file)
 
-    def test_raises_validationerror_when_null_values_in_column(self):
+    def test_raises_valuerror_when_null_values_in_column(self):
         for value in null_values_list:
             file = BytesIO(
                 "{},score,{}\n".format(constants.hgvs_nt_column, value).encode()
