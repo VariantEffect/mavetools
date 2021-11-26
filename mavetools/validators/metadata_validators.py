@@ -24,8 +24,8 @@ def validate_sra_identifier(identifier):
         or idutils.is_arrayexpress_experiment(identifier)
     ):
         raise ValidationError(
-                f"'{identifier} is not a valid SRA, GEO, ArrayExpress or BioProject "
-                "accession."
+            f"'{identifier} is not a valid SRA, GEO, ArrayExpress or BioProject "
+            "accession."
         )
 
 
@@ -38,9 +38,7 @@ def validate_keyword(kw):
 
 def validate_pubmed_identifier(identifier):
     if not idutils.is_pmid(identifier):
-        raise ValidationError(
-            f"'{identifier} is not a valid PubMed identifier."
-        )
+        raise ValidationError(f"'{identifier} is not a valid PubMed identifier.")
 
 
 def validate_doi_identifier(identifier):
@@ -50,29 +48,23 @@ def validate_doi_identifier(identifier):
 
 def validate_ensembl_identifier(identifier):
     if not idutils.is_ensembl(identifier):
-        raise ValidationError(
-            f"'{identifier}' is not a valid Ensembl accession."
-        )
+        raise ValidationError(f"'{identifier}' is not a valid Ensembl accession.")
 
 
 def validate_uniprot_identifier(identifier):
     if not idutils.is_uniprot(identifier):
-        raise ValidationError(
-            f"'{identifier}' is not a valid UniProt accession."
-        )
+        raise ValidationError(f"'{identifier}' is not a valid UniProt accession.")
 
 
 def validate_refseq_identifier(identifier):
     if not idutils.is_refseq(identifier):
-        raise ValidationError(
-            f"'{identifier}' is not a valid RefSeq accession."
-        )
+        raise ValidationError(f"'{identifier}' is not a valid RefSeq accession.")
 
 
 def validate_genome_identifier(identifier):
     if not idutils.is_genome(identifier):
         raise ValidationError(
-            f"'{identifier}' is not a valid GenBank or RefSeq genome assembly.",
+            f"'{identifier}' is not a valid GenBank or RefSeq genome assembly."
         )
 
 
