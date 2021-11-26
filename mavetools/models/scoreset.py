@@ -16,6 +16,7 @@ class ScoreSet(APIObject, Dataset):
     This class instantiates the ScoreSet object and declares the fields of that object.
     It inherits the attributes of APIObject and Dataset
     """
+
     experiment: str = attr.ib(kw_only=True)
     licence: Licence = attr.ib(kw_only=True)
     target: Target = attr.ib(kw_only=True)
@@ -36,13 +37,13 @@ class ScoreSet(APIObject, Dataset):
         """
         Returns API endpoint
         """
-        return 'scoresets/'
+        return "scoresets/"
 
     def api_id_field() -> str:
         """
         Returns API ID field as string urn
         """
-        return 'urn'
+        return "urn"
 
     def deserialize(json_dict):
         """
@@ -57,6 +58,7 @@ class NewScoreSet(NewDataset):
     This Class instantiates NewScoreSet and declares the variables present in NewScoreSet object.
     Attributes are set before posting a model instance
     """
+
     experiment: str = attr.ib(kw_only=True)
 
     # the following fields are optional
@@ -77,6 +79,7 @@ class NewScoreSetRequest(APIObject):
     This class instantiates NewScoreSetRequest and sets the fields for NewScoreSetRequest.
     Attributes are set before posting a model instance
     """
+
     scoreset: NewScoreSet = attr.ib(kw_only=True)
     target: NewTarget = attr.ib(kw_only=True)
 
@@ -91,7 +94,7 @@ class NewScoreSetRequest(APIObject):
         """
         Returns API endpoint
         """
-        return 'scoresets'
+        return "scoresets"
 
     def post_payload(self):
         """
@@ -103,7 +106,7 @@ class NewScoreSetRequest(APIObject):
                 self,
                 filter=attrs_filter,
                 retain_collection_types=True,
-                value_serializer=attrs_serializer
+                value_serializer=attrs_serializer,
             )
         )
         return json_dict, files

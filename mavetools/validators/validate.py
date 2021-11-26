@@ -44,8 +44,6 @@ def validate_dataset(countfile=None, scorefile=None, scorejson=None):
         dataset_validators.validate_scoreset_count_data_input(file=countfile)
 
     if scorefile is not None and countfile is not None:
-        dataset_validators.validate_datasets_define_same_variants(scores=scorefile, counts=countfile)
-
-
-
-
+        dataset_validators.validate_datasets_define_same_variants(
+            scores=scorefile, counts=countfile
+        )
