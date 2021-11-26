@@ -1,0 +1,70 @@
+import json
+import logging
+import requests
+import sys
+
+class Client():
+    def __init__(self, base_url='http://127.0.0.1:8000/api/', auth_token=''):
+        self.base_url = base_url
+        if auth_token:
+            self.auth_token = auth_token
+
+    class AuthTokenMissingException(Exception):
+        pass
+
+    def get_model_instance(self, model_class, instance_id):
+        """
+        Using a GET, hit an API endpoint to get info on a particular instance
+        of a model class such as a ScoreSet.
+        This will perform the HTTP GET request and then let the class itself
+        parse the JSON data.
+
+        Parameters
+        ----------
+        model_class : ModelClass
+            The model class we want to which we want to cast the response.
+        instance_id : str
+            The id of the object we are retrieving.
+
+        Returns
+        -------
+        model_instance
+            An instance of the passed class.
+
+        Raises
+        ------
+        ValueError
+            If any mandatory fields are missing.
+        """
+        model_url = f"{self.base_url}{model_class.api_url()}"
+        instance_url = f"{model_url}{instance_id}/"
+        try:
+            r = requests.get(instance_url)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            logging.error(r.json())
+            raise SystemExit(e)
+        return model_class.deserialize(r.json())
+
+    def post_model_instance(self, model_instance):
+        model_class = type(model_instance)
+        model_url = f"{self.base_url}{model_class.api_url()}/"
+        payload, files = model_instance.post_payload()
+        if not self.auth_token:
+            error_message = 'Need to include an auth token for POST requests!'
+            logging.error(error_message)
+            raise AuthTokenMissingException(error_message)
+        try:
+            r = requests.post(
+                model_url,
+                data={
+                    'request': json.dumps(payload)
+                },
+                files=files,
+                headers={'Authorization': (self.auth_token)}
+            )
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            logging.error(r.text)
+            sys.exit(1)
+        logging.info(f"Successfully uploaded {model_instance}!")
