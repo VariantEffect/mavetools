@@ -20,7 +20,7 @@ if sys.version_info.major == 3 and sys.version_info.minor == 6:
 
 setup(
     name="mavetools",
-    version="0.1.0",
+    version="0.1.1",
     author="Alan F Rubin",
     author_email="alan.rubin@wehi.edu.au",
     description=(
