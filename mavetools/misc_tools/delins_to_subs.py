@@ -28,10 +28,36 @@ def delins_to_subs(target, delins, offset=0):
 
     Returns
     -------
+    str
+        the corresponding multi-variant based on the delins single event
 
     Raises
     ______
 
 
     """
-    return None
+    # save first part of delins string and append start of return string
+    multi_variant = delins[0:2] + "["
+
+    # find range of indices in delins
+    start_delins, end_delins = delins.split("_")
+    start_delins = int(''.join(i for i in start_delins if i.isdigit()))
+    end_delins = int(''.join(i for i in end_delins if i.isdigit()))
+
+    # save bases in delins
+    bases_delins = ''.join(i for i in delins if i.isupper())
+
+    # with range, get appropriate subsequence from target
+    bases_target = target[start_delins-1+offset:end_delins+offset]
+
+    # compare subsequence in target with bases in delins
+    for i in range(len(bases_target)):
+        # where they differ, add to return string, with appropriate index
+        if bases_target[i] != bases_delins[i]:
+            multi_variant = multi_variant + str(start_delins+i) + bases_target[i] + ">" + bases_delins[i] + ";"
+
+    # close off multi_variant
+    multi_variant = multi_variant[:-1] + "]"
+
+    # return multi_variant
+    return multi_variant
