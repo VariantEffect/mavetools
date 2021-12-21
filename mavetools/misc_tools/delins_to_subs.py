@@ -2,7 +2,7 @@
 def delins_to_subs(target, delins, offset=0):
     """
     The code that converts codon changes to mavehgvs variants prefers to define single events,
-    e.g. a deletion-insertion of two bases rather than two substitutions. Many users may prefer
+    e.g., a deletion-insertion of two bases rather than two substitutions. Many users may prefer
     to look at these data as multiple substitutions instead.
 
     This function takes delins mavehgvs variants that have matching deletion and insertion length
@@ -17,12 +17,21 @@ def delins_to_subs(target, delins, offset=0):
 
     Parameters
     ----------
-    target
-    delins
-    offset
+    target : str
+        The target sequence that delins is based on.
+    delins : str
+        A mavehgvs representation of a single deletion-insertion event.
+    offset : int
+        The offset of index into target sequence. E.g., you have variants from MaveDB that are part of an
+        internal domain of a gene. MaveDB's base 1 is actually base 121. In this case, the user can pass
+        as target the full-length FASTA and as offset 120.
 
     Returns
     -------
+
+    Raises
+    ______
+
 
     """
     return None
