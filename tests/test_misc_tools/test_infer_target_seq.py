@@ -6,11 +6,12 @@ from mavehgvs.variant import Variant
 class Test(TestCase):
     def test_target_seq_inference(self):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
-        variant_list = [Variant("1C>A"), Variant("2A>C"), Variant("3A>C"), Variant("4T>A"), Variant("5T>A"),
-                        Variant("6T>A"), Variant("7G>A"), Variant("8G>A"), Variant("9T>A"), Variant("10T>A"),
-                        Variant("11G>A"), Variant("12G>A"), Variant("13T>A"), Variant("14C>A"), Variant("15T>A"),
-                        Variant("16G>A"), Variant("17C>A"), Variant("18T>A"), Variant("19A>C"), Variant("20A>C"),
-                        Variant("21T>A"), Variant("22A>C"), Variant("23T>A"), Variant("24G>A"), Variant("25G>A"),
-                        Variant("26A>C"), Variant("27A>C")]
+        variant_list = [Variant("n.1C>A"), Variant("n.2A>C"), Variant("n.3A>C"), Variant("n.4T>A"),
+                        Variant("n.5T>A"), Variant("n.6T>A"), Variant("n.7G>A"), Variant("n.8G>A"),
+                        Variant("n.9T>A"), Variant("n.10T>A"), Variant("n.11G>A"), Variant("n.12G>A"),
+                        Variant("n.13T>A"), Variant("n.14C>A"), Variant("n.15T>A"), Variant("n.16G>A"),
+                        Variant("n.17C>A"), Variant("n.18T>A"), Variant("n.19A>C"), Variant("n.20A>C"),
+                        Variant("n.21T>A"), Variant("n.22A>C"), Variant("n.23T>A"), Variant("n.24G>A"),
+                        Variant("n.25G>A"), Variant("n.26A>C"), Variant("n.27A>C")]
 
         self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
