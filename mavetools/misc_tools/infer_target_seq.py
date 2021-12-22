@@ -36,20 +36,10 @@ def infer_target_seq(variant_list):
             position = int(str(variant.positions))
             target_base = str(variant.sequence[0])
             # check if position is beyond current length of target_seq
-            #print(str(position))
             while int(position) > len(target_seq):
                 # append target_seq with N until we reach position
                 target_seq = target_seq + 'N'
             # now that they are the same length, add target base
-            #target_seq[position-1] = target_base
             target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
-
-
-
-        # check if it is delins or not
-
-        # if it is delins, we cannot infer target seq
-        # if it is not, we will be able to, we just want to know if variant type = sub
-            #
 
     return target_seq
