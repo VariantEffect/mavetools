@@ -16,7 +16,7 @@ class Test(TestCase):
 
         self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
 
-    def test_multi_sub(self):
+    def test_multi_var_single_sub(self):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         variant_list = [Variant("n.[1C>A,3A>C]"), Variant("n.2A>C"), Variant("n.4T>A"),
                         Variant("n.5T>A"), Variant("n.6T>A"), Variant("n.7G>A"), Variant("n.8G>A"),
