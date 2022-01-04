@@ -66,13 +66,25 @@ def infer_target_seq(variant_list):
         if variant.is_multi_variant():
             for i in range(len(variant.sequence)):
                 if type(variant.sequence[i]) is tuple:
-                    position = int(str(variant.positions[i]))
-                    target_base = str(variant.sequence[i][0])
-                    # check if position is beyond current length of target_seq
-                    while int(position) > len(target_seq):
-                        # append target_seq with N until we reach position
-                        target_seq = target_seq + 'N'
-                    # now that they are the same length, add target base
-                    target_seq = target_seq[0:position - 1] + target_base + target_seq[position:]
+                    if str(variant.positions[i])[0] in "ACGHILMOPSTV":  # protein variant
+                        # get position, target_base of variant
+                        position = int(str(variant.positions[i])[3:])
+                        target_aa = str(variant.positions[i])[:-len(str(position))]
+                        # check if position is beyond current length of target_seq
+                        while int(position) > len(target_seq):
+                            # append target_seq with N until we reach position
+                            target_seq = target_seq + 'N'
+                        # now that they are the same length, add target base
+                        target_aa = list(aa_dict.keys())[list(aa_dict.values()).index(target_aa)]
+                        target_seq = target_seq[0:position - 1] + target_aa + target_seq[position:]
+                    else:  # nucleotide variant
+                        position = int(str(variant.positions[i]))
+                        target_base = str(variant.sequence[i][0])
+                        # check if position is beyond current length of target_seq
+                        while int(position) > len(target_seq):
+                            # append target_seq with N until we reach position
+                            target_seq = target_seq + 'N'
+                        # now that they are the same length, add target base
+                        target_seq = target_seq[0:position - 1] + target_base + target_seq[position:]
 
     return target_seq
