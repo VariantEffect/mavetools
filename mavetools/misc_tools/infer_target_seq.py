@@ -1,5 +1,6 @@
 from mavehgvs.variant import Variant
 
+
 def infer_target_seq(variant_list):
     """
     This function works for both protein and nucleotide data. Input is a list of mavehgvs Variant objects.
