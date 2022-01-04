@@ -38,15 +38,28 @@ def infer_target_seq(variant_list):
         # check if Variaint is not a multivariant and is a substitution
         if variant.is_multi_variant() is False:
             if variant.variant_type == 'sub':
-                # get position, target_base of variant
-                position = int(str(variant.positions))
-                target_base = str(variant.sequence[0])
-                # check if position is beyond current length of target_seq
-                while int(position) > len(target_seq):
-                    # append target_seq with N until we reach position
-                    target_seq = target_seq + 'N'
-                # now that they are the same length, add target base
-                target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
+                # check if variant is protein data
+                if str(variant.positions)[0] in "ACGHILMOPSTV":  # protein variant
+                    # get position, target_base of variant
+                    position = int(str(variant.positions)[3:])
+                    target_aa = str(variant.positions)[:-len(str(position))]
+                    # check if position is beyond current length of target_seq
+                    while int(position) > len(target_seq):
+                        # append target_seq with N until we reach position
+                        target_seq = target_seq + 'N'
+                    # now that they are the same length, add target base
+                    target_aa = list(aa_dict.keys())[list(aa_dict.values()).index(target_aa)]
+                    target_seq = target_seq[0:position - 1] + target_aa + target_seq[position:]
+                else:  # nucleotide variant
+                    # get position, target_base of variant
+                    position = int(str(variant.positions))
+                    target_base = str(variant.sequence[0])
+                    # check if position is beyond current length of target_seq
+                    while int(position) > len(target_seq):
+                        # append target_seq with N until we reach position
+                        target_seq = target_seq + 'N'
+                    # now that they are the same length, add target base
+                    target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
             if variant.variant_type == 'delins':
                 # do this
                 continue
