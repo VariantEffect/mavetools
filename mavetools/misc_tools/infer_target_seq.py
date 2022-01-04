@@ -31,15 +31,30 @@ def infer_target_seq(variant_list):
     # iterate through variant list
     for variant in variant_list:
         # check if Variaint is not a multivariant and is a substitution
-        if variant.is_multi_variant() is False and variant.variant_type == 'sub':
-            # get position, target_base of variant
-            position = int(str(variant.positions))
-            target_base = str(variant.sequence[0])
-            # check if position is beyond current length of target_seq
-            while int(position) > len(target_seq):
-                # append target_seq with N until we reach position
-                target_seq = target_seq + 'N'
-            # now that they are the same length, add target base
-            target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
+        if variant.is_multi_variant() is False:
+            if variant.variant_type == 'sub':
+                # get position, target_base of variant
+                position = int(str(variant.positions))
+                target_base = str(variant.sequence[0])
+                # check if position is beyond current length of target_seq
+                while int(position) > len(target_seq):
+                    # append target_seq with N until we reach position
+                    target_seq = target_seq + 'N'
+                # now that they are the same length, add target base
+                target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
+            if variant.variant_type == 'delins':
+                # do this
+                continue
+        if variant.is_multi_variant():
+            for i in range(len(variant.sequence)):
+                if type(variant.sequence[i]) is tuple:
+                    position = int(str(variant.positions[i]))
+                    target_base = str(variant.sequence[i][0])
+                    # check if position is beyond current length of target_seq
+                    while int(position) > len(target_seq):
+                        # append target_seq with N until we reach position
+                        target_seq = target_seq + 'N'
+                    # now that they are the same length, add target base
+                    target_seq = target_seq[0:position - 1] + target_base + target_seq[position:]
 
     return target_seq
