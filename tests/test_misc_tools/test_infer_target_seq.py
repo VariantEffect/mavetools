@@ -18,11 +18,6 @@ class Test(TestCase):
 
     def test_single_aa_changes(self):
         target_seq = "EDPLYVKHFS"
-        aa_dict = {"A": "Ala", "C": "Cys", "D": "Asp", "E": "Glu", "F": "Phe",
-                   "G": "Gly", "H": "His", "I": "Ile", "K": "Lys", "L": "Leu",
-                   "M": "Met", "N": "Asn", "P": "Pro", "Q": "Gln", "R": "Arg",
-                   "S": "Ser", "T": "Thr", "V": "Val", "W": "Trp", "Y": "Tyr",
-                   "*": "Ter", "WTSYN": ""}
         variant_list = [Variant("p.Glu1Ala"), Variant("p.Asp2Ala"), Variant("p.Pro3Ala"), Variant("p.Leu4Ala"),
                         Variant("p.Tyr5Ala"), Variant("p.Val6Ala"), Variant("p.Lys7Ala"), Variant("p.His8Ala"),
                         Variant("p.Phe9Ala"), Variant("p.Ser10Ala")]
