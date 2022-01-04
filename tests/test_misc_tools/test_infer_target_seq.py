@@ -46,6 +46,21 @@ class Test(TestCase):
 
         self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
 
+    def test_multi_aa_changes(self):
+        target_seq = "EDPLYVKHFS"
+
+        variant_list = [Variant("p.[Glu1Ala;Asp2Ala]"), Variant("p.Pro3Ala"), Variant("p.Leu4Ala"),
+                        Variant("p.Tyr5Ala"), Variant("p.Val6Ala"), Variant("p.Lys7Ala"), Variant("p.His8Ala"),
+                        Variant("p.Phe9Ala"), Variant("p.Ser10Ala")]
+
+        self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
+
+        variant_list = [Variant("p.Glu1Ala"), Variant("p.Asp2Ala"), Variant("p.Pro3Ala"), Variant("p.Leu4Ala"),
+                        Variant("p.[Tyr5Ala;Lys7Ala]"), Variant("p.Val6Ala"),  Variant("p.His8Ala"),
+                        Variant("p.Phe9Ala"), Variant("p.Ser10Ala")]
+
+        self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
+
     def test_incomplete_data(self):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         variant_list = [Variant("n.1C>A"), Variant("n.2A>C"), Variant("n.3A>C"), Variant("n.4T>A"),
