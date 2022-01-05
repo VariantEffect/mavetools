@@ -65,5 +65,28 @@ def validate_dataset(countfile=None, scorefile=None, scorejson=None):
         #dataset_validators.validate_datasets_define_same_variants(scores=file_scorefile, counts=file_countfile)
 
 
+def validate_urn(scoreset_urn=None, experiment_urn=None, experimentset_urn=None):
+    """
 
+    Parameters
+    ----------
+    scoreset_urn
+    experiment_urn
+    experimentset_urn
 
+    Returns
+    -------
+
+    """
+    if scoreset_urn is not None:
+        urn_validators.validate_mavedb_urn(scoreset_urn)
+        #urn_validators.validate_mavedb_urn_variant(scoreset_urn)
+        urn_validators.validate_mavedb_urn_scoreset(scoreset_urn)
+    if experiment_urn is not None:
+        urn_validators.validate_mavedb_urn(experiment_urn)
+        #urn_validators.validate_mavedb_urn_variant(experiment_urn)
+        urn_validators.validate_mavedb_urn_experiment(experiment_urn)
+    if experimentset_urn is not None:
+        urn_validators.validate_mavedb_urn(experimentset_urn)
+        #urn_validators.validate_mavedb_urn_variant(experimentset_urn)
+        urn_validators.validate_mavedb_urn_experimentset(experimentset_urn)
