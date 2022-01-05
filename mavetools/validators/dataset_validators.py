@@ -71,8 +71,8 @@ def read_header_from_io(file, label=None, msg=None):
     except Exception:
         if not msg:
             msg = (
-                "A header could not be parsed from your {} file. Make sure"
-                "Columns are comma delimited. Column names with commas must be"
+                "A header could not be parsed from your {} file. Make sure "
+                "Columns are comma delimited. Column names with commas must be "
                 "escaped by enclosing them in double quotes.".format(label)
             )
         raise ValidationError(msg)
