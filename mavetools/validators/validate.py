@@ -2,7 +2,8 @@ from mavetools.validators import dataset_validators
 from mavetools.validators import urn_validators
 
 
-def validate_all(countfile=None, scorefile=None, scorejson=None):
+def validate_all(countfile=None, scorefile=None, scorejson=None,
+                 scoreset_urn=None, experiment_urn=None, experimentset_urn=None):
     """
     By calling other helper functions, this function runs all of the validation code
     """
