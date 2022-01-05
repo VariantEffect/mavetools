@@ -8,6 +8,7 @@ def validate_all(countfile=None, scorefile=None, scorejson=None,
     By calling other helper functions, this function runs all of the validation code
     """
     validate_dataset(countfile, scorefile, scorejson)
+    validate_urn(scoreset_urn, experiment_urn, experimentset_urn)
 
 
 def validate_dataset(countfile=None, scorefile=None, scorejson=None):
