@@ -1,4 +1,5 @@
 from mavetools.validators import dataset_validators
+from mavetools.validators import urn_validators
 
 
 def validate_all(countfile=None, scorefile=None, scorejson=None):
