@@ -1,8 +1,4 @@
-from .dataset import (
-    MaveDataset,
-    MaveCountsDataset,
-    MaveScoresDataset,
-)
+from .dataset import MaveDataset, MaveCountsDataset, MaveScoresDataset
 
 from .hgvs import (
     validate_nt_variant,
@@ -11,10 +7,7 @@ from .hgvs import (
     validate_hgvs_string,
 )
 
-from .variant import (
-    validate_columns_match,
-    validate_variant_json,
-)
+from .variant import validate_columns_match, validate_variant_json
 
 __all__ = [
     "dataset",

@@ -37,7 +37,7 @@ def attrs_serializer(inst, field, value):
     if isinstance(value, str):
         if os.path.isfile(value):
             ext = os.path.splitext(value)[1]
-            return (f"{field.name}{ext}", open(value, 'rb'), 'application/octet-stream')
+            return (f"{field.name}{ext}", open(value, "rb"), "application/octet-stream")
         return value
     if value is not None:
         return value

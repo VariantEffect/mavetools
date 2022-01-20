@@ -23,26 +23,21 @@ source ./venv/bin/activate
 
 The following software is required:
 
-- Python
+- Python 3.6 or higher
 - Git
 
-Please install the following packages within your virtual environment:
+Please install the following additional packages within your virtual environment to build the documentation and
+use the provided notebook examples:
 
 - jupyter
-- cfgv
-- fqfa
-- mavehgvs
 - nbshpinx
-- pandas
-- renku-sphinx-theme
 - Sphinx
-- attrs
 
 # Using Jupyter notebook
 
 You can make requests via the API, Jupyter notebook examples can be found at 
 `~/PycharmProjects/mavetools/docs/source` or on
-[github](https://github.com/VariantEffect/mavetools/tree/two_tools/docs/source).
+[github](https://github.com/VariantEffect/mavetools/docs/source).
 
 To run your Jupyter notebook from Pycharm, navigate to one of the .ipynb files in the directory described above and click 
 the `Run All` (overlapped double green arrow) icon in the upper left of the editing window. You will notice  

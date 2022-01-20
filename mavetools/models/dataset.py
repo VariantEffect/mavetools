@@ -5,26 +5,29 @@ from .external_identifier import ExternalIdentifier
 
 
 @attr.s
-class Urn():
+class Urn:
     """
     Instantiates the Urn object and declares urn attribute
     """
+
     urn: str = attr.ib(kw_only=True)
 
 
 @attr.s
-class Keyword():
+class Keyword:
     """
     Instantiates the Keyword object and declares text attribute
     """
+
     text: str = attr.ib(kw_only=True)
 
 
 @attr.s
-class TimeStamped():
+class TimeStamped:
     """
     Instantiates TimeStamped object and declares attributes
     """
+
     creation_date: str = attr.ib(kw_only=True)
     modification_date: str = attr.ib(kw_only=True)
 
@@ -34,6 +37,7 @@ class Dataset(TimeStamped, Urn):
     """
     Instantiates Dataset object and declares attributes
     """
+
     publish_date: str = attr.ib(kw_only=True)
     created_by: str = attr.ib(kw_only=True)
     modified_by: str = attr.ib(kw_only=True)
@@ -59,10 +63,11 @@ class Dataset(TimeStamped, Urn):
 
 
 @attr.s
-class NewDataset():
+class NewDataset:
     """
     Instantiates NewDataset object and declares object attributes
     """
+
     title: str = attr.ib(kw_only=True)
     short_description: str = attr.ib(kw_only=True)
     # optional attributes

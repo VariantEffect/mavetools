@@ -40,4 +40,4 @@ class Test(TestCase):
         variant = MaveVariant("c.[7G>C;8G>T;9T>C]", target_seq)
         self.assertEqual(variant.mave_hgvs, "c.7_9delinsCTC")
 
-    #def test_
+    # def test_

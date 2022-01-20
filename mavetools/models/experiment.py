@@ -12,6 +12,7 @@ class Experiment(APIObject, Dataset):
     Instantiates the Experiment object and declares attributes and functions
     Inherits APIObject and Dataset attributes
     """
+
     experimentset: str = attr.ib(kw_only=True, default=None)
     scoresets: List[str] = attr.ib(kw_only=True, default=None)
 
@@ -19,13 +20,13 @@ class Experiment(APIObject, Dataset):
         """
         Returns url for experiments
         """
-        return 'experiments/'
+        return "experiments/"
 
     def api_id_field() -> str:
         """
         Returns urn
         """
-        return 'urn'
+        return "urn"
 
     def deserialize(json_dict):
         """
@@ -41,13 +42,14 @@ class NewExperiment(NewDataset):
     Inherits NewDataset attributes
     Attributes set when posting a model instance
     """
+
     experimentset: str = attr.ib(kw_only=True, default=None)
 
     def api_url() -> str:
         """
         Returns experiments to be appended to url
         """
-        return 'experiments'
+        return "experiments"
 
     def post_payload(self):
         """
@@ -59,7 +61,7 @@ class NewExperiment(NewDataset):
                 self,
                 filter=attrs_filter,
                 retain_collection_types=True,
-                value_serializer=attrs_serializer
+                value_serializer=attrs_serializer,
             )
         )
         return json_dict, files

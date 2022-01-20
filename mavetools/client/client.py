@@ -4,8 +4,8 @@ import requests
 import sys
 
 
-class Client():
-    def __init__(self, base_url='http://127.0.0.1:8000/api/', auth_token=''):
+class Client:
+    def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
         """
         Instantiates the Client object and sets the values for base_url and
         auth_token
@@ -82,18 +82,16 @@ class Client():
 
         # check for existance of self.auth_token, raise error if does not exist
         if not self.auth_token:
-            error_message = 'Need to include an auth token for POST requests!'
+            error_message = "Need to include an auth token for POST requests!"
             logging.error(error_message)
             raise AuthTokenMissingException(error_message)
 
         try:  # to post data
             r = requests.post(
                 model_url,
-                data={
-                    'request': json.dumps(payload)
-                },
+                data={"request": json.dumps(payload)},
                 files=files,
-                headers={'Authorization': (self.auth_token)}
+                headers={"Authorization": (self.auth_token)},
             )
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:

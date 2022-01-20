@@ -1,10 +1,12 @@
 import attr
 
+
 @attr.s
-class Licence():
+class Licence:
     """
     Class contains attributes of Licence
     """
+
     long_name: str = attr.ib(kw_only=True, default=None)
     short_name: str = attr.ib(kw_only=True)
     link: str = attr.ib(kw_only=True, default=None)
@@ -14,4 +16,4 @@ class Licence():
         """
         Returns list of valid Licence short names
         """
-        return ['CC0', 'CC BY-NC-SA 4.0', 'CC BY 4.0']
+        return ["CC0", "CC BY-NC-SA 4.0", "CC BY 4.0"]

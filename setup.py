@@ -4,8 +4,15 @@ import sys
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open('requirements.txt') as f:
-    requirements = f.readlines()
+requirements = [
+    "attrs",
+    "requests",
+    "fqfa>=1.2.1",
+    "mavehgvs",
+    "numpy",
+    "pandas",
+    "idutils",
+]
 
 # fqfa requires backported dataclasses in Python 3.6
 if sys.version_info.major == 3 and sys.version_info.minor == 6:
@@ -13,7 +20,7 @@ if sys.version_info.major == 3 and sys.version_info.minor == 6:
 
 setup(
     name="mavetools",
-    version="0.0.1",
+    version="0.1.1",
     author="Alan F Rubin",
     author_email="alan.rubin@wehi.edu.au",
     description=(
@@ -24,7 +31,7 @@ setup(
     url="https://github.com/VariantEffect/mavetools",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Programming Language :: Python :: 3",

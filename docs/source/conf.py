@@ -12,17 +12,18 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+
+sys.path.insert(0, os.path.abspath("../.."))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'mavetools'
-copyright = '2020, Alan F. Rubin'
-author = 'Alan F. Rubin'
+project = "mavetools"
+copyright = "2020-2021, Alan F Rubin"
+author = "Alan F Rubin"
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = "0.1.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,17 +31,16 @@ release = '0.0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              "sphinx.ext.napoleon",
-              "sphinx.ext.intersphinx",
-              "sphinx.ext.autosectionlabel",
-              "sphinx.ext.doctest",
-              "nbsphinx",
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosectionlabel",
 ]
 nbsphinx_allow_errors = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -56,21 +56,13 @@ intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'alabaster'
-'''html_theme = 'groundwork'
-
-html_theme_options = {
-    "sidebar_width": '240px',
-    "stickysidebar": True,
-    "stickysidebarscrollable": True,
-    "contribute": True,
-    "github_fork": "useblocks/groundwork",
-    "github_user": "useblocks",
-}
-'''
-html_theme = 'renku'
+html_theme = "pyramid"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["static"]
+
+
+def setup(app):
+    app.add_css_file("styles.css")

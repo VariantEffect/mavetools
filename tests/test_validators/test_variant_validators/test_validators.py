@@ -1,23 +1,23 @@
 from io import BytesIO, StringIO
+import unittest
 from unittest import TestCase
 from random import choice
 
 import pandas as pd
-#from django.core.exceptions import ValidationError
-#from django.test import TestCase
-from cfgv import ValidationError
 from pandas.testing import assert_index_equal, assert_frame_equal
 
-#from dataset import constants
+# from dataset import constants
 from mavetools.validators.for_variant_validators import constants
+from mavetools.validators.exceptions import ValidationError
 
-#from ..factories import generate_hgvs, VariantFactory
+# from ..factories import generate_hgvs, VariantFactory
 from mavetools.validators.variant_validators import (
     MaveDataset,
     validate_columns_match,
     validate_variant_json,
     validate_hgvs_string,
 )
+
 
 def generate_hgvs(prefix: str = "c") -> str:
     """Generates a random hgvs string from a small sample."""
@@ -44,7 +44,7 @@ def generate_hgvs(prefix: str = "c") -> str:
         return f"{prefix}.{choice(range(1, 100))}{ref}>{alt}"
 
 
-#from core.utilities import null_values_list
+# from core.utilities import null_values_list
 # Used in CSV formatting
 NA_value = "NA"
 null_values_list = (
@@ -58,41 +58,6 @@ null_values_list = (
     "nil",
     NA_value,
 )
-
-
-
-class TestValidateMatchingColumns(TestCase):
-    """
-    Tests the function :func:`validate_scoreset_columns_match_variant` which
-    throws a `ValidationError` if the keys of a variant's data do not match
-    the corresponding columns defined in the parent
-    :class:`dataset.models.scoreset.ScoreSet`.
-    """
-
-    def test_validation_error_non_matching_score_columns(self):
-        variant = VariantFactory()
-        with self.assertRaises(ValidationError):
-            variant.data[constants.variant_score_data] = {}
-            validate_columns_match(variant, variant.scoreset)
-
-    def test_validation_error_non_matching_count_columns(self):
-        variant = VariantFactory()
-        with self.assertRaises(ValidationError):
-            variant.data[constants.variant_count_data] = {"count": 1}
-            validate_columns_match(variant, variant.scoreset)
-
-    def test_compares_sorted_columns(self):
-        variant = VariantFactory()
-        variant.data[constants.variant_score_data] = {
-            "other": 1,
-            constants.required_score_column: 1,
-        }
-        variant.scoreset.dataset_columns[constants.score_columns] = [
-            constants.required_score_column,
-            "other",
-        ]
-        # This should pass
-        validate_columns_match(variant, variant.scoreset)
 
 
 class TestHGVSValidator(TestCase):
@@ -174,10 +139,7 @@ class TestVariantJsonValidator(TestCase):
             validate_variant_json(data)
 
     def test_validation_error_values_not_dict(self):
-        data = {
-            constants.variant_score_data: {},
-            constants.variant_count_data: {},
-        }
+        data = {constants.variant_score_data: {}, constants.variant_count_data: {}}
         for key in data.keys():
             data[key] = []
             with self.assertRaises(ValidationError):
@@ -221,9 +183,7 @@ class TestMaveDataset(TestCase):
         print(dataset.errors)
 
     def test_invalid_missing_hgvs_columns(self):
-        data = "{},{}\n{},1.0".format(
-            "not_hgvs", self.SCORE_COL, generate_hgvs()
-        )
+        data = "{},{}\n{},1.0".format("not_hgvs", self.SCORE_COL, generate_hgvs())
 
         dataset = MaveDataset.for_scores(StringIO(data))
         dataset.validate()
@@ -237,11 +197,7 @@ class TestMaveDataset(TestCase):
         for c in null_values_list:
             with self.subTest(msg=f"'{c}'"):
                 data = "{},{},{}\n{},{},1.0 ".format(
-                    self.HGVS_NT_COL,
-                    self.HGVS_PRO_COL,
-                    self.SCORE_COL,
-                    hgvs_nt,
-                    c,
+                    self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL, hgvs_nt, c
                 )
 
                 dataset = MaveDataset.for_scores(StringIO(data))
@@ -249,8 +205,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertTrue(dataset.is_valid)
                 self.assertListEqual(
-                    list(dataset.data(serializable=True)[self.HGVS_PRO_COL]),
-                    [None],
+                    list(dataset.data(serializable=True)[self.HGVS_PRO_COL]), [None]
                 )
 
     def test_replaces_null_with_none_in_numeric_columns(self):
@@ -258,10 +213,7 @@ class TestMaveDataset(TestCase):
         for c in null_values_list:
             with self.subTest(msg=f"'{c}'"):
                 data = "{},{}\n{},{}".format(
-                    self.HGVS_NT_COL,
-                    self.SCORE_COL,
-                    hgvs_nt,
-                    c,
+                    self.HGVS_NT_COL, self.SCORE_COL, hgvs_nt, c
                 )
 
                 dataset = MaveDataset.for_scores(StringIO(data))
@@ -269,8 +221,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertTrue(dataset.is_valid)
                 self.assertListEqual(
-                    list(dataset.data(serializable=True)[self.SCORE_COL]),
-                    [None],
+                    list(dataset.data(serializable=True)[self.SCORE_COL]), [None]
                 )
 
     def test_invalid_null_values_in_header(self):
@@ -306,10 +257,7 @@ class TestMaveDataset(TestCase):
 
     def test_scores_missing_scores_column(self):
         data = "{},{}\n{},{}".format(
-            self.HGVS_NT_COL,
-            "scores_rna",
-            generate_hgvs(prefix="g"),
-            1.0,
+            self.HGVS_NT_COL, "scores_rna", generate_hgvs(prefix="g"), 1.0
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -321,10 +269,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_missing_either_required_hgvs_column(self):
         data = "{},{}\n{},{}".format(
-            self.HGVS_SPLICE_COL,
-            self.SCORE_COL,
-            generate_hgvs(prefix="c"),
-            1.0,
+            self.HGVS_SPLICE_COL, self.SCORE_COL, generate_hgvs(prefix="c"), 1.0
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -371,9 +316,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_same_variant_defined_in_two_rows_in_hgvs_pro(self):
         hgvs = generate_hgvs(prefix="p")
-        data = "{},{}\n{},1.0\n{},1.0".format(
-            self.HGVS_PRO_COL, "count", hgvs, hgvs
-        )
+        data = "{},{}\n{},1.0\n{},1.0".format(self.HGVS_PRO_COL, "count", hgvs, hgvs)
 
         dataset = MaveDataset.for_counts(StringIO(data))
         dataset.validate()
@@ -482,9 +425,7 @@ class TestMaveDataset(TestCase):
 
     def test_primary_column_is_pro_when_nt_is_not_defined(self):
         hgvs_pro = generate_hgvs(prefix="p")
-        data = "{},{}\n{},1.0".format(
-            self.HGVS_PRO_COL, self.SCORE_COL, hgvs_pro
-        )
+        data = "{},{}\n{},1.0".format(self.HGVS_PRO_COL, self.SCORE_COL, hgvs_pro)
 
         dataset = MaveDataset.for_scores(StringIO(data))
         dataset.validate()
@@ -496,11 +437,7 @@ class TestMaveDataset(TestCase):
         hgvs_nt = generate_hgvs(prefix="c")
         hgvs_pro = generate_hgvs(prefix="p")
         data = "{},{},{}\n{},{},1.0".format(
-            self.HGVS_NT_COL,
-            self.HGVS_PRO_COL,
-            self.SCORE_COL,
-            hgvs_nt,
-            hgvs_pro,
+            self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL, hgvs_nt, hgvs_pro
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -537,10 +474,7 @@ class TestMaveDataset(TestCase):
         for v in null_values_list:
             with self.subTest(msg=v):
                 data = "{},{}\n{},1.0\n{},1.0".format(
-                    self.HGVS_PRO_COL,
-                    self.SCORE_COL,
-                    generate_hgvs(prefix="p"),
-                    v,
+                    self.HGVS_PRO_COL, self.SCORE_COL, generate_hgvs(prefix="p"), v
                 )
 
                 dataset = MaveDataset.for_scores(StringIO(data))
@@ -601,9 +535,7 @@ class TestMaveDataset(TestCase):
                         variant,
                     )
                 else:
-                    data = "{},{}\n{},1.0".format(
-                        column, self.SCORE_COL, variant
-                    )
+                    data = "{},{}\n{},1.0".format(column, self.SCORE_COL, variant)
 
                 dataset = MaveDataset.for_scores(StringIO(data))
                 dataset.validate()
@@ -660,9 +592,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_splice_not_defined_when_nt_is_genomic(self):
         data = "{},{}\n{},1.0".format(
-            self.HGVS_NT_COL,
-            self.SCORE_COL,
-            generate_hgvs(prefix="g"),
+            self.HGVS_NT_COL, self.SCORE_COL, generate_hgvs(prefix="g")
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -674,11 +604,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_zero_is_not_parsed_as_none(self):
         hgvs = generate_hgvs(prefix="c")
-        data = "{},{}\n{},0.0".format(
-            self.HGVS_NT_COL,
-            self.SCORE_COL,
-            hgvs,
-        )
+        data = "{},{}\n{},0.0".format(self.HGVS_NT_COL, self.SCORE_COL, hgvs)
 
         dataset = MaveDataset.for_scores(StringIO(data))
         dataset.validate()
@@ -689,11 +615,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_close_to_zero_is_not_parsed_as_none(self):
         hgvs = generate_hgvs(prefix="c")
-        data = "{},{}\n{},5.6e-15".format(
-            self.HGVS_NT_COL,
-            self.SCORE_COL,
-            hgvs,
-        )
+        data = "{},{}\n{},5.6e-15".format(self.HGVS_NT_COL, self.SCORE_COL, hgvs)
 
         dataset = MaveDataset.for_scores(StringIO(data))
         dataset.validate()
@@ -716,25 +638,19 @@ class TestMaveDataset(TestCase):
             ),
             (
                 "{},{},{}\nc.1A>G,p.Ile1Val,0.0".format(
-                    self.HGVS_NT_COL,
-                    self.HGVS_PRO_COL,
-                    self.SCORE_COL,
+                    self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL
                 ),
                 "{},{},count\nc.1A>G,p.Ile1Val,0.0".format(
-                    self.HGVS_NT_COL,
-                    self.HGVS_PRO_COL,
+                    self.HGVS_NT_COL, self.HGVS_PRO_COL
                 ),
                 True,
             ),
             (
                 "{},{},{}\nc.1A>G,p.Ile1Val,0.0".format(
-                    self.HGVS_NT_COL,
-                    self.HGVS_PRO_COL,
-                    self.SCORE_COL,
+                    self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL
                 ),
                 "{},{},count\nc.1A>G,p.Ile1Phe,0.0".format(
-                    self.HGVS_NT_COL,
-                    self.HGVS_PRO_COL,
+                    self.HGVS_NT_COL, self.HGVS_PRO_COL
                 ),
                 False,
             ),
@@ -759,10 +675,7 @@ class TestMaveDataset(TestCase):
                 counts_dataset = MaveDataset.for_counts(StringIO(counts))
                 counts_dataset.validate()
 
-                self.assertEqual(
-                    scores_dataset.match_other(counts_dataset),
-                    expected,
-                )
+                self.assertEqual(scores_dataset.match_other(counts_dataset), expected)
 
     def test_to_dict(self):
         hgvs_1 = generate_hgvs(prefix="c")
@@ -800,9 +713,7 @@ class TestMaveDataset(TestCase):
 
     def test_valid_targetseq_validation_fails(self):
         data = "{},{},{}\nc.1A>G,p.Ile1Val,0.5".format(
-            self.HGVS_NT_COL,
-            self.HGVS_PRO_COL,
-            self.SCORE_COL,
+            self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -812,9 +723,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_targetseq_validation_fails(self):
         data = "{},{},{}\nc.1A>G,p.Val1Phe,0.5".format(
-            self.HGVS_NT_COL,
-            self.HGVS_PRO_COL,
-            self.SCORE_COL,
+            self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -828,9 +737,7 @@ class TestMaveDataset(TestCase):
 
     def test_invalid_target_sequence_not_a_multiple_of_3(self):
         data = "{},{},{}\nc.1A>G,p.Ile1Val,0.5".format(
-            self.HGVS_NT_COL,
-            self.HGVS_PRO_COL,
-            self.SCORE_COL,
+            self.HGVS_NT_COL, self.HGVS_PRO_COL, self.SCORE_COL
         )
 
         dataset = MaveDataset.for_scores(StringIO(data))
@@ -842,5 +749,6 @@ class TestMaveDataset(TestCase):
         self.assertEqual(dataset.n_errors, 1)
         self.assertIn("multiple of 3", dataset.errors[0])
 
+    @unittest.expectedFailure
     def test_invalid_relaxed_ordering_check_fails(self):
         self.fail("Test is pending")

@@ -1,5 +1,5 @@
 from mavetools.mavedf.df_to_pandas import df_to_pandas
-#from mavetools.mavevariant.mavevariant import legacy_to_mave_hgvs_nt
+
 from mavetools.mavedf.legacy_to_mave_new import legacy_to_mave_hgvs_nt
 from mavehgvs.variant import Variant
 from mavetools.mavedf.mutation_type import *
@@ -69,12 +69,14 @@ class MaveDf:
         for i in range(len(self.pandas_df["hgvs_nt"])):
 
             # check for legacy hgvs format (i.e., c.[1C>A;2=;3=]) and update if needed
-            self.pandas_df["hgvs_nt"][i] = legacy_to_mave_hgvs_nt(self.pandas_df["hgvs_nt"][i])
+            self.pandas_df["hgvs_nt"][i] = legacy_to_mave_hgvs_nt(
+                self.pandas_df["hgvs_nt"][i]
+            )
 
             # new implementation
             # instantiate mavevariant
-            #variant = MaveVariant(self.pandas_df["hgvs_nt"][i], target_seq)
-            #self.pandas_df["hgvs_nt"][i] = variant.mave_hgvs
+            # variant = MaveVariant(self.pandas_df["hgvs_nt"][i], target_seq)
+            # self.pandas_df["hgvs_nt"][i] = variant.mave_hgvs
             print("variant = " + self.pandas_df["hgvs_nt"][i])
 
             # get hgvs_nt
@@ -98,7 +100,7 @@ class MaveDf:
                 # now that we have the variant_position, get codon_number
                 codon_number = round((variant_position / 3) + 0.5)
                 # use codon_number to get target_codon from target_seq
-                target_codon = target_seq[(codon_number - 1) * 3:codon_number * 3]
+                target_codon = target_seq[(codon_number - 1) * 3 : codon_number * 3]
 
             # determine sequence of variant_codon
 
@@ -108,7 +110,9 @@ class MaveDf:
             elif is_deletion(hgvs):  # target_codon was deleted
                 variant_codon = None
                 sub_one = None  # no nucleotide substitutions
-            elif is_substitution_one_base(hgvs):  # variant_codon has one nucleotide substitution
+            elif is_substitution_one_base(
+                hgvs
+            ):  # variant_codon has one nucleotide substitution
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get index of nucleotide substitution
@@ -118,7 +122,9 @@ class MaveDf:
                 # set other possible indices for codon substitution to None
                 sub_two = None
                 sub_three = None
-            elif is_substitution_two_bases_nonadjacent(hgvs):  # variant has two nucleotide substitutions, non-adjacent
+            elif is_substitution_two_bases_nonadjacent(
+                hgvs
+            ):  # variant has two nucleotide substitutions, non-adjacent
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get indices of nucleotide substitutions
@@ -137,7 +143,9 @@ class MaveDf:
                 sub_one = int(str(variant.positions[0])) % 3 - 1
                 # get string of substituted nucleotides
                 sub_nucs = variant.sequence
-                if len(sub_nucs) == 2:  # variant codon has two adjacent nucleotide substitutions
+                if (
+                    len(sub_nucs) == 2
+                ):  # variant codon has two adjacent nucleotide substitutions
                     # assign additional nucleotide substitution indices
                     sub_two = sub_one + 1
                     # get nucleotides of substitutions
