@@ -82,4 +82,5 @@ class Test(TestCase):
                         Variant("n.21T>A"), Variant("n.22A>C"), Variant("n.23T>A"), Variant("n.24G>A"),
                         Variant("n.25G>A"), Variant("n.26A>C"), Variant("n.27A>C")]
 
-        self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
+        with self.assertRaises(ValueError):
+            infer_target_seq.infer_target_seq(variant_list)
