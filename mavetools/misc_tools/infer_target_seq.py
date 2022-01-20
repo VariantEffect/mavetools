@@ -88,4 +88,7 @@ def infer_target_seq(variant_list):
                         # now that they are the same length, add target base
                         target_seq = target_seq[0:position - 1] + target_base + target_seq[position:]
 
+    if "N" in target_seq:
+        raise ValueError("Gaps in target seq.")
+
     return target_seq
