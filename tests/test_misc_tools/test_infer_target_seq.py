@@ -71,7 +71,7 @@ class Test(TestCase):
                         Variant("n.21T>A"), Variant("n.22A>C"), Variant("n.23T>A"), Variant("n.24G>A"),
                         Variant("n.25G>A"), Variant("n.26A>C")] #, Variant("n.27A>C")]
 
-        self.assertEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
+        self.assertNotEqual(infer_target_seq.infer_target_seq(variant_list), target_seq)
 
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         variant_list = [Variant("n.1C>A"), Variant("n.2A>C"), Variant("n.3A>C"), Variant("n.4T>A"),
