@@ -13,8 +13,6 @@ from fqfa.constants.iupac.protein import AA_CODES
 from mavetools.convert import enrich2
 from mavetools.convert.for_enrich2 import constants, exceptions
 
-from tests import ProgramTestCase
-
 
 # Utility tests
 # --------------------------------------------------------------------------- #
