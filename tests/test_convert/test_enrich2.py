@@ -16,7 +16,7 @@ from mavetools.convert.for_enrich2 import constants, exceptions
 
 # Utility tests
 # --------------------------------------------------------------------------- #
-class TestGetCountDataFrames(ProgramTestCase):
+class TestGetCountDataFrames(TestCase):
     """
     Test method get_count_dataframes checking if conditions are correctly
     parsed.
@@ -93,7 +93,7 @@ class TestFlattenColumnNames(TestCase):
         self.assertListEqual(cnames, ["t0_rep1", "t1_rep1", "t0_rep2", "t1_rep2"])
 
 
-class TestReplicateScoreDataFrames(ProgramTestCase):
+class TestReplicateScoreDataFrames(TestCase):
     """
     Test method get_replicate_score_dataframes checking if conditions are
     correctly parsed.
@@ -272,7 +272,7 @@ class TestDropNull(TestCase):
 
 # HD5/Row parsing tests
 # --------------------------------------------------------------------------- #
-class TestEnrich2ConvertH5Filepath(ProgramTestCase):
+class TestEnrich2ConvertH5Filepath(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.h5")
@@ -288,7 +288,7 @@ class TestEnrich2ConvertH5Filepath(ProgramTestCase):
         self.assertEqual(res, os.path.join(self.enrich2.output_directory, expected))
 
 
-class TestEnrich2ConvertH5Df(ProgramTestCase):
+class TestEnrich2ConvertH5Df(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.h5")
@@ -384,7 +384,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertIn("error_description", invalid.columns)
 
 
-class TestEnrich2LoadInput(ProgramTestCase):
+class TestEnrich2LoadInput(TestCase):
     def test_error_file_not_h5_or_tsv(self):
         path = os.path.join(self.data_dir, "empiric", "empiric.xlsx")
         p = enrich2.Enrich2(path, wt_sequence="AAA")
@@ -420,7 +420,7 @@ class TestEnrich2LoadInput(ProgramTestCase):
             p.load_input_file()
 
 
-class TestEnrich2ParseRow(ProgramTestCase):
+class TestEnrich2ParseRow(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -516,7 +516,7 @@ class TestEnrich2ParseRow(ProgramTestCase):
 
 # Protein parsing tests
 # --------------------------------------------------------------------------- #
-class TestProteinHGVSParsing(ProgramTestCase):
+class TestProteinHGVSParsing(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -575,7 +575,7 @@ class TestProteinHGVSParsing(ProgramTestCase):
 
 # Nucleotide parsing tests
 # --------------------------------------------------------------------------- #
-class TestNucleotideHGVSParing(ProgramTestCase):
+class TestNucleotideHGVSParing(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -628,7 +628,7 @@ class TestNucleotideHGVSParing(ProgramTestCase):
 
 # Mixed parsing tests
 # --------------------------------------------------------------------------- #
-class TestEnrich2MixedHGVSParsing(ProgramTestCase):
+class TestEnrich2MixedHGVSParsing(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -721,7 +721,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.assertEqual(pro, "_sy")
 
 
-class TestInferSilentAASub(ProgramTestCase):
+class TestInferSilentAASub(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -768,7 +768,7 @@ class TestInferSilentAASub(ProgramTestCase):
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
 
 
-class TestApplyOffset(ProgramTestCase):
+class TestApplyOffset(TestCase):
     def test_mixed_variant_uses_nt_position_to_compute_codon_pos(self):
         variant = "c.-9A>T (p.Thr2Pro), c.-6C>A (p.Gln3Lys)"
         offset = -10
@@ -830,7 +830,7 @@ class TestApplyOffset(ProgramTestCase):
             enrich2.apply_offset(variant, offset=6, enrich2=p)
 
 
-class TestEnrich2Init(ProgramTestCase):
+class TestEnrich2Init(TestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
