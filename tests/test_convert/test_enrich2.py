@@ -73,7 +73,7 @@ class TestGetCountDataFrames(ProgramTestCase):
         self.assertIsNone(cnd_df)
 
 
-class TestFlattenColumnNames(unittest.TestCase):
+class TestFlattenColumnNames(TestCase):
     def setUp(self):
         index = pd.MultiIndex.from_product(
             [["c1", "c2"], ["rep1", "rep2"], ["t0", "t1"]],
@@ -165,7 +165,7 @@ class TestReplicateScoreDataFrames(ProgramTestCase):
             enrich2.get_replicate_score_dataframes(self.store)
 
 
-class TestDropNull(unittest.TestCase):
+class TestDropNull(TestCase):
     def test_calls_drop_na_rows_from_scores_inplace(self):
         df = pd.DataFrame({"A": [None, 1]})
         enrich2.drop_null(df)
