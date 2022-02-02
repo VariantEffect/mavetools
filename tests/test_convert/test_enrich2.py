@@ -844,7 +844,3 @@ class TestEnrich2Init(TestCase):
 
     def test_ok_is_coding_and_offset_mult_of_three(self):
         enrich2.Enrich2(src=self.path, wt_sequence="ATC", is_coding=True, offset=-3)
-
-
-if __name__ == "__main__":
-    unittest.main()
