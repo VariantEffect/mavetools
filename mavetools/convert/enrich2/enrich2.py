@@ -63,7 +63,7 @@ class Enrich2(metaclass=ABCMeta):
 
         if is_coding and not abs(offset) % 3 == 0:
             raise ValueError(
-                "Enrich2 offset for a coding " "dataset must be a multiple of 3."
+                "Enrich2 offset for a coding dataset must be a multiple of 3."
             )
 
     def convert(self):
