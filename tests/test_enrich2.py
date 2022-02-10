@@ -505,7 +505,6 @@ class TestEnrich2ParseRow(ProgramTestCase):
         self.assertEqual(expected, self.enrich2.parse_row((variant, None)))
 
     def test_returns_special_variant_as_tuple_non_synonymous_table(self):
-        # TODO
         self.assertEqual(self.enrich2.parse_row(("_wt", None)), ("_wt", "_wt"))
         self.assertEqual(self.enrich2.parse_row(("_sy", None)), ("_sy", "_sy"))
 
