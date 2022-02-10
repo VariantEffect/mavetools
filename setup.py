@@ -12,6 +12,7 @@ requirements = [
     "numpy",
     "pandas",
     "idutils",
+    "tables",
 ]
 
 # fqfa requires backported dataclasses in Python 3.6
