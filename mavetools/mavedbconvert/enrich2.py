@@ -4,7 +4,7 @@ from itertools import groupby
 import logging
 from operator import itemgetter
 
-from mavehgvs import patterns
+from mavehgvs.patterns import dna, protein
 from tqdm import tqdm
 from fqfa.constants.translation.table import CODON_TABLE
 from fqfa.constants.iupac.protein import AA_CODES
