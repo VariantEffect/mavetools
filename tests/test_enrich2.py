@@ -1,8 +1,10 @@
 import os
-from unittest import TestCase
+import unittest
 from unittest.mock import patch
 
-from mavehgvs import patterns as hgvsp
+import re
+
+from mavehgvs.patterns import dna, protein
 
 import numpy as np
 import pandas as pd
@@ -10,8 +12,9 @@ from pandas.testing import assert_index_equal
 from fqfa.constants.translation.table import CODON_TABLE
 from fqfa.constants.iupac.protein import AA_CODES
 
-from mavetools.convert import enrich2
-from mavetools.convert.for_enrich2 import constants, exceptions
+from mavetools.mavedbconvert import enrich2, constants, exceptions
+
+from tests import ProgramTestCase
 
 
 # Utility tests
