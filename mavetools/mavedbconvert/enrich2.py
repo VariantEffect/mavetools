@@ -714,7 +714,7 @@ class Enrich2(base.BaseProgram):
                     )
 
             #if not hgvsp.protein.single_variant_re.fullmatch(v):
-            if not patterns.dna.dna_single_variant.fullmatch(v):
+            if not re.fullmatch(protein.pro_single_variant, v):
                 raise ValueError(
                     "'{variant}' contains invalid protein HGVS syntax.".format(
                         variant=v
