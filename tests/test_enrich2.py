@@ -19,7 +19,7 @@ from tests import ProgramTestCase
 
 # Utility tests
 # --------------------------------------------------------------------------- #
-class TestGetCountDataFrames(TestCase):
+class TestGetCountDataFrames(ProgramTestCase):
     """
     Test method get_count_dataframes checking if conditions are correctly
     parsed.
@@ -76,7 +76,7 @@ class TestGetCountDataFrames(TestCase):
         self.assertIsNone(cnd_df)
 
 
-class TestFlattenColumnNames(TestCase):
+class TestFlattenColumnNames(unittest.TestCase):
     def setUp(self):
         index = pd.MultiIndex.from_product(
             [["c1", "c2"], ["rep1", "rep2"], ["t0", "t1"]],
@@ -96,7 +96,7 @@ class TestFlattenColumnNames(TestCase):
         self.assertListEqual(cnames, ["t0_rep1", "t1_rep1", "t0_rep2", "t1_rep2"])
 
 
-class TestReplicateScoreDataFrames(TestCase):
+class TestReplicateScoreDataFrames(ProgramTestCase):
     """
     Test method get_replicate_score_dataframes checking if conditions are
     correctly parsed.
@@ -168,7 +168,7 @@ class TestReplicateScoreDataFrames(TestCase):
             enrich2.get_replicate_score_dataframes(self.store)
 
 
-class TestDropNull(TestCase):
+class TestDropNull(unittest.TestCase):
     def test_calls_drop_na_rows_from_scores_inplace(self):
         df = pd.DataFrame({"A": [None, 1]})
         enrich2.drop_null(df)
@@ -275,7 +275,7 @@ class TestDropNull(TestCase):
 
 # HD5/Row parsing tests
 # --------------------------------------------------------------------------- #
-class TestEnrich2ConvertH5Filepath(TestCase):
+class TestEnrich2ConvertH5Filepath(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.h5")
@@ -291,7 +291,7 @@ class TestEnrich2ConvertH5Filepath(TestCase):
         self.assertEqual(res, os.path.join(self.enrich2.output_directory, expected))
 
 
-class TestEnrich2ConvertH5Df(TestCase):
+class TestEnrich2ConvertH5Df(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.h5")
@@ -387,7 +387,7 @@ class TestEnrich2ConvertH5Df(TestCase):
         self.assertIn("error_description", invalid.columns)
 
 
-class TestEnrich2LoadInput(TestCase):
+class TestEnrich2LoadInput(ProgramTestCase):
     def test_error_file_not_h5_or_tsv(self):
         path = os.path.join(self.data_dir, "empiric", "empiric.xlsx")
         p = enrich2.Enrich2(path, wt_sequence="AAA")
@@ -423,7 +423,7 @@ class TestEnrich2LoadInput(TestCase):
             p.load_input_file()
 
 
-class TestEnrich2ParseRow(TestCase):
+class TestEnrich2ParseRow(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -520,7 +520,7 @@ class TestEnrich2ParseRow(TestCase):
 
 # Protein parsing tests
 # --------------------------------------------------------------------------- #
-class TestProteinHGVSParsing(TestCase):
+class TestProteinHGVSParsing(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -580,7 +580,7 @@ class TestProteinHGVSParsing(TestCase):
 
 # Nucleotide parsing tests
 # --------------------------------------------------------------------------- #
-class TestNucleotideHGVSParing(TestCase):
+class TestNucleotideHGVSParing(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -633,7 +633,7 @@ class TestNucleotideHGVSParing(TestCase):
 
 # Mixed parsing tests
 # --------------------------------------------------------------------------- #
-class TestEnrich2MixedHGVSParsing(TestCase):
+class TestEnrich2MixedHGVSParsing(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -726,7 +726,7 @@ class TestEnrich2MixedHGVSParsing(TestCase):
         self.assertEqual(pro, "_sy")
 
 
-class TestInferSilentAASub(TestCase):
+class TestInferSilentAASub(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
@@ -773,7 +773,8 @@ class TestInferSilentAASub(TestCase):
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
 
 
-class TestApplyOffset(TestCase):
+class TestApplyOffset(ProgramTestCase):
+    # TODO
     def test_mixed_variant_uses_nt_position_to_compute_codon_pos(self):
         variant = "c.-9A>T (p.Thr2Pro), c.-6C>A (p.Gln3Lys)"
         offset = -10
@@ -835,7 +836,7 @@ class TestApplyOffset(TestCase):
             enrich2.apply_offset(variant, offset=6, enrich2=p)
 
 
-class TestEnrich2Init(TestCase):
+class TestEnrich2Init(ProgramTestCase):
     def setUp(self):
         super().setUp()
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
