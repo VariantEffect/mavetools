@@ -251,7 +251,8 @@ class BaseProgram(metaclass=ABCMeta):
         variant : str
             A protein substitution variant with valid HGVS_ syntax.
         """
-        if variant.is_multi_variant():
+        #if is_multi(variant):
+        if Variant(variant).is_multi_variant():
             _ = [
                 self.validate_against_protein_sequence(v)
                 for v in utilities.split_variant(variant)
