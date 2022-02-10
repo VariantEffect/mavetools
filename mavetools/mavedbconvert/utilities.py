@@ -214,7 +214,7 @@ class ProteinSubstitutionEvent(object):
 
     def __init__(self, variant):
         self.variant = variant.strip()
-        match = protein.substitution_re.fullmatch(self.variant)
+        match = re.fullmatch(protein.pro_sub, self.variant)
         if not match:
             raise exceptions.InvalidVariantType(
                 "'{}' is not a valid amino acid "
