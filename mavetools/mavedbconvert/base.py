@@ -11,7 +11,7 @@ from fqfa.validator.validator import dna_bases_validator
 
 from . import LOGGER, utilities, constants
 
-#logger = logging.getLogger()
+logger = logging.getLogger(LOGGER)
 
 __all__ = ["BaseProgram"]
 
@@ -77,7 +77,7 @@ class BaseProgram(metaclass=ABCMeta):
     ):
         # Check the input is a readable file.
         self.src = os.path.normpath(os.path.expanduser(src))
-        #logger.info("Checking read permission for '{}'".format(self.src))
+        logger.info("Checking read permission for '{}'".format(self.src))
         os.access(self.src, os.R_OK)
 
         src_filename, ext = os.path.splitext(os.path.split(src)[1])
@@ -101,9 +101,9 @@ class BaseProgram(metaclass=ABCMeta):
         # Create directory tree if it does not exist and check for
         # read and write permissions.
         if not os.path.isdir(self.dst):
-            #logger.info("Creating directory '{}'".format(self.dst))
+            logger.info("Creating directory '{}'".format(self.dst))
             os.makedirs(self.dst, exist_ok=True)
-        #logger.info("Checking write permission to directory '{}'".format(self.dst))
+        logger.info("Checking write permission to directory '{}'".format(self.dst))
         os.access(self.dst, os.W_OK)
 
         self.is_coding = is_coding
@@ -166,9 +166,9 @@ class BaseProgram(metaclass=ABCMeta):
         """
         Runs `parse_input` and saves the Mavedb-compliant result to file.
         """
-        #logger.info("Processing file {}".format(self.src))
+        logger.info("Processing file {}".format(self.src))
         mave_df = self.parse_input(self.load_input_file())
-        #logger.info("Writing to {}".format(self.output_file))
+        logger.info("Writing to {}".format(self.output_file))
         mave_df.to_csv(self.output_file, sep=",", index=None, na_rep=np.NaN)
 
     @abstractmethod
