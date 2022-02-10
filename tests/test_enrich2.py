@@ -696,9 +696,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         _, _ = self.enrich2.parse_mixed_variant(variant)
         patch.assert_called_with(*(["c.1=", "c.2="], variant))
 
-    @patch.object(
-        enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1="
-    )
+    @patch.object(enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1=")
     def test_calls_infer_with_synonymous_variants_only(self, patch):
         # TODO
         self.enrich2.wt_sequence = "AAAAAT"
