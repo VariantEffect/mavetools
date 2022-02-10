@@ -92,7 +92,7 @@ class TestIsNumeric(unittest.TestCase):
 
 class TestNucleotideSubstitutionEvent(unittest.TestCase):
     def test_parses_negative_positions(self):
-        nt = utilities.NucleotideSubstitutionEvent("n.-100A>T")
+        nt = utilities.NucleotideSubstitutionEvent("c.-100A>T")
         self.assertEqual(nt.position, -100)
 
     def test_negative_rna_position_error(self):
