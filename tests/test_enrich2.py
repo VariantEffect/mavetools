@@ -549,7 +549,6 @@ class TestProteinHGVSParsing(ProgramTestCase):
         self.assertEqual(result, "p.Leu5Gly")
 
     def test_passes_on_sy_or_wt(self):
-        # TODO
         self.assertEqual(self.enrich2.parse_protein_variant("_wt"), "_wt")
         self.assertEqual(self.enrich2.parse_protein_variant("_sy"), "_sy")
 
