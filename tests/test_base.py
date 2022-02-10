@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from mavedbconvert import base, exceptions
+from mavetools.mavedbconvert import base, exceptions
 
 from tests import ProgramTestCase
 
