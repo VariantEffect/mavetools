@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from mavedbconvert import utilities, constants, exceptions
+from mavetools.mavedbconvert import utilities, constants, exceptions
 
 
 class TestSlicer(unittest.TestCase):
