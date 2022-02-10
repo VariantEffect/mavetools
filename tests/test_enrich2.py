@@ -298,6 +298,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
 
     def test_doesnt_open_invalid_rows_file_if_there_are_no_invalid_rows(self):
+        # TODO
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
         invalid_rows_path = os.path.join(
@@ -311,6 +312,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertFalse(os.path.isfile(invalid_rows_path))
 
     def test_drops_non_numeric_columns(self):
+        # TODO
         df = pd.DataFrame(data={"score": [1], "B": ["a"]}, index=["c.1A>G (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
@@ -318,6 +320,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertNotIn("B", result)
 
     def test_type_casts_numeric_to_int_and_float(self):
+        # TODO
         df = pd.DataFrame(data={"score": [1], "B": [1.2]}, index=["c.1A>G (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
@@ -326,6 +329,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertTrue(np.issubdtype(result["B"].values[0], np.floating))
 
     def test_sets_index_as_input_index(self):
+        # TODO
         df = pd.DataFrame({"score": [1], "B": ["a"]}, index=["c.1A>T (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
@@ -367,6 +371,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertTrue(os.path.isfile(invalid_rows_path))
 
     def test_invalid_rows_file_contains_error_description(self):
+        # TODO
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
         invalid_rows_path = os.path.join(
@@ -448,6 +453,7 @@ class TestEnrich2ParseRow(ProgramTestCase):
             self.enrich2.parse_protein_variant("p.Thr1Gly, _sy")
 
     def test_infers_dna(self):
+        # TODO
         # test tuples
         for prefix in "cngm":
             variant = "{0}.1A>G, {0}.2C>G".format(prefix)
@@ -461,10 +467,12 @@ class TestEnrich2ParseRow(ProgramTestCase):
             self.assertEqual(expected, self.enrich2.parse_row(variant))
 
     def test_invalid_multiprefix(self):
+        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.parse_row("c.1A>G, n.2C>G")
 
     def test_infers_protein(self):
+        # TODO
         # test tuples
         variant = "p.Thr1=, p.Thr1Gly"
         expected = (None, "p.[Thr1=;Thr1Gly]")
@@ -485,11 +493,13 @@ class TestEnrich2ParseRow(ProgramTestCase):
 
     @patch("mavedbconvert.enrich2.apply_offset", return_value="c.3T>C (p.Thr1=)")
     def test_calls_apply_offset_to_variant(self, patch):
+        # TODO
         variant = "c.3T>C (p.=)"
         self.enrich2.parse_row((variant, None))
         patch.assert_called()
 
     def test_delegate_to_multi(self):
+        # TODO
         variant = "c.3T>C (p.Thr1=)"
         expected = ("c.3T>C", "p.Thr1=")
         self.assertEqual(expected, self.enrich2.parse_row((variant, None)))
@@ -500,6 +510,7 @@ class TestEnrich2ParseRow(ProgramTestCase):
         self.assertEqual(self.enrich2.parse_row(("_sy", None)), ("_sy", "_sy"))
 
     def test_strips_whitespace(self):
+        # TODO
         self.assertEqual(self.enrich2.parse_row((" c.1A>G ", None)), ("c.1A>G", None))
 
     # TODO: Uncomment if normalizing variants.
@@ -587,6 +598,7 @@ class TestNucleotideHGVSParing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
 
     def test_parses_non_coding_nt_variants_into_multi_variant(self):
+        # TODO
         nt = self.enrich2.parse_nucleotide_variant(
             "n.-455T>A, n.-122A>T, n.-101A>T, n.-42T>A"
         )
@@ -642,6 +654,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence=self.wt)
 
     def test_parses_nt_variants_into_multi_variant(self):
+        # TODO
         nt, _ = self.enrich2.parse_mixed_variant(
             "c.1A>T (p.Thr1Tyr), c.2C>A (p.Thr1Tyr)"
         )
@@ -649,6 +662,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(nt))
 
     def test_parses_pro_variants_into_multi_variant(self):
+        # TODO
         self.enrich2.wt_sequence = "ACTCAA"
         _, pro = self.enrich2.parse_mixed_variant(
             "c.1A>T (p.Thr1Pro), c.4C>A (p.Gln2Lys)"
@@ -664,6 +678,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
             self.enrich2.parse_mixed_variant("p.Lys4Arg, c.2T>A (p.Lys1Arg)")
 
     def test_variant_order_maintained(self):
+        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         nt, pro = self.enrich2.parse_mixed_variant(
             "c.1= (p.Lys1Ile), c.6T>G (p.Asn2Lys), c.2A>T (p.Lys1Ile)"
@@ -675,6 +690,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1="
     )
     def test_groups_codons(self, patch):
+        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         variant = "c.1= (p.=), c.6T>G (p.Asn2Lys), c.2= (p.=)"
         _, _ = self.enrich2.parse_mixed_variant(variant)
@@ -684,6 +700,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1="
     )
     def test_calls_infer_with_synonymous_variants_only(self, patch):
+        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         variant = "c.1= (p.=), c.6T>G (p.Asn2Lys), c.2= (p.Lys1=)"
         _, _ = self.enrich2.parse_mixed_variant(variant)
@@ -698,6 +715,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         )
 
     def test_valueerror_multiple_prefix_types(self):
+        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.parse_mixed_variant("c.1A>G (p.=), r.2u>a (p.Lys4Arg)")
         with self.assertRaises(ValueError):
@@ -710,6 +728,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
             self.enrich2.parse_mixed_variant("c.1A>G (p.=), c.2T>A (g.Lys4Arg)")
 
     def test_doesnt_collapse_single_variants_into_multivariant(self):
+        # TODO
         nt, pro = self.enrich2.parse_mixed_variant("c.3T>C (p.=)")
         self.assertEqual(nt, "c.3T>C")
         self.assertEqual(pro, "p.Thr1=")
@@ -733,41 +752,50 @@ class TestInferSilentAASub(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA", offset=0)
 
     def test_valueerror_not_a_sub_event(self):
+        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             self.enrich2.infer_silent_aa_substitution("c.100_102del")
 
     def test_index_error_variant_pos_is_out_of_bounds_relative_to_wt(self):
+        # TODO
         with self.assertRaises(IndexError):
             self.enrich2.infer_silent_aa_substitution("c.100A>G")
 
     def test_valueerror_base_in_wt_does_not_match_base_in_hgvs(self):
+        # TODO
         self.enrich2.wt_sequence = "TGA"
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution("c.1A>G")
 
     def test_correct_wt_aa_inferred(self):
+        # TODO
         self.enrich2.wt_sequence = "TCT"
         self.assertEqual("p.Ser1=", self.enrich2.infer_silent_aa_substitution("c.3T>C"))
 
     def test_correct_aa_position_inferred(self):
+        # TODO
         self.enrich2.wt_sequence = "AAAGGGTCT"
         self.assertEqual("p.Ser3=", self.enrich2.infer_silent_aa_substitution("c.9T>C"))
 
     def test_error_mutant_codon_does_not_match_wild_type(self):
+        # TODO
         self.enrich2.wt_sequence = "ATG"
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution("c.1A>C")
 
     def test_correctly_infers_aa_from_codon_group(self):
+        # TODO
         self.enrich2.wt_sequence = "TTA"
         group = ["c.1T>C", "c.2=", "c.3A>T"]
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
 
     def test_valueerror_mixed_codons_in_group(self):
+        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution(["c.1T>C", "c.5T>C"])
 
     def test_correctly_infers_aa_from_silent_variants(self):
+        # TODO
         self.enrich2.wt_sequence = "TTA"
         group = ["c.1=", "c.2=", "c.3="]
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
