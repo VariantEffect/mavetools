@@ -91,6 +91,7 @@ class TestIsNumeric(unittest.TestCase):
 
 
 class TestNucleotideSubstitutionEvent(unittest.TestCase):
+    # TODO
     def test_parses_negative_positions(self):
         nt = utilities.NucleotideSubstitutionEvent("c.-100A>T")
         self.assertEqual(nt.position, -100)
@@ -167,6 +168,7 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
 
 
 class TestProteinSubstitutionEvent(unittest.TestCase):
+    # TODO
     def test_error_set_position_less_than_1(self):
         pro = utilities.ProteinSubstitutionEvent("p.Gly4Leu")
         with self.assertRaises(ValueError):
@@ -217,6 +219,7 @@ class TestSplitVariant(unittest.TestCase):
 
 
 class TestNormalizeVariant(unittest.TestCase):
+    # TODO
     def test_stripts_white_space(self):
         self.assertEqual(utilities.normalize_variant(" c.1A>G "), "c.1A>G")
 
@@ -289,6 +292,7 @@ class TestHGVSNTFromEventList(unittest.TestCase):
         self.assertEqual(result, "n.[45A>G;127_128delinsAAA]")
 
     def test_keeps_duplicate_events(self):
+        # TODO
         result = utilities.hgvs_nt_from_event_list(["45a>u", "45a>u"], prefix="r")
         self.assertEqual(result, "r.[45a>u;45a>u]")
 
