@@ -730,8 +730,10 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         nt, pro = self.enrich2.parse_mixed_variant("c.3T>C (p.=)")
         self.assertEqual(nt, "c.3T>C")
         self.assertEqual(pro, "p.Thr1=")
-        self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(nt))
-        self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(pro))
+        #self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(nt))
+        self.assertIsNotNone(re.fullmatch(dna.dna_single_variant, nt))
+        #self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(pro))
+        self.assertIsNotNone(re.fullmatch(protein.pro_multi_variant, pro))
 
     def test_protein_set_as_nt_when_table_is_not_syn_and_variant_is_special(self):
         nt, pro = self.enrich2.parse_mixed_variant("_wt")
