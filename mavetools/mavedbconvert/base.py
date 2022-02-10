@@ -4,12 +4,12 @@ import logging
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-from mavehgvs.variant import Variant
-
+#from hgvsp import is_multi
+from mavehgvs import Variant
 from fqfa.constants.iupac.protein import AA_CODES
 from fqfa.validator.validator import dna_bases_validator
 
-from . import utilities, constants
+from . import LOGGER, utilities, constants
 
 #logger = logging.getLogger()
 
