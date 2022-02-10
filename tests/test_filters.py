@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 
-from mavedbconvert import filters, constants
+from mavetools.mavedbconvert import filters, constants
 
 
 class TestDropNaColumns(unittest.TestCase):
