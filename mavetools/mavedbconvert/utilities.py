@@ -1,7 +1,8 @@
 import re
 from collections import OrderedDict
 
-from hgvsp import rna, dna, protein, single_variant_re, multi_variant_re
+from mavehgvs.patterns import rna, dna, protein, combined
+from mavehgvs import Variant
 
 import numpy as np
 import pandas as pd
