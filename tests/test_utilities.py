@@ -96,10 +96,12 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
         self.assertEqual(nt.position, -100)
 
     def test_negative_rna_position_error(self):
+        # TODO
         with self.assertRaises(IndexError):
             utilities.NucleotideSubstitutionEvent("r.-100a>u")
 
     def test_error_invalid_dna_substitution_syntax(self):
+        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             utilities.NucleotideSubstitutionEvent("c.100_101delins")
 
@@ -120,20 +122,24 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
             nt.codon_frame_position()
 
     def test_parses_ref_base(self):
+        # TODO
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1A>G").ref, "A")
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1=").ref, None)
 
     def test_parses_alt_base(self):
+        # TODO
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1A>G").alt, "G")
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1=").alt, None)
 
     def test_infers_silent(self):
+        # TODO
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1=").silent, True)
 
     def test_parses_prefix(self):
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1A>G").prefix, "c")
 
     def test_formats_event_string_correctly(self):
+        # TODO
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1A>G").event, "1A>G")
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1=").event, "1=")
 
