@@ -795,6 +795,7 @@ class TestApplyOffset(ProgramTestCase):
             enrich2.apply_offset("p.Leu1=", 10)
 
     def test_applies_offset_to_non_mixed_variant(self):
+        # TODO
         variant = "n.-455T>A, n.-122A>T, n.-101A>T, n.-42T>A"
         offset = -456
         self.assertEqual(
@@ -804,6 +805,7 @@ class TestApplyOffset(ProgramTestCase):
         self.assertEqual("n.1T>A", enrich2.apply_offset("n.-455T>A", offset))
 
     def test_applies_offset_to_protein_variant_modulo_3(self):
+        # TODO
         variant = "p.Leu10=, p.Leu13="
         offset = 10
         self.assertEqual("p.Leu7=, p.Leu10=", enrich2.apply_offset(variant, offset))
