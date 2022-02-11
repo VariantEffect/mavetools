@@ -254,8 +254,7 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
             self.base.validate_against_protein_sequence("p.Met2Lys")
 
     def test_error_invalid_position(self):
-        # TODO
-        with self.assertRaises(ValueError):
+        with self.assertRaises(MaveHgvsParseError):
             self.base.validate_against_protein_sequence("p.Met0Lys")
 
     def test_validates_multi(self):
