@@ -263,9 +263,8 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
             self.base.validate_against_protein_sequence("p.[Met1Lys;Met2=]")
 
     def test_error_invalid_position_multi(self):
-        # TODO
-        with self.assertRaises(ValueError):
-            self.base.validate_against_protein_sequence("p.[Met0Lys;Lys2=]")
+        with self.assertRaises(MaveHgvsParseError):
+            self.base.validate_against_protein_sequence("p.[Met0Lys;Lys2Thr]")
 
     def test_index_error_index_extends_beyond_indexable_pro_seq(self):
         self.base.validate_against_protein_sequence("p.Lys2Met")
