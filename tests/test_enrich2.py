@@ -298,7 +298,6 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
 
     def test_doesnt_open_invalid_rows_file_if_there_are_no_invalid_rows(self):
-        # TODO
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
         invalid_rows_path = os.path.join(
@@ -312,7 +311,6 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertFalse(os.path.isfile(invalid_rows_path))
 
     def test_drops_non_numeric_columns(self):
-        # TODO
         df = pd.DataFrame(data={"score": [1], "B": ["a"]}, index=["c.1A>G (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
@@ -320,7 +318,6 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertNotIn("B", result)
 
     def test_type_casts_numeric_to_int_and_float(self):
-        # TODO
         df = pd.DataFrame(data={"score": [1], "B": [1.2]}, index=["c.1A>G (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
@@ -329,7 +326,6 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertTrue(np.issubdtype(result["B"].values[0], np.floating))
 
     def test_sets_index_as_input_index(self):
-        # TODO
         df = pd.DataFrame({"score": [1], "B": ["a"]}, index=["c.1A>T (p.Lys1Val)"])
         result = self.enrich2.convert_h5_df(
             df=df, element=constants.variants_table, df_type=constants.score_type
