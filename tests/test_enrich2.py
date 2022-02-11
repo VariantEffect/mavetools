@@ -640,13 +640,12 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence=self.wt)
 
     def test_parses_nt_variants_into_multi_variant(self):
-        # TODO
         nt, _ = self.enrich2.parse_mixed_variant(
             "c.1A>T (p.Thr1Tyr), c.2C>A (p.Thr1Tyr)"
         )
         self.assertEqual(nt, "c.[1A>T;2C>A]")
         #self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(nt))
-        self.assertIsNotNone(dna.dna_multi_variant.fullmatch(nt))
+        self.assertIsNotNone(re.fullmatch(dna.dna_multi_variant, nt))
 
     def test_parses_pro_variants_into_multi_variant(self):
         # TODO
