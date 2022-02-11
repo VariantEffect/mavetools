@@ -779,7 +779,6 @@ class TestInferSilentAASub(ProgramTestCase):
 
 
 class TestApplyOffset(ProgramTestCase):
-    # TODO
     def test_mixed_variant_uses_nt_position_to_compute_codon_pos(self):
         variant = "c.-9A>T (p.Thr2Pro), c.-6C>A (p.Gln3Lys)"
         offset = -10
