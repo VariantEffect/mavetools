@@ -128,32 +128,12 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1=").event, "1=")
 
     def test_infers_codon_position(self):
-        self.assertEqual(
-            utilities.NucleotideSubstitutionEvent("c.3A>G").codon_position(
-                one_based=False
-            ),
-            2,
-        )
-        self.assertEqual(
-            utilities.NucleotideSubstitutionEvent("c.3A>G").codon_position(
-                one_based=True
-            ),
-            1,
-        )
+        self.assertEqual(utilities.NucleotideSubstitutionEvent("c.3A>G").codon_position(one_based=False), 2)
+        self.assertEqual(utilities.NucleotideSubstitutionEvent("c.3A>G").codon_position(one_based=True), 1)
 
     def test_infers_within_frame_position(self):
-        self.assertEqual(
-            utilities.NucleotideSubstitutionEvent("c.3A>G").codon_frame_position(
-                one_based=False
-            ),
-            1,
-        )
-        self.assertEqual(
-            utilities.NucleotideSubstitutionEvent("c.3A>G").codon_frame_position(
-                one_based=True
-            ),
-            3,
-        )
+        self.assertEqual(utilities.NucleotideSubstitutionEvent("c.3A>G").codon_frame_position(one_based=False), 1)
+        self.assertEqual(utilities.NucleotideSubstitutionEvent("c.3A>G").codon_frame_position(one_based=True), 3)
 
 
 class TestProteinSubstitutionEvent(unittest.TestCase):
