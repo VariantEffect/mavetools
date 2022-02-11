@@ -205,6 +205,11 @@ class ProteinSubstitutionEvent(object):
 
     def __init__(self, variant):
         self.variant = variant.strip()
+        if not self.variant.startswith("p"):
+            raise exceptions.InvalidVariantType(
+                "'{}' is not a valid DNA/RNA "
+                "substitution event.".format(self.variant)
+            )
         var = Variant(self.variant)
         if var.variant_type != 'sub' and var.sequence != '=':
             raise exceptions.InvalidVariantType(
