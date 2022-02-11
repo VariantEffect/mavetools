@@ -163,6 +163,7 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
             pro.position -= 4
 
     def test_error_invalid_dna_substitution_syntax(self):
+        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             utilities.ProteinSubstitutionEvent("p.100_101delins")
 
@@ -181,6 +182,7 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2Leu").alt, "Leu")
 
     def test_sets_alt_as_ref_in_silent_variant(self):
+        # TODO
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2=").alt, "Gly")
 
     def test_infers_silent(self):
@@ -190,6 +192,7 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2=").prefix, "p")
 
     def test_formats_event_string_correctly(self):
+        # TODO
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2=").event, "Gly2=")
         self.assertEqual(
             utilities.ProteinSubstitutionEvent("p.Gly2Leu").event, "Gly2Leu"
