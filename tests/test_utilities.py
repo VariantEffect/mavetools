@@ -185,9 +185,7 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
 
     def test_formats_event_string_correctly(self):
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2=").event, "Gly2=")
-        self.assertEqual(
-            utilities.ProteinSubstitutionEvent("p.Gly2Leu").event, "Gly2Leu"
-        )
+        self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2Leu").event, "Gly2Leu")
 
 
 class TestSplitVariant(unittest.TestCase):
