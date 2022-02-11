@@ -585,7 +585,6 @@ class TestNucleotideHGVSParing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
 
     def test_parses_non_coding_nt_variants_into_multi_variant(self):
-        # TODO
         nt = self.enrich2.parse_nucleotide_variant(
             "c.-455T>A, c.-122A>T, c.-101A>T, c.-42T>A"
         )
