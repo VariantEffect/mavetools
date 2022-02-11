@@ -648,14 +648,13 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.assertIsNotNone(re.fullmatch(dna.dna_multi_variant, nt))
 
     def test_parses_pro_variants_into_multi_variant(self):
-        # TODO
         self.enrich2.wt_sequence = "ACTCAA"
         _, pro = self.enrich2.parse_mixed_variant(
             "c.1A>T (p.Thr1Pro), c.4C>A (p.Gln2Lys)"
         )
         self.assertEqual(pro, "p.[Thr1Pro;Gln2Lys]")
         #self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(pro))
-        self.assertIsNotNone(protein.pro_multi_variant.fullmatch(pro))
+        self.assertIsNotNone(re.fullmatch(protein.pro_multi_variant, pro))
 
     def test_error_list_len_different(self):
         # ValueError when attempting tuple unpacking
