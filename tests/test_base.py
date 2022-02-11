@@ -2,6 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 
+from mavehgvs.exceptions import MaveHgvsParseError
 from mavetools.mavedbconvert import base, exceptions
 
 from tests import ProgramTestCase
