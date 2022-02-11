@@ -449,7 +449,6 @@ class TestEnrich2ParseRow(ProgramTestCase):
             self.enrich2.parse_protein_variant("p.Thr1Gly, _sy")
 
     def test_infers_dna(self):
-        # TODO
         # test tuples
         for prefix in "cngm":
             variant = "{0}.1A>G, {0}.2C>G".format(prefix)
@@ -463,12 +462,10 @@ class TestEnrich2ParseRow(ProgramTestCase):
             self.assertEqual(expected, self.enrich2.parse_row(variant))
 
     def test_invalid_multiprefix(self):
-        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.parse_row("c.1A>G, n.2C>G")
 
     def test_infers_protein(self):
-        # TODO
         # test tuples
         variant = "p.Thr1=, p.Thr1Gly"
         expected = (None, "p.[Thr1=;Thr1Gly]")
@@ -489,13 +486,11 @@ class TestEnrich2ParseRow(ProgramTestCase):
 
     @patch("mavetools.mavedbconvert.enrich2.apply_offset", return_value="c.3T>C (p.Thr1=)")
     def test_calls_apply_offset_to_variant(self, patch):
-        # TODO
         variant = "c.3T>C (p.=)"
         self.enrich2.parse_row((variant, None))
         patch.assert_called()
 
     def test_delegate_to_multi(self):
-        # TODO
         variant = "c.3T>C (p.Thr1=)"
         expected = ("c.3T>C", "p.Thr1=")
         self.assertEqual(expected, self.enrich2.parse_row((variant, None)))
@@ -505,7 +500,6 @@ class TestEnrich2ParseRow(ProgramTestCase):
         self.assertEqual(self.enrich2.parse_row(("_sy", None)), ("_sy", "_sy"))
 
     def test_strips_whitespace(self):
-        # TODO
         self.assertEqual(self.enrich2.parse_row((" c.1A>G ", None)), ("c.1A>G", None))
 
     # TODO: Uncomment if normalizing variants.
