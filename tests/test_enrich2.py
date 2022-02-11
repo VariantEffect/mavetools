@@ -587,9 +587,9 @@ class TestNucleotideHGVSParing(ProgramTestCase):
     def test_parses_non_coding_nt_variants_into_multi_variant(self):
         # TODO
         nt = self.enrich2.parse_nucleotide_variant(
-            "n.-455T>A, n.-122A>T, n.-101A>T, n.-42T>A"
+            "c.-455T>A, c.-122A>T, c.-101A>T, c.-42T>A"
         )
-        self.assertEqual(nt, "n.[-455T>A;-122A>T;-101A>T;-42T>A]")
+        self.assertEqual(nt, "c.[-455T>A;-122A>T;-101A>T;-42T>A]")
 
     def test_combines_into_multi_variant_syntax(self):
         result = self.enrich2.parse_nucleotide_variant("c.2A>G,c.1A>G")
