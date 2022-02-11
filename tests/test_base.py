@@ -182,6 +182,7 @@ class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
             self.base.validate_against_wt_sequence("p.Gly1Leu")
 
     def test_passes_on_special_and_silent(self):
+        # TODO
         self.base.validate_against_wt_sequence("_wt")
         self.base.validate_against_wt_sequence("_sy")
         self.base.validate_against_wt_sequence("c.1=")
@@ -203,6 +204,7 @@ class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
             self.base.validate_against_wt_sequence("c.1T>G")
 
     def test_error_negative_position(self):
+        # TODO
         with self.assertRaises(IndexError):
             self.base.one_based = True
             self.base.validate_against_wt_sequence("c.0T>G")
@@ -229,10 +231,12 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
         self.base = BaseTest(src=self.src, wt_sequence="ATGAAA", one_based=True)
 
     def test_error_not_a_protein_sub(self):
+        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             self.base.validate_against_protein_sequence("c.1A>G")
 
     def test_passes_on_special_and_silent(self):
+        # TODO
         self.base.validate_against_protein_sequence("_wt")
         self.base.validate_against_protein_sequence("_sy")
         self.base.validate_against_protein_sequence("p.=")
@@ -245,15 +249,18 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
             self.base.validate_against_protein_sequence("p.Met2Lys")
 
     def test_error_invalid_position(self):
+        # TODO
         with self.assertRaises(ValueError):
             self.base.validate_against_protein_sequence("p.Met0Lys")
 
     def test_validates_multi(self):
+        # TODO
         self.base.validate_against_protein_sequence("p.[Met1Lys;Lys2=]")
         with self.assertRaises(ValueError):
             self.base.validate_against_protein_sequence("p.[Met1Lys;Met2=]")
 
     def test_error_invalid_position_multi(self):
+        # TODO
         with self.assertRaises(ValueError):
             self.base.validate_against_protein_sequence("p.[Met0Lys;Lys2=]")
 
