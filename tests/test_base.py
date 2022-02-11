@@ -258,9 +258,8 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
             self.base.validate_against_protein_sequence("p.Met0Lys")
 
     def test_validates_multi(self):
-        # TODO
-        self.base.validate_against_protein_sequence("p.[Met1Lys;Lys2=]")
-        with self.assertRaises(ValueError):
+        self.base.validate_against_protein_sequence("p.[Met1Lys;Lys2Thr]")
+        with self.assertRaises(MaveHgvsParseError): # cannot contain target identical
             self.base.validate_against_protein_sequence("p.[Met1Lys;Met2=]")
 
     def test_error_invalid_position_multi(self):
