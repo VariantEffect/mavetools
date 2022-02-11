@@ -268,6 +268,7 @@ def split_variant(variant):
 
 
 def normalize_variant(variant):
+    # TODO
     """
     Replaces `???` for `Xaa` in protein variants and `X` for `N` in
     nucleotide variants to be compliant with the `hgvs` biocommons package.
