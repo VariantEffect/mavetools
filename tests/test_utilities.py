@@ -96,9 +96,7 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
         self.assertEqual(nt.position, -100)
 
     def test_strips_ws(self):
-        self.assertEqual(
-            utilities.NucleotideSubstitutionEvent(" c.1A>G ").variant, "c.1A>G"
-        )
+        self.assertEqual(utilities.NucleotideSubstitutionEvent(" c.1A>G ").variant, "c.1A>G")
 
     def test_parses_position(self):
         self.assertEqual(utilities.NucleotideSubstitutionEvent("c.1A>G").position, 1)
