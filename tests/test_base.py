@@ -183,9 +183,6 @@ class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
             self.base.validate_against_wt_sequence("p.Gly1Leu")
 
     def test_passes_on_special_and_silent(self):
-        # TODO
-        self.base.validate_against_wt_sequence("_wt")
-        self.base.validate_against_wt_sequence("_sy")
         self.base.validate_against_wt_sequence("c.1=")
 
     def test_passes_when_reference_base_matches(self):
