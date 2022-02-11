@@ -738,50 +738,41 @@ class TestInferSilentAASub(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA", offset=0)
 
     def test_valueerror_not_a_sub_event(self):
-        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             self.enrich2.infer_silent_aa_substitution("c.100_102del")
 
     def test_index_error_variant_pos_is_out_of_bounds_relative_to_wt(self):
-        # TODO
         with self.assertRaises(IndexError):
             self.enrich2.infer_silent_aa_substitution("c.100A>G")
 
     def test_valueerror_base_in_wt_does_not_match_base_in_hgvs(self):
-        # TODO
         self.enrich2.wt_sequence = "TGA"
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution("c.1A>G")
 
     def test_correct_wt_aa_inferred(self):
-        # TODO
         self.enrich2.wt_sequence = "TCT"
         self.assertEqual("p.Ser1=", self.enrich2.infer_silent_aa_substitution("c.3T>C"))
 
     def test_correct_aa_position_inferred(self):
-        # TODO
         self.enrich2.wt_sequence = "AAAGGGTCT"
         self.assertEqual("p.Ser3=", self.enrich2.infer_silent_aa_substitution("c.9T>C"))
 
     def test_error_mutant_codon_does_not_match_wild_type(self):
-        # TODO
         self.enrich2.wt_sequence = "ATG"
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution("c.1A>C")
 
     def test_correctly_infers_aa_from_codon_group(self):
-        # TODO
         self.enrich2.wt_sequence = "TTA"
         group = ["c.1T>C", "c.2=", "c.3A>T"]
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
 
     def test_valueerror_mixed_codons_in_group(self):
-        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.infer_silent_aa_substitution(["c.1T>C", "c.5T>C"])
 
     def test_correctly_infers_aa_from_silent_variants(self):
-        # TODO
         self.enrich2.wt_sequence = "TTA"
         group = ["c.1=", "c.2=", "c.3="]
         self.assertEqual("p.Leu1=", self.enrich2.infer_silent_aa_substitution(group))
