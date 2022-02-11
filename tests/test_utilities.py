@@ -162,11 +162,6 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
         with self.assertRaises(ValueError):
             pro.position -= 4
 
-    def test_error_invalid_dna_substitution_syntax(self):
-        # TODO
-        with self.assertRaises(exceptions.InvalidVariantType):
-            utilities.ProteinSubstitutionEvent("p.100_101delins")
-
     def test_strips_ws(self):
         self.assertEqual(utilities.ProteinSubstitutionEvent(" p.Gly2Leu ").variant, "p.Gly2Leu")
 
