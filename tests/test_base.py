@@ -234,7 +234,6 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
         self.base = BaseTest(src=self.src, wt_sequence="ATGAAA", one_based=True)
 
     def test_error_not_a_protein_sub(self):
-        # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
             self.base.validate_against_protein_sequence("c.1A>G")
 
