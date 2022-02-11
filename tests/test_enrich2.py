@@ -668,7 +668,6 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
             self.enrich2.parse_mixed_variant("p.Lys4Arg, c.2T>A (p.Lys1Arg)")
 
     def test_variant_order_maintained(self):
-        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         nt, pro = self.enrich2.parse_mixed_variant(
             "c.1= (p.Lys1Ile), c.6T>G (p.Asn2Lys), c.2A>T (p.Lys1Ile)"
@@ -680,7 +679,6 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1="
     )
     def test_groups_codons(self, patch):
-        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         variant = "c.1= (p.=), c.6T>G (p.Asn2Lys), c.2= (p.=)"
         _, _ = self.enrich2.parse_mixed_variant(variant)
@@ -688,7 +686,6 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
 
     @patch.object(enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1=")
     def test_calls_infer_with_synonymous_variants_only(self, patch):
-        # TODO
         self.enrich2.wt_sequence = "AAAAAT"
         variant = "c.1= (p.=), c.6T>G (p.Asn2Lys), c.2= (p.Lys1=)"
         _, _ = self.enrich2.parse_mixed_variant(variant)
@@ -703,7 +700,6 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         )
 
     def test_valueerror_multiple_prefix_types(self):
-        # TODO
         with self.assertRaises(ValueError):
             self.enrich2.parse_mixed_variant("c.1A>G (p.=), r.2u>a (p.Lys4Arg)")
         with self.assertRaises(ValueError):
