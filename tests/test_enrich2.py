@@ -367,7 +367,6 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.assertTrue(os.path.isfile(invalid_rows_path))
 
     def test_invalid_rows_file_contains_error_description(self):
-        # TODO
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
         invalid_rows_path = os.path.join(
