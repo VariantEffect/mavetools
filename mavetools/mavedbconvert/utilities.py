@@ -112,36 +112,22 @@ class NucleotideSubstitutionEvent(object):
 
     def __init__(self, variant):
         self.variant = variant.strip()
-        match_dna = dna.substitution_re.fullmatch(self.variant)
-        match_rna = rna.substitution_re.fullmatch(self.variant)
-        if not (match_dna or match_rna):
+        var = Variant(self.variant)
+        if var.variant_type != 'sub' and var.sequence != '=':
             raise exceptions.InvalidVariantType(
                 "'{}' is not a valid DNA/RNA "
                 "substitution event.".format(self.variant)
             )
-
-        match = match_dna if match_dna is not None else match_rna
-        self.dict = match.groupdict()
-        self.position = int(match.groupdict()[constants.hgvsp_nt_pos])
-        self.ref = match.groupdict()[constants.hgvsp_nt_ref]
-        self.alt = match.groupdict()[constants.hgvsp_nt_alt]
-        self.silent = match.groupdict()[constants.hgvsp_silent] == "="
-        self.prefix = variant[0].lower()
-
-        if self.dict.get("utr", None) == "-":
-            self.position *= -1
-
-        if match_rna and self.position < 0:
-            raise IndexError("RNA positions cannot be negative.")
-
-        if self.ref:
-            if match_dna:
-                self.ref = self.ref.upper()
-        if self.alt:
-            if match_dna:
-                self.alt = self.alt.upper()
-        if self.ref == self.alt:
+        self.position = int(str(var.positions))
+        if var.sequence == '=':
             self.silent = True
+            self.ref = None
+            self.alt = None
+        else:
+            self.silent = False
+            self.ref = var.sequence[0]
+            self.alt = var.sequence[1]
+        self.prefix = var.prefix
 
     def __repr__(self):
         return self.format
