@@ -179,7 +179,6 @@ class TestSplitVariant(unittest.TestCase):
 
 
 class TestNormalizeVariant(unittest.TestCase):
-    # TODO
     def test_stripts_white_space(self):
         self.assertEqual(utilities.normalize_variant(" c.1A>G "), "c.1A>G")
 
