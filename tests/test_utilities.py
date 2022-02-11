@@ -95,11 +95,6 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
         nt = utilities.NucleotideSubstitutionEvent("c.-100A>T")
         self.assertEqual(nt.position, -100)
 
-    def test_error_invalid_dna_substitution_syntax(self):
-        # TODO
-        with self.assertRaises(exceptions.InvalidVariantType):
-            utilities.NucleotideSubstitutionEvent("c.100_101delins")
-
     def test_strips_ws(self):
         self.assertEqual(
             utilities.NucleotideSubstitutionEvent(" c.1A>G ").variant, "c.1A>G"
