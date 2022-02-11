@@ -185,6 +185,12 @@ class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
     def test_passes_on_special_and_silent(self):
         self.base.validate_against_wt_sequence("c.1=")
 
+    def test_throws_error_with_invalid_variants(self):
+        with self.assertRaises(MaveHgvsParseError):
+            self.base.validate_against_wt_sequence("_wt")
+        with self.assertRaises(MaveHgvsParseError):
+            self.base.validate_against_wt_sequence("_sy")
+
     def test_passes_when_reference_base_matches(self):
         self.base.one_based = False
         self.base.validate_against_wt_sequence("c.1T>G")
