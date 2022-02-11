@@ -157,7 +157,6 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
 
 
 class TestProteinSubstitutionEvent(unittest.TestCase):
-    # TODO
     def test_error_set_position_less_than_1(self):
         pro = utilities.ProteinSubstitutionEvent("p.Gly4Leu")
         with self.assertRaises(ValueError):
