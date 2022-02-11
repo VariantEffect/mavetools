@@ -200,32 +200,26 @@ class ProteinSubstitutionEvent(object):
 
     def __init__(self, variant):
         self.variant = variant.strip()
-        match = re.fullmatch(protein.pro_sub, self.variant)
-        if not match:
+        var = Variant(self.variant)
+        if var.variant_type != 'sub' and var.sequence != '=':
             raise exceptions.InvalidVariantType(
                 "'{}' is not a valid amino acid "
                 "substitution event.".format(self.variant)
             )
-
-        self.dict = match.groupdict()
         self._position = None
-        self.position = int(match.groupdict()[constants.hgvsp_pro_pos])
-        self.ref = match.groupdict()[constants.hgvsp_pro_ref]
-        self.alt = match.groupdict()[constants.hgvsp_pro_alt]
-        self.silent = match.groupdict()[constants.hgvsp_silent] == "="
-        self.prefix = "p"
+        self.position = int(''.join([n for n in str(var.positions) if n in "0123456789"])[0])
 
-        # Normalize to three letter codes
-        if self.ref and len(self.ref) == 1:
-            self.ref = AA_CODES[self.ref]
-        if self.alt and len(self.alt) == 1:
-            if self.alt == "?":
-                self.alt = "???"
-            else:
-                self.alt = AA_CODES[self.alt]
-
-        if self.ref and self.silent:
+        if var.sequence == '=':
+            self.silent = True
+            self.ref = ''.join([n for n in str(var.positions) if n not in "0123456789"])
             self.alt = self.ref
+        else:
+            self.silent = False
+            self.ref = var.sequence[0]
+            print("ref: ", self.ref)
+            self.alt = var.sequence[1]
+            print("alt: ", self.alt)
+        self.prefix = var.prefix
 
     def __repr__(self):
         return self.format
