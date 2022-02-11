@@ -168,9 +168,7 @@ class TestProteinSubstitutionEvent(unittest.TestCase):
             utilities.ProteinSubstitutionEvent("p.100_101delins")
 
     def test_strips_ws(self):
-        self.assertEqual(
-            utilities.ProteinSubstitutionEvent(" p.Gly2Leu ").variant, "p.Gly2Leu"
-        )
+        self.assertEqual(utilities.ProteinSubstitutionEvent(" p.Gly2Leu ").variant, "p.Gly2Leu")
 
     def test_parses_position(self):
         self.assertEqual(utilities.ProteinSubstitutionEvent("p.Gly2Leu").position, 2)
