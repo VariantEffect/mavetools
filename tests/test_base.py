@@ -238,9 +238,6 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
             self.base.validate_against_protein_sequence("c.1A>G")
 
     def test_passes_on_special_and_silent(self):
-        # TODO
-        self.base.validate_against_protein_sequence("_wt")
-        self.base.validate_against_protein_sequence("_sy")
         self.base.validate_against_protein_sequence("p.=")
 
     def test_passes_when_reference_aa_matches(self):
