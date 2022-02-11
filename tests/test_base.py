@@ -208,8 +208,7 @@ class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
             self.base.validate_against_wt_sequence("c.1T>G")
 
     def test_error_negative_position(self):
-        # TODO
-        with self.assertRaises(IndexError):
+        with self.assertRaises(MaveHgvsParseError):
             self.base.one_based = True
             self.base.validate_against_wt_sequence("c.0T>G")
 
