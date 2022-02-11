@@ -95,11 +95,6 @@ class TestNucleotideSubstitutionEvent(unittest.TestCase):
         nt = utilities.NucleotideSubstitutionEvent("c.-100A>T")
         self.assertEqual(nt.position, -100)
 
-    def test_negative_rna_position_error(self):
-        # TODO
-        with self.assertRaises(IndexError):
-            utilities.NucleotideSubstitutionEvent("r.-100a>u")
-
     def test_error_invalid_dna_substitution_syntax(self):
         # TODO
         with self.assertRaises(exceptions.InvalidVariantType):
