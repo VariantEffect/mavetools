@@ -217,7 +217,7 @@ class ProteinSubstitutionEvent(object):
                 "substitution event.".format(self.variant)
             )
         self._position = None
-        self.position = int(''.join([n for n in str(var.positions) if n in "0123456789"])[0])
+        self.position = int(''.join([n for n in str(var.positions) if n in "0123456789"]))
 
         if var.sequence == '=':
             self.silent = True
