@@ -193,7 +193,6 @@ class TestNormalizeVariant(unittest.TestCase):
         self.assertEqual(utilities.normalize_variant("p.G4??"), "p.G4??")
 
     def test_replaces_X_with_N_in_rna_variant(self):
-        # TODO
         self.assertEqual(utilities.normalize_variant("r.100a>x"), "r.100a>n")
         self.assertEqual(
             utilities.normalize_variant("r.100_102delinsnnn"), "r.100_102delinsnnn"
