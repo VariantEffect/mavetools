@@ -799,7 +799,6 @@ class TestApplyOffset(ProgramTestCase):
         self.assertEqual("c.1T>A", enrich2.apply_offset("c.-455T>A", offset))
 
     def test_applies_offset_to_protein_variant_modulo_3(self):
-        # TODO
         variant = "p.Leu10=, p.Leu13="
         offset = 10
         self.assertEqual("p.Leu7=, p.Leu10=", enrich2.apply_offset(variant, offset))
