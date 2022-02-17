@@ -5,6 +5,7 @@ from unittest.mock import patch
 import re
 
 from mavehgvs.patterns import dna, protein
+from mavehgvs.exceptions import *
 
 import numpy as np
 import pandas as pd
