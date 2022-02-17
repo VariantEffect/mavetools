@@ -10,6 +10,7 @@ class TestHGVSPatternsBackend(unittest.TestCase):
         self.backend = validators.HGVSPatternsBackend()
 
     def test_validate_hgvs_raise_HGVSValidationError(self):
+        # TODO
         with self.assertRaises(exceptions.HGVSValidationError):
             self.backend.validate("p.1102A>G")
         with self.assertRaises(exceptions.HGVSValidationError):
@@ -20,10 +21,12 @@ class TestHGVSPatternsBackend(unittest.TestCase):
         self.backend.validate(constants.enrich2_synonymous)
 
     def test_returns_str_variant(self):
+        # TODO
         self.assertIsInstance(self.backend.validate("c.1A>G"), str)
 
 
 class TestValidateHGVS(unittest.TestCase):
+    # TODO
     def test_uses_patterns_backend_as_default(self):
         result = validators.validate_variants(["c.[1A>G;2A>G]"], n_jobs=2, verbose=0)
         self.assertIsInstance(result[0], str)
