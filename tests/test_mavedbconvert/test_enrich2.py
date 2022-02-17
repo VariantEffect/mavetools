@@ -431,10 +431,9 @@ class TestEnrich2ParseRow(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="ACT")
 
     def test_invalid_variant(self):
-        # TODO
-        with self.assertRaises(MaveHgvsParseError):
-            self.enrich2.parse_row(("c.1_2del", None))
         with self.assertRaises(exceptions.InvalidVariantType):
+            self.enrich2.parse_row(("c.1_2del", None))
+        with self.assertRaises(MaveHgvsParseError):
             self.enrich2.parse_row(("b.1A>G", None))
 
     def test_special_nt_variants_are_singletons(self):
