@@ -806,7 +806,7 @@ class TestApplyOffset(ProgramTestCase):
         self.assertEqual("p.Leu7=, p.Leu10=", enrich2.apply_offset(variant, offset))
         self.assertEqual("p.Leu7=", enrich2.apply_offset("p.Leu10=", offset))
 
-    @patch.object(enrich2.base.BaseProgram, "validate_against_wt_sequence")
+    @patch.object(mavetools.convert.enrich2.enrich2.base.BaseProgram, "validate_against_wt_sequence")
     def test_validates_against_wt_sequence(self, patch):
         variant = "c.-9C>T"
         path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
