@@ -821,7 +821,7 @@ class TestApplyOffset(ProgramTestCase):
         with self.assertRaises(ValueError):
             enrich2.apply_offset(variant, offset=-10, enrich2=p)
 
-    @patch.object(enrich2.base.BaseProgram, "validate_against_protein_sequence")
+    @patch.object(mavetools.convert.enrich2.enrich2.base.BaseProgram, "validate_against_protein_sequence")
     def test_validates_against_pro_sequence(self, patch):
         variant = "p.Gly3Leu"
         path = os.path.join(self.data_dir, "enrich2", "dummy.h5")
