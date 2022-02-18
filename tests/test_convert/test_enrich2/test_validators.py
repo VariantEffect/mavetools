@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from mavetools.mavedbconvert import validators, constants, exceptions
+from mavetools.convert.enrich2 import constants, exceptions, validators
 
 
 class TestHGVSPatternsBackend(unittest.TestCase):
