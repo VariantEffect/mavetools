@@ -293,12 +293,8 @@ def normalize_variant(variant):
     """
     if variant is None:
         return variant
-    if (
-        protein.single_variant_re.fullmatch(variant)
-        or protein.multi_variant_re.fullmatch(variant)
-        or protein.predicted_variant_re.fullmatch(variant)
-        or protein.any_event_re.fullmatch(variant)
-    ):
+    variant = variant.strip()
+    if variant.startswith("p"):
         # Sub groups of three first.
         variant = re.sub(r"\?{3}", "Xaa", variant)
         # Sub singular next.
