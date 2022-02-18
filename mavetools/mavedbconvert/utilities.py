@@ -308,9 +308,7 @@ def normalize_variant(variant):
     ):
         variant = variant.replace(r"X", "N")
     elif (
-        rna.single_variant_re.fullmatch(variant)
-        or rna.multi_variant_re.fullmatch(variant)
-        or rna.any_event_re.fullmatch(variant)
+        variant.startswith("r")
     ):
         variant = variant.replace(r"x", "n")
     return variant.strip()
