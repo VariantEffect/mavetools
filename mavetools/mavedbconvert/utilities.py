@@ -300,9 +300,11 @@ def normalize_variant(variant):
         # Sub singular next.
         variant = re.sub(r"\?", "X", variant)
     elif (
-        dna.single_variant_re.fullmatch(variant)
-        or dna.multi_variant_re.fullmatch(variant)
-        or dna.any_event_re.fullmatch(variant)
+        variant.startswith("n")  # non-coding DNA sequence
+        or variant.startswith("c")  # coding DNA sequence
+        or variant.startswith("g")  # linear genomic DNA sequence
+        or variant.startswith("m")  # mitochondrial genomic DNA sequence
+        or variant.startswith("o")  # circular genomic DNA sequence
     ):
         variant = variant.replace(r"X", "N")
     elif (
