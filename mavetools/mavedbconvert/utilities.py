@@ -307,9 +307,7 @@ def normalize_variant(variant):
         or variant.startswith("o")  # circular genomic DNA sequence
     ):
         variant = variant.replace(r"X", "N")
-    elif (
-        variant.startswith("r")
-    ):
+    elif variant.startswith("r"):
         variant = variant.replace(r"x", "n")
     return variant.strip()
 
