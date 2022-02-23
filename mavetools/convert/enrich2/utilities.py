@@ -7,7 +7,6 @@ from mavehgvs import Variant
 import numpy as np
 import pandas as pd
 from fqfa.constants.translation.table import CODON_TABLE
-from fqfa.constants.iupac.protein import AA_CODES
 
 from . import constants, exceptions
 
