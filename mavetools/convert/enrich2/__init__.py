@@ -19,7 +19,7 @@ HOMEDIR = os.path.normpath(os.path.expanduser("~/.mavedb_convert/"))
 if not os.path.isdir(HOMEDIR):
     os.mkdir(HOMEDIR)  # pragma: no cover
 
-LOGGER = "mavedbconvert"
+LOGGER = "enrich2"
 
 # Initialize the logging via dictionary configuration
 logging.config.dictConfig(
