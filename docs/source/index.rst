@@ -24,10 +24,7 @@ Building a local copy of the documentation requires the following additional pac
    convert
    mavedf
    validators
-   experiment_create
-   experiment_get
-   scoreset_create
-   scoreset_get
+   notebooks
 
 
 Indices and tables
