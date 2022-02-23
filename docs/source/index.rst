@@ -21,6 +21,7 @@ Building a local copy of the documentation requires the following additional pac
    :maxdepth: 2
    :caption: Contents:
 
+   client
    convert
    mavedf
    validators
