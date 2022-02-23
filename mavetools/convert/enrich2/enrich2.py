@@ -20,10 +20,6 @@ from . import LOGGER, constants, utilities, validators, base
 
 __all__ = [
     "Enrich2",
-    "drop_null",
-    "flatten_column_names",
-    "get_count_dataframe_by_condition",
-    "get_replicate_score_dataframes",
 ]
 
 
