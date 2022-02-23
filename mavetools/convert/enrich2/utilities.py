@@ -1,7 +1,7 @@
 import re
 from collections import OrderedDict
 
-from mavehgvs.patterns import rna, dna, protein, combined
+from mavehgvs.patterns import dna, protein
 from mavehgvs import Variant
 
 import numpy as np
