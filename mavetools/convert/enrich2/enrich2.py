@@ -13,7 +13,9 @@ import pandas as pd
 import numpy as np
 from pandas.testing import assert_index_equal
 
-from . import LOGGER, constants, filters, utilities, validators, base
+from mavetools.convert.enrich2.format import *
+
+from . import LOGGER, constants, utilities, validators, base
 
 
 __all__ = [
