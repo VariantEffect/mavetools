@@ -275,10 +275,10 @@ def split_variant(variant):
         return ["{}.{}".format(prefix, e.strip()) for e in variant[3:-1].split(";")]
     return [variant]
 
-
+"""
 def normalize_variant(variant):
     # TODO
-    """
+    # I do not think this function is actually used?
     Replaces `???` for `Xaa` in protein variants and `X` for `N` in
     nucleotide variants to be compliant with the `hgvs` biocommons package.
     Use for enrich and enrich2 inputs.
@@ -289,7 +289,6 @@ def normalize_variant(variant):
     Returns
     -------
     str
-    """
     if variant is None:
         return variant
     variant = variant.strip()
@@ -309,7 +308,7 @@ def normalize_variant(variant):
     elif variant.startswith("r"):
         variant = variant.replace(r"x", "n")
     return variant.strip()
-
+"""
 
 def format_variant(variant):
     """
