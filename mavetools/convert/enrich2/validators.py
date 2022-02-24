@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from joblib import Parallel, delayed
 
-from . import constants, utilities, exceptions, LOGGER
+from mavetools.convert.enrich2 import constants, utilities, exceptions, LOGGER
 
 
 logger = logging.getLogger(LOGGER)
