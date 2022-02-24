@@ -184,6 +184,8 @@ class BaseProgram(metaclass=ABCMeta):
         pass  # pragma: no cover
 
     def validate_against_wt_sequence(self, variant):
+        # TODO
+        # this validation code exists elsewhere in mavetools
         """
         Checks that the reference base in a substitution variant matches that
         in the wild-type sequence provided.
