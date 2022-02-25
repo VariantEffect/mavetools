@@ -27,6 +27,10 @@ logger = logging.getLogger(LOGGER)
 
 
 class Enrich2(base.BaseProgram):
+    """
+    The Enrich2 object contains information associated with the Enrich2 dataset (src) specified at
+    the object's instantiation.
+    """
     __doc__ = base.BaseProgram.__doc__
     LOG_MSG = "Writing {elem} {df_type} for condition '{cnd}' to '{path}'."
 
