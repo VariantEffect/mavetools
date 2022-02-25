@@ -42,7 +42,6 @@ def codon_sub_to_mavehgvs(
         If either codon is not valid.
     ValueError
         If the position is less than 1.
-
     """
     if len(target_codon) != 3 or not dna_bases_validator(target_codon):
         raise ValueError("invalid target codon")
