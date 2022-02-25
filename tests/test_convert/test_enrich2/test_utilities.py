@@ -10,9 +10,7 @@ class TestSlicer(unittest.TestCase):
         self.assertEqual(list(utilities.slicer("aaabbbccc", 3)), ["aaa", "bbb", "ccc"])
 
     def test_slicer_returns_clips_if_cannot_chunk(self):
-        self.assertEqual(
-            list(utilities.slicer("aaaabbbbccc", 4)), ["aaaa", "bbbb", "ccc"]
-        )
+        self.assertEqual(list(utilities.slicer("aaaabbbbccc", 4)), ["aaaa", "bbbb", "ccc"])
 
 
 class TestTranslateWTSequence(unittest.TestCase):
