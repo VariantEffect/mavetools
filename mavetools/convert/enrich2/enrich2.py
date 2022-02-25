@@ -114,7 +114,7 @@ class Enrich2(base.BaseProgram):
             )
 
         if self.input_is_h5:
-            return pd.HDFStore(self.src, mode="r")
+            result = pd.HDFStore(self.src, mode="r")
         else:
             df = pd.read_csv(
                 self.src,
@@ -138,7 +138,9 @@ class Enrich2(base.BaseProgram):
                 )
 
             df.index = df[self.hgvs_column]
-            return df
+            result = df
+
+        return result
 
     def parse_row(self, row):
         """
