@@ -12,7 +12,21 @@ from . import constants, exceptions
 
 
 def slicer(seq, size):
-    """Slices a string into chunks of `size`."""
+    """
+    Slices a string into chunks of `size`.
+
+    Parameters
+    __________
+    seq : string
+        string to be sliced
+    size : int
+        len of each slice
+
+    Returns
+    _______
+    generator
+        sliced string as generator object
+    """
     return (seq[pos : pos + size] for pos in range(0, len(seq), size))
 
 
