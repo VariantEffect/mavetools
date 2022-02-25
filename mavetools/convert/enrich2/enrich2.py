@@ -145,11 +145,13 @@ class Enrich2(base.BaseProgram):
     def parse_row(self, row):
         """
         Delegates the correct method below
+
         Parameters
         ----------
         row : tuple[str, str] | list[str] | str
             An enrich2 variant or a tuple/list of enrich2 variant and
             the hd5 element table type (synonymous, etc).
+
         Returns
         -------
         str
