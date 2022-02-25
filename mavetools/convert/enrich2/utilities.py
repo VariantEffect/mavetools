@@ -33,6 +33,7 @@ def slicer(seq, size):
 def translate_dna(wt_sequence, offset=0):
     """
     Translates a DNA wild-type sequence starting from an `offset`.
+
     Parameters
     ----------
     wt_sequence : str
@@ -40,10 +41,18 @@ def translate_dna(wt_sequence, offset=0):
     offset : int
         Number of bases at the beginning of `wt_sequence` to ignore before
         beginning translation.
+
     Returns
     -------
-    `str`
+    protein_seq : str
         The translated wild-type sequence.
+
+    Raises
+    ______
+    ValueError
+        If the offset is negative.
+    ValueError
+        If the length of the sequence derived based on offset is not multiple of 3.
     """
     if offset < 0:
         raise ValueError("Offset must not be negative.")
