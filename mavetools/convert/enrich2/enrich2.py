@@ -559,7 +559,6 @@ class Enrich2(base.BaseProgram):
                     raise ValueError(
                         "special variant strings may not be combined with HGVS-like variants"
                     )
-            #if not hgvsp.dna.single_variant_re.fullmatch(v):
             if not re.fullmatch(dna.dna_single_variant, v):
                 raise ValueError(
                     "'{variant}' contains invalid DNA/RNA HGVS syntax.".format(
