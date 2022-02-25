@@ -11,7 +11,8 @@ def codon_sub_to_mavehgvs(
     target_id: Optional[str] = None,
     prefer_delins: bool = True,
 ) -> str:
-    """Create a MAVE-HGVS coding variant string describing the change between two codons.
+    """
+    Create a MAVE-HGVS coding variant string describing the change between two codons.
 
     Parameters
     ----------
