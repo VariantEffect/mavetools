@@ -33,7 +33,7 @@ def codon_sub_to_mavehgvs(
 
     Returns
     -------
-    str
+    variant_string : str
         MAVE-HGVS string for the substitution described by this codon.
 
     Raises
