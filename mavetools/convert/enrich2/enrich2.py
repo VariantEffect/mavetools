@@ -93,7 +93,18 @@ class Enrich2(base.BaseProgram):
 
         Returns
         -------
-        `pd.HDFStore`
+        result: `pd.HDFStore` or `pd.df`
+            `pd.HDFStore` if self.input_is_h5
+            `pd.df` if self.input_is_tsv
+
+        Raises
+        ______
+        TypeError
+            If self.input_is_h5 or self.input_is_tsv return False
+        KeyError
+            If score column does not exist in Enrich2 object df
+        KeyError
+            If hgvs column does not exist in Enrich2 object df
         """
         if not (self.input_is_h5 or self.input_is_tsv):
             raise TypeError(
