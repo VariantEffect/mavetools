@@ -69,6 +69,15 @@ class Enrich2(base.BaseProgram):
             )
 
     def convert(self):
+        """
+        Convert all score and count data frames in the Enrich2 TSV or HDF5 file
+        into MaveDB-ready `.csv` files.
+
+        Returns
+        _______
+        result : `.csv` file
+            MaveDB-ready `.csv` file
+        """
         logger.info("Processing file {}".format(self.src))
         if self.input_is_h5:
             input_file = self.load_input_file()
