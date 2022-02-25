@@ -90,6 +90,7 @@ class Enrich2(base.BaseProgram):
     def load_input_file(self):
         """
         Loads the input file specified at initialization into a dataframe.
+
         Returns
         -------
         `pd.HDFStore`
