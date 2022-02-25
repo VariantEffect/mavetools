@@ -93,12 +93,14 @@ def format_column(values, astype=float):
     Formats a list of values by replacing null float/int values with
     `np.NaN` or null object values with None. All other values
     are typecast to `astype`.
+
     Parameters
     ----------
     values : list[Union[float, int]]
         List of values to format.
     astype : callable, optional
         Type-casting callback accepting a single argument.
+
     Returns
     -------
     list[Any]
