@@ -72,7 +72,17 @@ def translate_dna(wt_sequence, offset=0):
 
 def is_null(value):
     """
-    Returns `True` if `value` is null, undefined, none, na, n/a, nan or empty.
+    Checks if the value of the passed string is null, undefined, none, na, n/a, nan or empty.
+
+    Parameters
+    __________
+    value : Any
+        To be checked if is null, undefined, none, na, n/a, nan or empty.
+
+    Returns
+    _______
+    bool
+        `True` if `value` is null, undefined, none, na, n/a, nan or empty.
     """
     value = str(value).strip().lower()
     return (not value) or constants.null_value_re.fullmatch(value) is not None
