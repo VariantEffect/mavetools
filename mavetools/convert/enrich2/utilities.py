@@ -272,9 +272,7 @@ class ProteinSubstitutionEvent(object):
         else:
             self.silent = False
             self.ref = var.sequence[0]
-            print("ref: ", self.ref)
             self.alt = var.sequence[1]
-            print("alt: ", self.alt)
         self.prefix = var.prefix
 
     def __repr__(self):
