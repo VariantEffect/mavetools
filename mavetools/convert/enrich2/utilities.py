@@ -409,7 +409,6 @@ def hgvs_nt_from_event_list(events, prefix):
             prefix, ";".join([format_variant(e) for e in events])
         )
 
-    #match = single_variant_re.fullmatch(mave_hgvs) or multi_variant_re.fullmatch(mave_hgvs)
     match = re.fullmatch(dna.dna_single_variant, mave_hgvs) or re.fullmatch(dna.dna_multi_variant, mave_hgvs)
 
     if not match:
