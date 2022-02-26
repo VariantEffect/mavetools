@@ -265,11 +265,7 @@ class TestHgvsColumns(unittest.TestCase):
     def test_returns_only_hgvs_columns(self):
         self.assertListEqual(
             [constants.nt_variant_col, constants.pro_variant_col],
-            list(
-                utilities.hgvs_columns(
-                    ["score", constants.nt_variant_col, constants.pro_variant_col]
-                )
-            ),
+            list(utilities.hgvs_columns(["score", constants.nt_variant_col, constants.pro_variant_col]))
         )
 
 
