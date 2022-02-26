@@ -208,22 +208,26 @@ class NucleotideSubstitutionEvent(object):
     def codon_frame_position(self, one_based=True):
         """
         Returns the 1-based position of this variant within it's codon.
+
         Parameters
         ----------
         one_based : bool
             Set as `True` if the variant position expressed in
             1-based coordinates.
+
         Returns
         -------
         int
+            The 1-based position of this variant within it's codon.
+
+        Raises
+        ______
+        ValueError
+            If self.position is less than 0.
         """
         if self.position < 0:
             raise ValueError("Cannot infer codon frame from negative position.")
-        return (
-            self.position
-            - 3 * (self.codon_position(one_based) - 1)
-            + int(not one_based)
-        )
+        return self.position - 3 * (self.codon_position(one_based) - 1) + int(not one_based)
 
 
 class ProteinSubstitutionEvent(object):
