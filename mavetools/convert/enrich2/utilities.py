@@ -358,6 +358,7 @@ def normalize_variant(variant):
     return variant.strip()
 """
 
+
 def format_variant(variant):
     """
     Return None for null variant and strips trailing whitespaces.
