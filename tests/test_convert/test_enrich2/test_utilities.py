@@ -171,9 +171,7 @@ class TestSplitVariant(unittest.TestCase):
         self.assertListEqual(["c.100A>G"], utilities.split_variant("c.100A>G"))
 
     def test_split_hgvs_returns_list_of_single_variants(self):
-        self.assertListEqual(
-            ["c.100A>G", "c.101A>G"], utilities.split_variant("c.[100A>G;101A>G]")
-        )
+        self.assertListEqual(["c.100A>G", "c.101A>G"], utilities.split_variant("c.[100A>G;101A>G]"))
 
 
 class TestNormalizeVariant(unittest.TestCase):
