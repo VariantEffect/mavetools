@@ -382,7 +382,26 @@ def hgvs_pro_from_event_list(events):
 
 
 def hgvs_nt_from_event_list(events, prefix):
-    """Convert a list of variant events into a single HGVS string."""
+    """
+    Convert a list of variant events into a single HGVS string.
+
+    Parameters
+    __________
+    events : list[str]
+        List of strings of variant events.
+    prefix : str
+        Prefix of event (i.e., c, r, etc.).
+
+    Returns
+    _______
+    mave_hgvs : str
+        Mave HGVS formatted string.
+
+    Raises
+    ______
+    HGVSMatchError
+        If string is not in Mave HGVS format.
+    """
     if len(events) == 1:
         mave_hgvs = "{}.{}".format(prefix, format_variant(events[0]))
     else:
