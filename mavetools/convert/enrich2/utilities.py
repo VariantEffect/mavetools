@@ -184,14 +184,22 @@ class NucleotideSubstitutionEvent(object):
     def codon_position(self, one_based=True):
         """
         Returns the 1-based codon position of a variant.
+
         Parameters
         ----------
         one_based : bool
             Set as `True` if the variant position expressed in
             1-based coordinates.
+
         Returns
         -------
         int
+            The 1-based codon position of a variant.
+
+        Raises
+        ______
+        ValueError
+            If self.position is less than 0.
         """
         if self.position < 0:
             raise ValueError("Cannot infer codon from negative position.")
