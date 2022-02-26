@@ -240,9 +240,7 @@ class TestHGVSNTFromEventList(unittest.TestCase):
         self.assertEqual(result, "c.45A>G")
 
     def test_combines_muilt_events(self):
-        result = utilities.hgvs_nt_from_event_list(
-            ["45A>G", "127_128delinsAAA"], prefix="n"
-        )
+        result = utilities.hgvs_nt_from_event_list(["45A>G", "127_128delinsAAA"], prefix="n")
         self.assertEqual(result, "n.[45A>G;127_128delinsAAA]")
 
     def test_keeps_duplicate_events(self):
