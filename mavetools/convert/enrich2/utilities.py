@@ -296,6 +296,7 @@ def split_variant(variant):
     """
     Splits a multi-variant `HGVS` string into a list of single variants. If
     a single variant string is provided, it is returned as a singular `list`.
+
     Parameters
     ----------
     variant : str
