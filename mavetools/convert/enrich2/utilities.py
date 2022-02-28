@@ -256,6 +256,7 @@ class ProteinSubstitutionEvent(object):
     """
     Parses a protein HGVS_ string into a python class. Can only accept
     basic strings of the format `p.<ref><position><alt>`
+
     Attributes
     ----------
     position : int
@@ -266,7 +267,7 @@ class ProteinSubstitutionEvent(object):
         The mutant amino acid in three-letter-code format.
     silent : bool
         `True` if `ref == alt` or the event has the form
-        `<prefix>.<ref><position>=`
+        `<prefix>.<ref><position>=`.
     prefix : str
         Prefix of the variant.
     """
@@ -422,6 +423,7 @@ def normalize_variant(variant):
 def format_variant(variant):
     """
     Return None for null variant and strips trailing whitespaces.
+
     Parameters
     ----------
     variant : str, optional.
