@@ -148,6 +148,12 @@ class NucleotideSubstitutionEvent(object):
     """
 
     def __init__(self, variant):
+        """
+
+        Parameters
+        ----------
+        variant
+        """
         self.variant = variant.strip()
         if self.variant.startswith("p"):
             raise exceptions.InvalidVariantType(
