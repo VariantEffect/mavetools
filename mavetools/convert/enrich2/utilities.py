@@ -182,10 +182,23 @@ class NucleotideSubstitutionEvent(object):
 
     @property
     def format(self):
+        """
+
+        Returns
+        -------
+
+        """
+        print(type("{}.{}".format(self.prefix, self.event)))
         return "{}.{}".format(self.prefix, self.event)
 
     @property
     def event(self):
+        """
+
+        Returns
+        -------
+
+        """
         if self.silent:
             return "{pos}=".format(ref=self.ref, pos=self.position)
         return "{pos}{ref}>{alt}".format(ref=self.ref, pos=self.position, alt=self.alt)
@@ -259,6 +272,12 @@ class ProteinSubstitutionEvent(object):
     """
 
     def __init__(self, variant):
+        """
+
+        Parameters
+        ----------
+        variant
+        """
         self.variant = variant.strip()
         if not self.variant.startswith("p"):
             raise exceptions.InvalidVariantType(
@@ -285,14 +304,36 @@ class ProteinSubstitutionEvent(object):
         self.prefix = var.prefix
 
     def __repr__(self):
+        """
+
+        Returns
+        -------
+
+        """
         return self.format
 
     @property
     def position(self):
+        """
+
+        Returns
+        -------
+
+        """
         return self._position
 
     @position.setter
     def position(self, value):
+        """
+
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+
+        """
         if value < 1:
             raise ValueError(
                 "Protein position cannot be less "
@@ -302,10 +343,22 @@ class ProteinSubstitutionEvent(object):
 
     @property
     def format(self):
+        """
+
+        Returns
+        -------
+
+        """
         return "{}.{}".format(self.prefix, self.event)
 
     @property
     def event(self):
+        """
+
+        Returns
+        -------
+
+        """
         if self.silent:
             return "{ref}{pos}=".format(ref=self.ref, pos=self.position)
         return "{ref}{pos}{alt}".format(ref=self.ref, pos=self.position, alt=self.alt)
