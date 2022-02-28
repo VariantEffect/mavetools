@@ -115,10 +115,12 @@ def format_column(values, astype=float):
 def is_numeric(dtype):
     """
     Returns `True` if a dtype is a subtype of a `float` or `int`.
+
     Parameters
     ----------
     dtype: type
         Type to check
+
     Returns
     -------
     bool
