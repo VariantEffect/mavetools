@@ -499,6 +499,16 @@ def non_hgvs_columns(columns):
     Takes an iterable of column names and returns a pandas Index object
     containing all entries that are not equal to the HGVS column names.
     The order of the elements is preserved.
+
+    Parameters
+    __________
+    columns :
+
+    Returns
+    _______
+    pandas.core.indexes.base.Index
+
+
     """
     data_columns = [
         x
