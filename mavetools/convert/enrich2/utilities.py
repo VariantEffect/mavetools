@@ -132,6 +132,7 @@ class NucleotideSubstitutionEvent(object):
     """
     Parses a nucleotide HGVS_ string into a python class. Can only accept
     basic strings of the format `<prefix>.<position><ref>><alt>`
+
     Attributes
     ----------
     position : int
