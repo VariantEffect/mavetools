@@ -144,7 +144,7 @@ class Enrich2(base.BaseProgram):
 
     def parse_row(self, row):
         """
-        Delegates the correct method below
+        Delegates the correct method below.
 
         Parameters
         ----------
