@@ -515,6 +515,7 @@ def non_hgvs_columns(columns):
     Parameters
     __________
     columns :
+        column names
 
     Returns
     _______
