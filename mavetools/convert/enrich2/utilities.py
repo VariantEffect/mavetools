@@ -520,8 +520,7 @@ def non_hgvs_columns(columns):
     Returns
     _______
     pandas.core.indexes.base.Index
-
-
+        All entries not equal to the HGVS column names.
     """
     data_columns = [
         x
