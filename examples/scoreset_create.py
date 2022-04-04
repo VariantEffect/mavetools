@@ -12,7 +12,6 @@ from mavetools.models.target import (
 
 # check environment variables and see if variable named MAVEDB_BASE_URL exists and return value
 # if the value does not exist, an empty string is returned instead
-from mavetools.validators.validate import validate_all
 
 base_url = os.getenv("MAVEDB_BASE_URL", "")
 # the urn of the scoreset and the experiment that that scoreset belongs to
