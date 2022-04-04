@@ -535,6 +535,16 @@ def hgvs_columns(columns):
     Takes an iterable of column names and returns a pandas Index object
     containing all entries that are equal to the HGVS column names.
     The order of the elements is preserved.
+
+    Parameters
+    __________
+    columns :
+        column names
+
+    Returns
+    _______
+    pandas.core.indexes.base.Index
+        All entries equal to the HGVS column names.
     """
     data_columns = [
         x
