@@ -374,6 +374,7 @@ def split_variant(variant):
     ----------
     variant : str
         A valid single or multi-variant `HGVS` string.
+
     Returns
     -------
     list[str]
