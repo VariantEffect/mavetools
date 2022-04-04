@@ -429,6 +429,7 @@ def format_variant(variant):
     ----------
     variant : str, optional.
         HGVS_ formatted string.
+
     Returns
     -------
     str
