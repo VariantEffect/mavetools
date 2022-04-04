@@ -56,6 +56,14 @@ def drop_na_rows(df):
     """
     Drop rows where all non-HGVS entries are null. Operation is performed in
     place.
+
+    Parameters
+    __________
+    df
+
+    Returns
+    _______
+    df
     """
     null_rows = df.loc[:, utilities.non_hgvs_columns(df.columns)].isnull().all(axis=1)
     if sum(null_rows) > 0:
