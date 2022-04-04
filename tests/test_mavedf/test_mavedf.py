@@ -1,7 +1,6 @@
 from unittest import TestCase
 from io import StringIO
 from mavetools.mavedf.mavedf import MaveDf
-from mavetools.validators.exceptions import ValidationError
 
 
 class Test(TestCase):
