@@ -11,6 +11,15 @@ logger = logging.getLogger(LOGGER)
 def drop_na_columns(df):
     """
     Drop columns where all entries are null. Operation is performed in place.
+
+    Parameters
+    __________
+    df :
+
+
+    Returns
+    _______
+    df :
     """
     has_nt_col = constants.nt_variant_col in df.columns
     has_pro_col = constants.pro_variant_col in df.columns
