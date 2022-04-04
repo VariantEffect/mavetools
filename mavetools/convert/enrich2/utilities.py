@@ -443,6 +443,16 @@ def hgvs_pro_from_event_list(events):
     """
     Convert a list of protein variant events into a single HGVS string. Removes
     duplicates from `events`.
+
+    Parameters
+    __________
+    events
+
+
+    Returns
+    _______
+    mave_hgvs
+
     """
     events = list(OrderedDict.fromkeys([format_variant(e) for e in events]).keys())
     if len(events) == 1:
