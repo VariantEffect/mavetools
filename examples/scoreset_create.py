@@ -2,7 +2,7 @@ import attr, os
 
 from mavetools.client.client import Client
 from mavetools.models.licence import Licence
-from mavetools.models.scoreset import NewScoreSet, NewScoreSetRequest, ScoreSet
+from mavetools.models.scoreset import NewScoreSet, NewScoreSetRequest
 from mavetools.models.target import (
     NewTarget,
     ReferenceGenome,
