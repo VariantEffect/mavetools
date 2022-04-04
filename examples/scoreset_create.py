@@ -1,4 +1,4 @@
-import attr, os
+import os
 
 from mavetools.client.client import Client
 from mavetools.models.licence import Licence
