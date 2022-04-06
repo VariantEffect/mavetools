@@ -76,7 +76,7 @@ class TestIsNumeric(unittest.TestCase):
         self.assertTrue(utilities.is_numeric(float))
 
     def test_true_for_np_int(self):
-        self.assertTrue(utilities.is_numeric(np.int))
+        self.assertTrue(utilities.is_numeric(int))
 
     def test_false_for_str(self):
         self.assertFalse(utilities.is_numeric(str))
