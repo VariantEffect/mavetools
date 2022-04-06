@@ -85,7 +85,7 @@ class TestIsNumeric(unittest.TestCase):
         self.assertFalse(utilities.is_numeric(object))
 
     def test_false_for_np_object(self):
-        self.assertFalse(utilities.is_numeric(np.object))
+        self.assertFalse(utilities.is_numeric(object))
 
 
 class TestNucleotideSubstitutionEvent(unittest.TestCase):
