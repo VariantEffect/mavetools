@@ -485,7 +485,7 @@ class TestEnrich2ParseRow(ProgramTestCase):
             ),
         )
 
-    @patch("mavetools.enrich2.enrich2.apply_offset", return_value="c.3T>C (p.Thr1=)")
+    @patch("mavetools.convert.enrich2.enrich2.apply_offset", return_value="c.3T>C (p.Thr1=)")
     def test_calls_apply_offset_to_variant(self, patch):
         variant = "c.3T>C (p.=)"
         self.enrich2.parse_row((variant, None))
