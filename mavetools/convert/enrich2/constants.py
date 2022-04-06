@@ -1,3 +1,4 @@
+# TODO compare constants to constants in MaveCore, may be able to replace
 import re
 
 MAX_ERROR_VARIANTS = 5
