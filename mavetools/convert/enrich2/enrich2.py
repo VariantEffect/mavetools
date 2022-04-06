@@ -519,7 +519,7 @@ class Enrich2(base.BaseProgram):
 
         # strip parens from protein variants
         for i, variant in enumerate(variants):
-            if constants.surrounding_brackets_re.fullmatch(variant):
+            if re.fullmatch(constants.surrounding_brackets_re, variant):
                 variant = variant[1:-1]
             variants[i] = utilities.format_variant(variant)
 
