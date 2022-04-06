@@ -49,9 +49,9 @@ class HGVSPatternsBackend(ValidationBackend):
         if variant in constants.special_variants:
             return variant
         #single_match = hgvsp.single_variant_re.fullmatch(variant)
-        single_match = dna.dna_single_variant.fullmatch(variant)
+        single_match = re.fullmatch(dna.dna_single_variant, variant)
         #multi_match = hgvsp.multi_variant_re.fullmatch(variant)
-        multi_match = dna.dna_multi_variant.fullmatch(variant)
+        multi_match = re.fullmatch(dna.dna_multi_variant, variant)
         if not (single_match or multi_match):
             raise exceptions.HGVSValidationError(
                 "'{}' is not valid HGVS syntax.".format(variant)
