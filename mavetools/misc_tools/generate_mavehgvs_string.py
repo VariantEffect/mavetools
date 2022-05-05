@@ -8,8 +8,8 @@ def generate_mavehgvs_string(prefix, wt, mutant, index):
 
     Parameters
     ----------
-    prefix: List[str]
-        A list of mavehgvs prefixes describing the variant return types (e.g., "c", "p", et cetera).
+    prefix: str
+        A mavehgvs prefix describing the variant return type (e.g., "c", "p", et cetera).
     wt: str
         Wildtype amino acid or codon or base.
     mutant: str
@@ -19,8 +19,8 @@ def generate_mavehgvs_string(prefix, wt, mutant, index):
 
     Returns
     -------
-    List[str]
-        A list of mavehgvs formatted strings.
+    str
+        A mavehgvs formatted string.
 
     Raises
     ______
