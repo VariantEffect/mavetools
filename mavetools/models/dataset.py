@@ -57,8 +57,7 @@ class Dataset(TimeStamped, Urn):
     extra_metadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
 
     def deserialize():
-        # why pass?
-        pass
+        raise NotImplementedError()
 
 
 @attr.s
