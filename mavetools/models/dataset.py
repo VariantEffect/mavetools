@@ -37,29 +37,27 @@ class Dataset(TimeStamped, Urn):
     """
     Instantiates Dataset object and declares attributes
     """
-
+    # record keeping attributes
     publish_date: str = attr.ib(kw_only=True)
     created_by: str = attr.ib(kw_only=True)
     modified_by: str = attr.ib(kw_only=True)
-    # optional attributes
-    approved: Optional[str] = attr.ib(kw_only=True, default=None)
-    private: Optional[bool] = attr.ib(kw_only=True, default=None)
-    last_child_value: Optional[Any] = attr.ib(kw_only=True, default=None)
-    # optional attribute
-    extra_metadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
-    abstract_text: str = attr.ib(kw_only=True)
-    method_text: str = attr.ib(kw_only=True)
+
+    # required attributes
     short_description: str = attr.ib(kw_only=True)
     title: str = attr.ib(kw_only=True)
+    contributors: List[str] = attr.ib(kw_only=True)
+
+    # optional attribute
+    abstract_text: str = attr.ib(kw_only=True)
+    method_text: str = attr.ib(kw_only=True)
     keywords: List[Keyword] = attr.ib(kw_only=True)
     sra_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
     doi_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
     pubmed_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    contributors: List[str] = attr.ib(kw_only=True)
+    extra_metadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
 
     def deserialize():
-        # why pass?
-        pass
+        raise NotImplementedError()
 
 
 @attr.s
@@ -68,8 +66,10 @@ class NewDataset:
     Instantiates NewDataset object and declares object attributes
     """
 
+    # required attributes
     title: str = attr.ib(kw_only=True)
     short_description: str = attr.ib(kw_only=True)
+
     # optional attributes
     abstract_text: Optional[str] = attr.ib(kw_only=True, default=None)
     method_text: Optional[str] = attr.ib(kw_only=True, default=None)

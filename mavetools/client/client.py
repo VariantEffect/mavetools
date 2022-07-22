@@ -71,6 +71,12 @@ class Client:
 
         Returns
         -------
+        requests.model.Response
+            The HTTP response object from the request, which contains the URN
+            of the newly-created model in the `Response.text` field.
+
+        Raises
+        ------
         AuthTokenMissingException
             If the auth_token is missing
         """
@@ -100,3 +106,6 @@ class Client:
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {model_instance}!")
+
+        # return the HTTP response
+        return r
