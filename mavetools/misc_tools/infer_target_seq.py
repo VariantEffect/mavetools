@@ -40,7 +40,10 @@ def infer_target_seq(variant_list):
         if variant.is_multi_variant() is False:
             if variant.variant_type == 'sub':
                 # check if variant is protein data
+                # TODO consider using is_protein method
                 if str(variant.positions)[0] in "ACGHILMOPSTV":  # protein variant
+                    print(str(variant.positions))
+                    print(str(variant.positions)[0])
                     # get position, target_base of variant
                     position = int(str(variant.positions)[3:])
                     target_aa = str(variant.positions)[:-len(str(position))]
@@ -52,6 +55,8 @@ def infer_target_seq(variant_list):
                     target_aa = list(aa_dict.keys())[list(aa_dict.values()).index(target_aa)]
                     target_seq = target_seq[0:position - 1] + target_aa + target_seq[position:]
                 else:  # nucleotide variant
+                    print(str(variant.positions))
+                    print(str(variant.positions)[0])
                     # get position, target_base of variant
                     position = int(str(variant.positions))
                     target_base = str(variant.sequence[0])
