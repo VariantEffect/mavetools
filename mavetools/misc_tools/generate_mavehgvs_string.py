@@ -1,4 +1,6 @@
 from mavehgvs.variant import Variant
+import mavehgvs
+import pandas as pd
 
 def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=False):
     """
