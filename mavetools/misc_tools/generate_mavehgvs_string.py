@@ -38,7 +38,7 @@ def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=Fa
     # validate arguments
 
     # if p is in prefix
-
-
+    if prefix == "p":
+        hgvs = protein_mavehgvs(wt, mutant, position)
     # if c or n is in prefix
 
