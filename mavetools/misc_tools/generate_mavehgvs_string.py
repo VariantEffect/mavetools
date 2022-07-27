@@ -3,7 +3,7 @@ from mavehgvs.variant import Variant
 def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=False):
     """
     This function generates a mavehgvs formatted string from a valid prefix, the wt amino acid, codon or base, the
-    mutant amino acid, codon or base, and the index. An error will be thrown if incompatible values are passed
+    mutant amino acid, codon or base, and the position. An error will be thrown if incompatible values are passed
     together.
 
     Parameters
@@ -14,7 +14,7 @@ def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=Fa
         Wildtype amino acid or codon or base.
     mutant: str
         Mutant amino acid, codon or base.
-    index: int
+    position: int
         Location of variant in target sequence.
 
     Returns
