@@ -43,3 +43,15 @@ def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=Fa
     # if c or n is in prefix
     elif prefix == "c" or prefix == "n":
 
+
+    return hgvs
+
+def protein_mavehgvs(wt, mutant, position: int):
+    if pd.isna(position): return None
+    if wt == mutant:
+        hgvs = "p." + wt + str(position) + "="
+    else:
+        hgvs = "p." + wt + str(position) + mutant
+    # validate variant
+    hgvs_validate = mavehgvs.Variant(hgvs)
+    return hgvs #, hgvs_validate
