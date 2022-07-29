@@ -2,10 +2,104 @@ import json
 import logging
 import requests
 import sys
+import os
+
+from mavetools.models.scoreset import ScoreSet
+from mavetools.models.ml_tools import MlExperiment
+
+class ClientTemplate:
+    def parse_json_scoreset_list(self, scoreset_list, keywords = None, organisms = None, retrieve_json_only = False, experiment_types = None):
+        if keywords is not None:
+            keywords = set(keywords)
+
+        if organisms is not None:
+            organisms = set(organisms)
+
+        if experiment_types is not None:
+            experiment_types = set(experiment_types)
+
+        experiment_dict = {}
+        for scoreset in scoreset_list:
+            if keywords is not None:
+                keyword_match = False
+                for keyword in scoreset['keywords']:
+                    if keyword['text'] in keywords:
+                        keyword_match = True
+                if not keyword_match:
+                    continue
+
+            if organisms is not None:
+                if not scoreset['target']['reference_maps'][0]['genome']['organism_name'] in organisms:
+                    continue
+
+            if experiment_types is not None:
+                if not scoreset['target']['type'] in experiment_types:
+                    continue
+
+            urn = scoreset['urn']
+
+            if retrieve_json_only:
+                experiment_dict[urn] = scoreset
+                continue
+
+            scoreset_obj = ScoreSet.deserialize(scoreset)
+
+            experiment_urn = scoreset_obj.experiment
+
+            if not experiment_urn in experiment_dict:
+                experiment_dict[experiment_urn] = MlExperiment(experiment_urn, {}, scoreset_obj)
+
+            experiment_dict[experiment_urn].scoreset_dict[urn] = scoreset_obj
+
+        return experiment_dict
+
+class LocalClient(ClientTemplate):
+    def __init__(self, local_instance_path):
+        self.local_instance_path = local_instance_path
+        self.meta_data_folder = f'{local_instance_path}/meta_data/'
+        self.scoreset_data_folder = f'{local_instance_path}/scoreset_data/'
+
+    def get_meta_file_path(self, urn):
+        return f'{self.meta_data_folder}/{urn}.json'
+
+    def load_meta_data(self, filepath):
+        f = open(filepath, 'r')
+        meta_data = json.load(f)
+        f.close()
+        return meta_data
+
+    def get_meta_data(self, urn):
+        return self.load_meta_data(self.get_meta_file_path(urn))
+
+    def search_database(self, keywords = None, organisms = None, experiment_types = ['Protein coding']):
+        scoreset_list = []
+        for meta_data_file in os.listdir(self.meta_data_folder):
+            meta_data_file = f'{self.meta_data_folder}{meta_data_file}'
+
+            meta_data = self.load_meta_data(meta_data_file)
+
+            scoreset_list.append(meta_data)
+
+        experiment_dict = self.parse_json_scoreset_list(scoreset_list, keywords = keywords, organisms = organisms, experiment_types = experiment_types)
+
+        return experiment_dict
+
+    def get_experiment_dict(self, urns):
+        scoreset_list = []
+        for urn in urns:
+            scoreset_list.append(self.get_meta_data(urn))
+        return self.parse_json_scoreset_list(scoreset_list)
+
+    def retrieve_score_table(self, urn):
+        score_table_file = f'{self.scoreset_data_folder}/{urn}.csv'
+        f = open(score_table_file, 'r')
+        text = f.read()
+        f.close()
+        return text
 
 
-class Client:
-    def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
+class Client(ClientTemplate):
+    def __init__(self, base_url="https://www.mavedb.org/api/", auth_token=""):
         """
         Instantiates the Client object and sets the values for base_url and
         auth_token
@@ -23,6 +117,57 @@ class Client:
 
     class AuthTokenMissingException(Exception):
         pass
+
+    def clone(self, local_instance_path):
+        if not os.path.exists(local_instance_path):
+            os.mkdir(local_instance_path)
+        meta_data_folder = f'{local_instance_path}/meta_data/'
+        if not os.path.exists(meta_data_folder):
+            os.mkdir(meta_data_folder)
+        scoreset_data_folder = f'{local_instance_path}/scoreset_data/'
+        if not os.path.exists(scoreset_data_folder):
+            os.mkdir(scoreset_data_folder)
+
+        entry_dict = self.search_database(retrieve_json_only = True)
+        for urn in entry_dict:
+            meta_file = f'{meta_data_folder}/{urn}.json'
+
+            f = open(meta_file,'w')
+            json.dump(entry_dict[urn], f)
+            f.close()
+
+            score_table_file = f'{scoreset_data_folder}/{urn}.csv'
+
+            f = open(score_table_file, 'w')
+            f.write(self.retrieve_score_table(urn))
+            f.close()
+
+    def search_database(self, keywords = None, organisms = None, retrieve_json_only = False, experiment_types = ['Protein coding']):
+        search_page_url = f'{self.base_url}/scoresets'
+        try:
+            r = requests.get(search_page_url)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            logging.error(r.json())
+            raise SystemExit(e)
+
+        scoreset_list = r.json()
+
+        experiment_dict = self.parse_json_scoreset_list(scoreset_list, keywords = keywords, organisms = organisms, retrieve_json_only = retrieve_json_only)
+
+        return experiment_dict
+
+    def retrieve_score_table(self, urn):
+        base_parent = self.base_url.replace('api/','')
+        score_table_url = f'{base_parent}scoreset/{urn}/scores/'
+        try:
+            r = requests.get(score_table_url)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            logging.error(r.json())
+            raise SystemExit(e)
+        return r.text
+
 
     def get_model_instance(self, model_class, instance_id):
         """
