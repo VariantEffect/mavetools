@@ -8,11 +8,17 @@ from mavetools.models.experiment import Experiment
 from mavetools.models.scoreset import ScoreSet
 
 
-class Client:
-    def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
+class Client(BaseClient):
+    """
+
+    """
+
+    def get_experiment(self, instance_id):
         """
-        Instantiates the Client object and sets the values for base_url and
-        auth_token
+        Using a GET, hit an API endpoint to get info on a particular instance
+        of a model class such as a ScoreSet.
+        This will perform the HTTP GET request and then let the class itself
+        parse the JSON data.
 
         Parameters
         ----------
