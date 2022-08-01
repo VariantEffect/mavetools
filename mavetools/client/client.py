@@ -73,8 +73,8 @@ class Client(BaseClient):
 
         Parameters
         ----------
-        model_instance
-            instance of model that will be POSTed
+        scoreset: ScoreSet
+            Instance of the scoreset that will be POSTed.
 
         Returns
         -------
