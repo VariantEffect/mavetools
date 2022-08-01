@@ -87,7 +87,7 @@ class Client(BaseClient):
         AuthTokenMissingException
             If the auth_token is missing
         """
-        return self.post_model_instance(model_instance)
+        return self.post_model_instance(scoreset)
 
 
 
