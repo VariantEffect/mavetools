@@ -21,17 +21,17 @@ class ScoreSet(APIObject, Dataset):
     licenceId: Licence = attr.ib(kw_only=True)
     targetGene: Target = attr.ib(kw_only=True)
     # optional attributes
-    dataset_columns: Optional[Any] = attr.ib(kw_only=True, default=None)
-    replaces: Optional[str] = attr.ib(kw_only=True, default=None)
-    score_columns: List[str] = attr.ib(kw_only=True)
-    count_columns: List[str] = attr.ib(kw_only=True)
+    datasetColumns: Optional[Any] = attr.ib(kw_only=True, default=None)
+    replacesId: Optional[str] = attr.ib(kw_only=True, default=None)
+    #score_columns: Optional[List[str] = attr.ib(kw_only=True)#TODO see how these should be structured within DatasetColumns
+    #count_columns: Optional[List[str]] = attr.ib(kw_only=True)#
     # optional attributes
     previous_version: Optional[str] = attr.ib(kw_only=True, default=None)
     next_version: Optional[str] = attr.ib(kw_only=True, default=None)
-    current_version: str = attr.ib(kw_only=True)
-    variant_count: int = attr.ib(kw_only=True)
-    data_usage_policy: str = attr.ib(kw_only=True)
-    is_meta_analysis: bool = attr.ib(kw_only=True)
+    #current_version: Optional[str] = attr.ib(kw_only=True)
+    numVariants: int = attr.ib(kw_only=True)
+    dataUsagePolicy: str = attr.ib(kw_only=True)
+    is_meta_analysis: Optional[bool] = attr.ib(kw_only=True, default=None)
 
     def api_url() -> str:
         """
