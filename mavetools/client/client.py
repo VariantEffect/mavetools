@@ -38,9 +38,7 @@ class Client(BaseClient):
         ValueError
             If any mandatory fields are missing.
         """
-        self.base_url = base_url
-        if auth_token:
-            self.auth_token = auth_token
+        return self.get_model_instance(Experiment, instance_id)
 
     class AuthTokenMissingException(Exception):
         pass
