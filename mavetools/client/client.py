@@ -112,6 +112,7 @@ class Client(BaseClient):
         AuthTokenMissingException
             If the auth_token is missing
         """
+        return self.post_model_instance(model_instance)
 
         # save object type of model_instance
         model_class = type(model_instance)
