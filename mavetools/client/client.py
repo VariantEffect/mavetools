@@ -20,11 +20,8 @@ class Client(BaseClient):
 
         Parameters
         ----------
-        model_class : ModelClass
-            The model class we want to which we want to cast the response.
-            (e.g., Experiment or Scoreset)
-        instance_id : str
-            The id of the object we are retrieving.
+        urn : str
+            The URN of the experiment to be retrieved.
 
         Returns
         -------
