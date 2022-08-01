@@ -18,8 +18,8 @@ class ScoreSet(APIObject, Dataset):
     """
 
     experiment: str = attr.ib(kw_only=True)
-    licence: Licence = attr.ib(kw_only=True)
-    target: Target = attr.ib(kw_only=True)
+    licenceId: Licence = attr.ib(kw_only=True)
+    targetGene: Target = attr.ib(kw_only=True)
     # optional attributes
     dataset_columns: Optional[Any] = attr.ib(kw_only=True, default=None)
     replaces: Optional[str] = attr.ib(kw_only=True, default=None)
