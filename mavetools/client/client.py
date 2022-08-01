@@ -10,7 +10,8 @@ from mavetools.models.scoreset import ScoreSet
 
 class Client(BaseClient):
     """
-
+    The Client object inherits the BaseClient and upon instantiation sets the base url where API requests will be made.
+    CRUD operations can be made using the client object.
     """
 
     def get_experiment(self, urn):
