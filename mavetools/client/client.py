@@ -51,8 +51,8 @@ class Client(BaseClient):
 
         Parameters
         ----------
-        model_instance
-            instance of model that will be POSTed
+        experiment: Experiment
+            Instance of the experiment that will be POSTed.
 
         Returns
         -------
