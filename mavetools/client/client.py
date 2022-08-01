@@ -68,7 +68,30 @@ class Client(BaseClient):
         return self.get_model_instance(ScoreSet, instance_id)
 
 
-    def post_model_instance(self, model_instance):
+    def post_experiment(self, model_instance):
+        """
+        Using a POST, hit an API endpoint to post a resource.
+        Performs HTTP POST request.
+
+        Parameters
+        ----------
+        model_instance
+            instance of model that will be POSTed
+
+        Returns
+        -------
+        requests.model.Response
+            The HTTP response object from the request, which contains the URN
+            of the newly-created model in the `Response.text` field.
+
+        Raises
+        ------
+        AuthTokenMissingException
+            If the auth_token is missing
+        """
+        return self.post_model_instance(model_instance)
+
+    def post_scoreset(self, model_instance):
         """
         Using a POST, hit an API endpoint to post a resource.
         Performs HTTP POST request.
