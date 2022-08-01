@@ -29,7 +29,7 @@ class Client(BaseClient):
         """
         return self.get_model_instance(Experiment, urn)
 
-    def get_scoreset(self, instance_id):
+    def get_scoreset(self, urn):
         """
         Using a GET, hit an API endpoint to get info on a particular instance
         of a model class such as a ScoreSet.
