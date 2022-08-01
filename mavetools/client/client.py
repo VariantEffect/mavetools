@@ -43,7 +43,7 @@ class Client(BaseClient):
         -------
         The scoreset requested.
         """
-        return self.get_model_instance(ScoreSet, instance_id)
+        return self.get_model_instance(ScoreSet, urn)
 
 
     def post_experiment(self, model_instance):
