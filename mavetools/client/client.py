@@ -22,10 +22,21 @@ class Client(BaseClient):
 
         Parameters
         ----------
-        base_url: the url in which the api endpoint exists
-            default: 'http://127.0.0.1:8000/api/'
-        auth_token: authorizes POST requests via the API and MaveDB
-            default: ''
+        model_class : ModelClass
+            The model class we want to which we want to cast the response.
+            (e.g., Experiment or Scoreset)
+        instance_id : str
+            The id of the object we are retrieving.
+
+        Returns
+        -------
+        model_instance
+            An instance of the passed class.
+
+        Raises
+        ------
+        ValueError
+            If any mandatory fields are missing.
         """
         self.base_url = base_url
         if auth_token:
