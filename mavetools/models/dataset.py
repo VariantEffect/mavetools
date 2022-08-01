@@ -52,9 +52,13 @@ class Dataset(TimeStamped, Urn):
     methodText: str = attr.ib(kw_only=True)
     keywords: List[Keyword] = attr.ib(kw_only=True)
     sra_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    doi_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    pubmed_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    extra_metadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
+    doiIdentifiers: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    pubmedIdentifiers: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    extraMetadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
+
+    # TODO check where these belong
+    processingState: str = attr.ib(kw_only=True, default=None)  # TODO check type of this variable
+    private: bool = attr.ib(kw_only=True, default=True)
 
     def deserialize():
         raise NotImplementedError()
@@ -78,3 +82,6 @@ class NewDataset:
     doi_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
     sra_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
     pubmed_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
+
+    # TODO check where these belong
+    private: bool = attr.ib(kw_only=True, default=True)
