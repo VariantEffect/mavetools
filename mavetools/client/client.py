@@ -69,8 +69,7 @@ class Client(BaseClient):
 
     def create_scoreset(self, scoreset):
         """
-        Using a POST, hit an API endpoint to post a resource.
-        Performs HTTP POST request.
+        Hit an API endpoint to post a scoreset.
 
         Parameters
         ----------
