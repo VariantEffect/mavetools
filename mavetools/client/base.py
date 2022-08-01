@@ -61,8 +61,8 @@ class BaseClient:
         except requests.exceptions.HTTPError as e:
             logging.error(r.json())
             raise SystemExit(e)
-        #return model_class.deserialize(r.json())
-        return r.json()
+        return model_class.deserialize(r.json())
+        #return r.json()
 
     def post_model_instance(self, model_instance):
         """
