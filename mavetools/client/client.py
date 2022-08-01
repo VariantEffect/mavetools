@@ -45,8 +45,7 @@ class Client(BaseClient):
         """
         return self.get_model_instance(ScoreSet, urn)
 
-
-    def post_experiment(self, model_instance):
+    def create_experiment(self, experiment):
         """
         Using a POST, hit an API endpoint to post a resource.
         Performs HTTP POST request.
