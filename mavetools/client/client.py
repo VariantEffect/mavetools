@@ -31,10 +31,8 @@ class Client(BaseClient):
 
     def get_scoreset(self, urn):
         """
-        Using a GET, hit an API endpoint to get info on a particular instance
-        of a model class such as a ScoreSet.
-        This will perform the HTTP GET request and then let the class itself
-        parse the JSON data.
+        Hit an API endpoint to get instance of scoreset by passing the experiment URN value.
+        Parsed JSON data is returned.
 
         Parameters
         ----------
