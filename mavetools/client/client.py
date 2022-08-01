@@ -114,31 +114,6 @@ class Client(BaseClient):
         """
         return self.post_model_instance(model_instance)
 
-        # save object type of model_instance
-        model_class = type(model_instance)
-        model_url = f"{self.base_url}{model_class.api_url()}/"
-        payload, files = model_instance.post_payload()
 
-        # check for existance of self.auth_token, raise error if does not exist
-        if not self.auth_token:
-            error_message = "Need to include an auth token for POST requests!"
-            logging.error(error_message)
-            raise AuthTokenMissingException(error_message)
 
-        try:  # to post data
-            r = requests.post(
-                model_url,
-                data={"request": json.dumps(payload)},
-                files=files,
-                headers={"Authorization": (self.auth_token)},
-            )
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            logging.error(r.text)
-            sys.exit(1)
 
-        # No errors or exceptions at this point, log successful upload
-        logging.info(f"Successfully uploaded {model_instance}!")
-
-        # return the HTTP response
-        return r
