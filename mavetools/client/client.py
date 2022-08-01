@@ -65,15 +65,8 @@ class Client(BaseClient):
         ValueError
             If any mandatory fields are missing.
         """
-        model_url = f"{self.base_url}{model_class.api_url()}"
-        instance_url = f"{model_url}{instance_id}/"
-        try:
-            r = requests.get(instance_url)
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            logging.error(r.json())
-            raise SystemExit(e)
-        return model_class.deserialize(r.json())
+        return self.get_model_instance(ScoreSet, instance_id)
+
 
     def post_model_instance(self, model_instance):
         """
