@@ -27,7 +27,7 @@ class Client(BaseClient):
         -------
         The experiment requested.
         """
-        return self.get_model_instance(Experiment, instance_id)
+        return self.get_model_instance(Experiment, urn)
 
     def get_scoreset(self, instance_id):
         """
