@@ -25,13 +25,7 @@ class Client(BaseClient):
 
         Returns
         -------
-        model_instance
-            An instance of the passed class.
-
-        Raises
-        ------
-        ValueError
-            If any mandatory fields are missing.
+        The experiment requested.
         """
         return self.get_model_instance(Experiment, instance_id)
 
