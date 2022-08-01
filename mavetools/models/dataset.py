@@ -45,7 +45,8 @@ class Dataset(TimeStamped, Urn):
     # required attributes
     shortDescription: str = attr.ib(kw_only=True)
     title: str = attr.ib(kw_only=True)
-    contributors: List[str] = attr.ib(kw_only=True)
+    # TODO check if this should be optional
+    contributors: Optional[List[str]] = attr.ib(kw_only=True, default=None)
 
     # optional attribute
     abstractText: str = attr.ib(kw_only=True)
