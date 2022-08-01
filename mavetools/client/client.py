@@ -3,6 +3,10 @@ import logging
 import requests
 import sys
 
+from .base import BaseClient
+from mavetools.models.experiment import Experiment
+from mavetools.models.scoreset import ScoreSet
+
 
 class Client:
     def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
