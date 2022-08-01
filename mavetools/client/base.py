@@ -8,6 +8,7 @@ class BaseClient:
     """
     The BaseClient object upon instantiation sets the base url where API requests will be made.
     """
+
     def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
         """
         Instantiates the Client object and sets the values for base_url and
