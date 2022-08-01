@@ -13,7 +13,7 @@ class Client(BaseClient):
 
     """
 
-    def get_experiment(self, instance_id):
+    def get_experiment(self, urn):
         """
         Using a GET, hit an API endpoint to get info on a particular instance
         of a model class such as a ScoreSet.
