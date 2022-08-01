@@ -95,7 +95,7 @@ class BaseClient:
         if not self.auth_token:
             error_message = "Need to include an auth token for POST requests!"
             logging.error(error_message)
-            raise AuthTokenMissingException(error_message)
+            raise self.AuthTokenMissingException(error_message)
 
         try:  # to post data
             r = requests.post(
