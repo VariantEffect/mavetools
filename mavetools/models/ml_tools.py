@@ -2,17 +2,66 @@ from mavetools.models.scoreset import ScoreSetData
 from mavetools.models.utils import apply_offset_to_hgvs_pro, check_offset
 
 class MlExperiment:
+
+    """
+    Class that represents one experiment.
+    """
+
     def __init__(self, urn, scoreset_dict, scoreset):
+
+        """
+        Initializes an instance of the ML experiment class.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier of the experiment
+
+        scoreset_dict
+            A dictionary of all scoreset metdata objects belonging to the experiment.
+
+        scoreset
+            A representative metadata object for the experiment.
+        """
+
         self.urn = urn
         self.scoreset_dict = scoreset_dict
         self.representative_scoreset_metadata = scoreset
 
 
 class MlDataset:
+
+    """
+    A class that represents a dataset of experiments determined for the usage in ML tools.
+    """
+
     def __init__(self, experiments):
+
+        """
+        Initializes an instance of the ML dataset class.
+
+        Parameters
+        ----------
+
+        experiments
+            A dictionary mapping MaveDB urn identifiers to their corresponding ML experiment objects.
+        """
+
         self.experiments = experiments
 
     def retrieve_data(self, client):
+
+        """
+        Uses a client object to download (or look up) the scoretables for all the scoresets in the dataset.
+
+        Parameters
+        ----------
+
+        client
+            A client object, see client.py for more information.
+        """
+
         for experiment_urn in self.experiments:
             for scoreset_urn in self.experiments[experiment_urn].scoreset_dict:
                 csv_table = client.retrieve_score_table(scoreset_urn)
@@ -20,6 +69,14 @@ class MlDataset:
                 self.experiments[experiment_urn].scoreset_dict[scoreset_urn].scoresetdata = ScoreSetData(scoreset_urn, csv_table, hgvs_pro_pos = hgvs_pro_pos, score_pos = score_pos, hgvs_nt_pos = hgvs_nt_pos)
 
     def aggregate_scoresetdata(self):
+
+        """
+        For all experiments aggregates multiple scoresets corresponding to one experiment.
+        Retrieves the full target protein sequence of the experiment.
+        Checks all the offset values given in the metadata and maps all variations to the full target sequence.
+        Effect values occupying the same position gets averaged.
+        """
+
         for experiment_urn in self.experiments:
             
             experiment_scoresetdata = ScoreSetData(experiment_urn, '')
@@ -84,12 +141,45 @@ class MlDataset:
             self.experiments[experiment_urn].experiment_scoresetdata = experiment_scoresetdata
 
     def scale_all_savs(self, verbosity = 0):
+
+        """
+        Applies to effect value scaling to all SAV effect scores in the experiment.
+
+        Parameters
+        ----------
+
+        verbosity
+            Verbosity level of the function.
+        """
+
         for experiment_urn in self.experiments:
             if len(self.experiments[experiment_urn].experiment_scoresetdata.sav_scores) == 0:
                 continue
             self.experiments[experiment_urn].experiment_scoresetdata.scale_sav_data(verbosity = verbosity)
 
     def write_scaled_sav_fasta(self, outfile, sequences_only_file = None):
+
+        """
+        Writes scaled SAV effect scores together with their full target protein sequences to a fasta file.
+        The fasta file has a non-standard format:
+
+            >[Sequence identifier]
+            <[hgvs_pro identifier] #scaled_effect:[scaled effect value]
+            <[hgvs_pro identifier] #scaled_effect:[scaled effect value]
+            <[hgvs_pro identifier] #scaled_effect:[scaled effect value]
+            ...
+            [The sequence]
+
+        Parameters
+        ----------
+
+        outfile
+            Path to where the fasta file should be written.
+
+        sequences_only_file
+            When not None, gives a path where a classical fasta gets written omitting the variation information.
+        """
+
         fasta_lines = []
         seq_only_lines = []
         for experiment_urn in self.experiments:
@@ -127,22 +217,3 @@ class MlDataset:
             f.write(''.join(seq_only_lines))
             f.close()
 
-def create_sav_ml_dataset(client, scoreset_dict, outfile):
-    fasta_lines = []
-    for urn in scoreset_dict:
-        csv_table = client.retrieve_score_table(urn)
-        scoresetdata = ScoreSetData(csv_table)
-        normalized_sav_scores = scoresetdata.normalize_sav_data()
-        seq = scoreset_dict[urn].get_protein_sequence()
-
-        headline = f'>{scoreset_dict[urn].target.name}\n'
-        fasta_lines.append(headline)
-        for hgvs_pro in normalized_sav_scores:
-            variant_line = f'<{hgvs_pro} {normalized_sav_scores[hgvs_pro]}\n'
-            fasta_lines.append(variant_line)
-
-        fasta_lines.append(f'{seq}\n')
-
-    f = open(outfile, 'w')
-    f.write(''.join(fasta_lines))
-    f.close()

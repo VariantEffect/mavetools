@@ -90,7 +90,45 @@ class ScoreSet(APIObject, Dataset):
         return hgvs_pro_pos, hgvs_nt_pos, score_pos
 
 class ScoreSetData:
+
+    """
+    This class represents the score tables for a corresponding scoresheet.
+    Can also represent score tables for a corresponding experiment,
+    in that case the scoretables from all scoresheets belonging to the experiment
+    got aggregated (see aggregate_scoresetdata function of MLdataset class in ml_tools.py).
+    """
+
     def __init__(self, urn, csv_formatted_data, hgvs_pro_pos = None, score_pos = None, hgvs_nt_pos = None):
+
+        """
+        Initialization routine that builds a class instance from the content of a MaveDB scoreset table.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier
+
+        csv_formatted_data
+            Content of a MaveDB scoreset table.
+
+        hgvs_pro_pos
+            Column number of the column that contains the hgvs_pro identifiers.
+
+        score_pos
+            Column number of the column that contains the experimental effect values.
+
+        hgvs_pro_pos
+            Column number of the column that contains the hgvs_nt identifiers.
+
+        Returns
+        -------
+
+        class_instance
+            Instance of ScoreSetData class.
+        """
+
+        #Initialize several class attributes
         self.urn = urn
         self.score_dict = {}
         self.nt_score_dict = {}
@@ -105,6 +143,9 @@ class ScoreSetData:
         self.cardinality = 0
         self.sav_cardinality = 0
         self.sorted_sav_values = None
+
+        #Parse the table
+
         lines = csv_formatted_data.split('\n')
         for line in lines:
             if line == '':
@@ -112,6 +153,8 @@ class ScoreSetData:
             if line[0] == '#':
                 continue
             words = line.split(',')
+
+            #In case their is a header row, parse the hgvs_pro, hgvs_nt, and effect column numbers
             if words[0][:4] != 'urn:':
                 for pos, word in enumerate(words):
                     if word == 'hgvs_pro':
@@ -126,10 +169,13 @@ class ScoreSetData:
                 try:
                     score = float(words[score_pos])
                 except:
+                    #Debugging help, can be removed, when better sanity checks are implemented
                     print(score_pos)
                     print(words[score_pos])
                     print(lines[10:])
                     sys.exit()
+
+                #Retrieve the column values and write them to their corresponding class attribute datastructures
                 hgvs_pro = words[hgvs_pro_pos]
                 hgvs_nt = words[hgvs_nt_pos]
 
@@ -140,9 +186,15 @@ class ScoreSetData:
                 else:
                     continue
 
+        #Get some basic information of the data
+
         for hgvs_pro in self.score_dict:
             score = self.score_dict[hgvs_pro]
             self.cardinality += 1
+
+            #Dependant on the variant type, we need to do different things later
+            #For now, store separately synonymous variants and single amino acid variations
+            #There is perhaps the need to implement similar datastructures for indels and non-coding variations.
             variant_type = get_variant_type(hgvs_pro)
 
             if self.min_score is None:
@@ -179,6 +231,17 @@ class ScoreSetData:
 
 
     def get_sorted_sav_values(self):
+
+        """
+        Sorts the SAV effect values and stores them, so if called again, the sorting don't has to be recalculated again.
+
+        Returns
+        -------
+
+        self.sorted_sav_values
+            Pointer to the sorted sav value datastructure.
+        """
+
         if self.sorted_sav_values is not None:
             return self.sorted_sav_values
         else:
@@ -186,6 +249,17 @@ class ScoreSetData:
             return self.sorted_sav_values
 
     def sav_binning(self):
+
+        """
+        Creates a 10-bin histogram of all sav scores.
+
+        Returns
+        -------
+
+        bins
+            The calculated histogram
+        """
+
         n_of_bins = 10
 
         sorted_scores = self.get_sorted_sav_values()
@@ -207,6 +281,25 @@ class ScoreSetData:
 
 
     def scale_sav_data(self, verbosity = 0):
+
+        """
+        Scales all sav scores. Scaling is based on a typical neutral effect score and a typical strong effect value.
+        For more details of the scaling process, look into the score_scale_function in utils.py.
+
+
+        Parameters
+        ---------
+
+        verbosity
+            Verbosity level of the function
+
+        Returns
+        -------
+
+        None
+            if the typical neutral effect and the strong effect value are equal, the scaling would be non-sensical
+        """
+
         median_synonymous = median(self.synonymous_scores.values())
         sorted_scores = self.get_sorted_sav_values()
         perc_size = max([1,round(self.sav_cardinality/100)])
@@ -246,6 +339,18 @@ class ScoreSetData:
             self.scaled_sav_scores[hgvs_pro] = scaled_score
 
     def plot_sav_score_distribution(self, outfile):
+
+        """
+        Plots the histogram of the sav scores. Was majorly used for debugging purposes.
+        Could be modified in the future to generate some additional output.
+
+        Parameters
+        ----------
+        
+        outfile
+            Path to file, where the figure file should be written.
+        """
+
         plt.rcParams.update({'figure.figsize':(7,5), 'figure.dpi':100})
         
         data = np.array(list(self.sav_scores.values()))

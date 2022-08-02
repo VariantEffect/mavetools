@@ -8,7 +8,42 @@ from mavetools.models.scoreset import ScoreSet
 from mavetools.models.ml_tools import MlExperiment
 
 class ClientTemplate:
+
+    """
+    Parent class for client classes to inheir.
+    """
+
     def parse_json_scoreset_list(self, scoreset_list, keywords = None, organisms = None, retrieve_json_only = False, experiment_types = None):
+
+        """
+        Parses a list of scoreset metadatas in json format.
+        Creates classes and datastructures that are required to use ML tools features.
+
+        Parameters
+        ----------
+
+        scoreset_list
+            A list of scoreset metadata in json format.
+
+        keywords
+            List of keywords. If not None, filters all scoresets that keywords do not contain any of the given keywords.
+
+        organisms
+            List of organisms. If not None, filters all scoresets that organism is not any of the given organisms.
+
+        retrieve_json_only
+            When True, the function does not create the ML datastructures, but applies all given filters and creatures a ordered experiment-scoreset datastructure of the json objects.
+
+        experiment_types
+            List of experiment types. If not None, filters all scoresets that experiment type is not any of the given experiment types.
+
+        Returns
+        -------
+
+        experiment_dict
+            A dictionary mapping experiment urns to their corresponding MLExperiment objects.
+        """
+
         if keywords is not None:
             keywords = set(keywords)
 
@@ -53,25 +88,113 @@ class ClientTemplate:
 
         return experiment_dict
 
+
 class LocalClient(ClientTemplate):
+
+    """
+    A client class that imitates the original client class to use a local clone of the MaveDB.
+    """
+
     def __init__(self, local_instance_path):
+
+        """
+        Initializes the client instance.
+
+        Parameters
+        ----------
+
+        local_instance_path
+            path the locally stored MaveDB.
+        """
+
         self.local_instance_path = local_instance_path
         self.meta_data_folder = f'{local_instance_path}/meta_data/'
         self.scoreset_data_folder = f'{local_instance_path}/scoreset_data/'
 
     def get_meta_file_path(self, urn):
+        """
+        Getter for filepath of the stored meta data file in the locally cloned MaveDB.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier of the scoreset.
+
+        Returns
+        -------
+
+        path
+            Path to the metadata json-formatted file.
+        """
         return f'{self.meta_data_folder}/{urn}.json'
 
     def load_meta_data(self, filepath):
+
+        """
+        Wrapper function for loading a json-formatted metadata file.
+
+        Parameters
+        ----------
+
+        filepath
+            Path to a json-formatted metadata file.
+
+        Returns
+        -------
+
+        meta_data
+            json object of the metadata.
+        """
+
         f = open(filepath, 'r')
         meta_data = json.load(f)
         f.close()
         return meta_data
 
     def get_meta_data(self, urn):
+
+        """
+        Getter for metadata.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier of a scoreset.
+
+        Returns
+        -------
+        
+        meta_data
+            json object of the metadata.
+        """
+
         return self.load_meta_data(self.get_meta_file_path(urn))
 
     def search_database(self, keywords = None, organisms = None, experiment_types = ['Protein coding']):
+
+        """
+        Searches all scoresets in MaveDB and applies some filters.
+        Parameters
+        ----------
+
+        keywords
+            List of keywords. If not None, filters all scoresets that keywords do not contain any of the given keywords.
+
+        organisms
+            List of organisms. If not None, filters all scoresets that organism is not any of the given organisms.
+
+        experiment_types
+            List of experiment types. If not None, filters all scoresets that experiment type is not any of the given experiment types.
+
+        Returns
+        -------
+
+        experiment_dict
+            A dictionary mapping experiment urns to their corresponding MLExperiment objects.
+        """
+
         scoreset_list = []
         for meta_data_file in os.listdir(self.meta_data_folder):
             meta_data_file = f'{self.meta_data_folder}{meta_data_file}'
@@ -85,12 +208,46 @@ class LocalClient(ClientTemplate):
         return experiment_dict
 
     def get_experiment_dict(self, urns):
+
+        """
+        Generates a experiment_dict containing MLExperiment objects for a list of given urns.
+
+        Parameters
+        ----------
+
+        urns
+            A list of MaveDB urn identifiers.
+
+        Returns
+        -------
+
+        experiment_dict
+            A dictionary mapping experiment urns to their corresponding MLExperiment objects.
+        """
+
         scoreset_list = []
         for urn in urns:
             scoreset_list.append(self.get_meta_data(urn))
         return self.parse_json_scoreset_list(scoreset_list)
 
     def retrieve_score_table(self, urn):
+
+        """
+        Retrieves the score table for an urn.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier of a scoreset.
+
+        Returns
+        -------
+
+        text
+            Scoreset table as a string.
+        """
+
         score_table_file = f'{self.scoreset_data_folder}/{urn}.csv'
         f = open(score_table_file, 'r')
         text = f.read()
@@ -119,6 +276,17 @@ class Client(ClientTemplate):
         pass
 
     def clone(self, local_instance_path):
+
+        """
+        Downloads the whole MaveDB and creates a local clone.
+
+        Parameters
+        ----------
+
+        local_instance_path
+            Path to where the clone should be stored.
+        """
+
         if not os.path.exists(local_instance_path):
             os.mkdir(local_instance_path)
         meta_data_folder = f'{local_instance_path}/meta_data/'
@@ -143,6 +311,28 @@ class Client(ClientTemplate):
             f.close()
 
     def search_database(self, keywords = None, organisms = None, retrieve_json_only = False, experiment_types = ['Protein coding']):
+
+        """
+        Searches all scoresets in MaveDB and applies some filters.
+        Parameters
+        ----------
+
+        keywords
+            List of keywords. If not None, filters all scoresets that keywords do not contain any of the given keywords.
+
+        organisms
+            List of organisms. If not None, filters all scoresets that organism is not any of the given organisms.
+
+        experiment_types
+            List of experiment types. If not None, filters all scoresets that experiment type is not any of the given experiment types.
+
+        Returns
+        -------
+
+        experiment_dict
+            A dictionary mapping experiment urns to their corresponding MLExperiment objects.
+        """
+
         search_page_url = f'{self.base_url}/scoresets'
         try:
             r = requests.get(search_page_url)
@@ -158,6 +348,23 @@ class Client(ClientTemplate):
         return experiment_dict
 
     def retrieve_score_table(self, urn):
+
+        """
+        Retrieves the score table for an urn.
+
+        Parameters
+        ----------
+
+        urn
+            MaveDB urn identifier of a scoreset.
+
+        Returns
+        -------
+
+        text
+            Scoreset table as a string.
+        """
+
         base_parent = self.base_url.replace('api/','')
         score_table_url = f'{base_parent}scoreset/{urn}/scores/'
         try:

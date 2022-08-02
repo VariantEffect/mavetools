@@ -8,6 +8,11 @@ from Bio import Entrez
 from mavetools.models.utils import parseFasta
 
 def is_connected():
+
+    """
+    Tests if there is an active internet connection.
+    """
+
     try:
         # connect to the host -- tells us if the host is actually
         # reachable
@@ -19,12 +24,36 @@ def is_connected():
 
 
 def connection_sleep_cycle():
+
+    """
+    A waiting routine for short internet outages.
+    """
+
     while not is_connected():
         print('No connection, sleeping a bit and then try again')
         time.sleep(30)
 
 
 def getUniprotSequence(uniprot_ac, tries=0):
+
+    """
+    Fetches sequence data from Uniprot database.
+
+    Parameters
+    ----------
+
+    uniprot_ac
+        Uniprot accesion identifier of the protein sequence to fetch.
+
+    tries
+        A count parameter for the trial and error loop for short time internet disconnections.
+
+    Returns
+    -------
+
+    wildtype_sequence
+        Amino acid sequence of the querried protein.
+    """
 
     if uniprot_ac is None:
         print(f'Uniprot Ac is None')
@@ -67,6 +96,7 @@ def get_refseq_sequences(refseqs, seq_type='protein'):
 
     """
     Fetches sequence data from NCBI refseq database.
+    Uses the biopython library.
 
     Parameters
     ----------

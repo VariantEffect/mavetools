@@ -69,6 +69,23 @@ def attrs_serializer(inst, field, value):
 
 
 def get_variant_type(hgvs_pro):
+
+    """
+    Routine to deduce the type of variation from hgvs_pro identifier.
+
+    Parameters
+    ----------
+
+    hgvs_pro
+        hgvs_pro identifier
+
+    Returns
+    -------
+
+    variant_type
+        As string. If variant types are used more in a future implementation, then one should consider to create corresponding classes and datastructures.
+    """
+
     if hgvs_pro == '_wt' or hgvs_pro[-1] == '=' or hgvs_pro == 'p.(=)' or hgvs_pro == '_sy':
         return 'synonymous'
 
@@ -97,6 +114,20 @@ def get_variant_type(hgvs_pro):
 
 
 def median(l):
+
+    """
+    Calculates the median of a list.
+
+    Parameters
+    ----------
+
+    l
+        A list.
+
+    med
+        Median value of the given list.
+    """
+
     n = len(l)
     l = sorted(l)
     if n == 1:
@@ -114,20 +145,72 @@ def score_scale_function(reported_score, median_synonymous, bottom_perc_median):
     """
     Scaling function for variant effect scores.
     Based on 'Analysis of Large-Scale Mutagenesis Data To Assess the Impact of Single Amino Acid Substitutions' doi: 10.1534/genetics.117.300064
-    Slightly improved to work on a broader spectrum of score distributions
+    Slightly improved to work on a broader spectrum of score distributions.
+
+    Parameters
+    ----------
+
+    reported_score
+        Effect value reported in the scoreset table.
+
+    median_synonymous
+        Typical neutral effect value of the corresponding experiment.
+
+    bottom_perc_median
+        Typical strong effect value of the corresponding experiment.
+
+    Returns
+    -------
+
+    scaled_score
+        Scaled effect score.
     """
 
+    #Determine the direction of the effect scores.
     if bottom_perc_median > median_synonymous:
         sign = 1
     else:
         sign = -1
 
+    #Addapted scaling function
     scaled_score = sign * ((reported_score - median_synonymous) / (-1*abs(bottom_perc_median - median_synonymous))) + 1
 
     return scaled_score
 
 
 def parseFasta(path=None, new_file=None, lines=None, page=None, left_split=None, right_split=' '):
+
+    """
+    Parses a fasta file.
+
+    Parameters
+    ----------
+
+    path
+        Path to the fasta file. Can be omitted, if a page or lines is given.
+
+    new_file
+        Path to where the fasta file should be written. Can be used, when not giving an actual input path.
+
+    lines
+        A list of line strings representing the fasta file. Can be omitted, if path or page is given.
+
+    page
+        A string representing the fasta file. Can be omitted, if path or lines is given.
+
+    left_split
+        A character, which can be used to split the Identifier string given after the '>' symbol in the fasta file format.
+
+    right_split
+        A character, which can be used to split the Identifier string given after the '>' symbol in the fasta file format.
+
+    Returns
+    -------
+
+    seq_map
+        A dictionary of sequence identifiers mapping to sequences.
+    """
+
     if lines is None and page is None:
         f = open(path, 'r')
         lines = f.read().split('\n')
@@ -168,12 +251,56 @@ def parseFasta(path=None, new_file=None, lines=None, page=None, left_split=None,
 
 
 def disect_hgvs_pro(hgvs_pro):
+
+    """
+    Routine to split a hgvs_pro into its parts.
+    Works only for SAV-like hgvs_pro identifiers!!!
+
+    Parameters
+    ----------
+
+    hgvs_pro
+        hgvs_pro identifier.
+
+    Returns
+    -------
+
+    left_part
+        Wildtype amino acid of the SAV.
+
+    right_part
+        Mutant amino acid of the SAV.
+
+    pos
+        Position of the SAV in the corresponding protein sequence.
+    """
+
     left_part = hgvs_pro[:5]
     right_part = hgvs_pro[-3:]
     pos = int(hgvs_pro[5:-3])
     return left_part, right_part, pos
 
 def apply_offset_to_hgvs_pro(hgvs_pro, offset):
+
+    """
+    Routine to add an offset to a hgvs_pro identifier.
+
+    Parameters
+    ----------
+
+    hgvs_pro
+        hgvs_pro identifier.
+
+    offset
+        An integer for that to position in the identifier has to be shifted.
+
+    Returns
+    -------
+
+    new_hgvs_pro
+        Shifted hgvs_pro identifier.
+    """
+
     if offset == 0:
         return hgvs_pro
 
@@ -185,12 +312,47 @@ def apply_offset_to_hgvs_pro(hgvs_pro, offset):
 
 
 def offset_loop(seq, offset, hgvs_pros, urn, verbosity = 0):
+
+    """
+    Identifies problematic offsets and calculates the rate of mismatched amino acids.
+
+    Parameters
+    ----------
+
+    seq
+        Amino acid sequence of the protein.
+
+    offset
+        Offset given in the scoreset metadata.
+
+    hgvs_pros
+        List of hgvs_pro identifiers of the corresponding scoreset.
+
+    urn
+        MaveDB urn identifier of the corresponding scoreset.
+
+    verbosity
+        Verbosity level of the function.
+
+    Returns
+    -------
+
+    mismatch_found
+        Boolean, True if at least one mismatched amino acid got detected.
+
+    hit_rate
+        Rate of correctly matched amino acids.
+    """
+
     mismatch_found = False
     correct_count = 0
     incorrect_count = 0
+
     for hgvs_pro in hgvs_pros:
+
         left_part, right_part, old_pos = disect_hgvs_pro(hgvs_pro)
         wt_aa_three_letter = left_part[2:].upper()
+
         new_pos = old_pos + offset
         try:
             seq_wt_aa_three_letter = ONE_TO_THREE[seq[new_pos-1]]
@@ -215,6 +377,35 @@ def offset_loop(seq, offset, hgvs_pros, urn, verbosity = 0):
     return mismatch_found, hit_rate
 
 def check_offset(seq, offset, hgvs_pros, urn, verbosity = 0):
+
+    """
+    Sanity check of the offset value given in the scoreset metadata.
+    When the sanity check fails, tries to find the correct offset.
+
+    Parameters
+    ----------
+
+    seq
+        Amino acid sequence of the target protein of the corresponding scoreset.
+
+    offset
+        Offset value given in the scoreset metadata.
+
+    hgvs_pros
+        List of all hgvs_pro identifiers given in the scoreset.
+
+    urn
+        MaveDB urn identifier of the scoreset.
+
+    verbosity
+        Verbosity level of the function.
+
+    Returns
+    -------
+
+    best_offset
+        The best offset found, can be None, if none got at least 90% correctly matched amino acids.
+    """
 
     hit_rate_thresh = 0.9
     best_offset = None
