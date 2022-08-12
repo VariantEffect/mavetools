@@ -63,10 +63,10 @@ class BaseClient:
         except requests.exceptions.HTTPError as e:
             logging.error(r.json())
             raise SystemExit(e)
-        return model_class.deserialize(r.json())
-        #return r.json()
 
-    def post_model_instance(self, model_instance):
+        return r.json()
+
+    def post_model_instance(self, model_instance, endpoint, files=None):
         """
         Using a POST, hit an API endpoint to post a resource.
         Performs HTTP POST request.
