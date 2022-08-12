@@ -73,14 +73,20 @@ class BaseClient:
 
         Parameters
         ----------
-        model_instance
-            instance of model that will be POSTed
+        model_instance: dict
+            Instance of model that will be POSTed.
+        endpoint: str
+            The API endpoint where we want the request to be made. This is the url extension beyond the base url
+            used to instantiate the Client object. For example if you want an experiment from the base url
+            'http://127.0.0.1:8000/api/v1/', the api_endpoint argument would be "experiments", making an API endpoint
+            of 'http://127.0.0.1:8000/api/v1/experiments'.
+        files
+            The files associated with the model instance.
 
         Returns
         -------
-        requests.model.Response
-            The HTTP response object from the request, which contains the URN
-            of the newly-created model in the `Response.text` field.
+        str
+            The URN of the created model instance.
 
         Raises
         ------
