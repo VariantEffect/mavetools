@@ -28,7 +28,7 @@ class BaseClient:
     class AuthTokenMissingException(Exception):
         pass
 
-    def get_model_instance(self, model_class, instance_id):
+    def get_model_instance(self, endpoint, instance_id):
         """
         Using a GET, hit an API endpoint to get info on a particular instance
         of a model class such as a ScoreSet.
