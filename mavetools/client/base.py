@@ -55,7 +55,7 @@ class BaseClient:
         ValueError
             If any mandatory fields are missing.
         """
-        model_url = f"{self.base_url}{model_class.api_url()}"
+        model_url = f"{self.base_url}{endpoint}/"
         instance_url = f"{model_url}{instance_id}/"
         try:
             r = requests.get(instance_url)
