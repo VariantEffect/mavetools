@@ -47,8 +47,8 @@ class BaseClient:
 
         Returns
         -------
-        model_instance
-            An instance of the passed class.
+        model_instance: str
+            An instance of the passed class as a JSON str.
 
         Raises
         ------
