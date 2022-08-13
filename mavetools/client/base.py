@@ -95,10 +95,7 @@ class BaseClient:
         """
         model_url = f"{self.base_url}{endpoint}/"
 
-        # save object type of model_instance
-        model_class = type(model_instance)
-        model_url = f"{self.base_url}{model_class.api_url()}/"
-        payload, files = model_instance.post_payload()
+        # do MaveCore validation here
 
         # check for existance of self.auth_token, raise error if does not exist
         if not self.auth_token:
