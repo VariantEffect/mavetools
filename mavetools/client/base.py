@@ -106,9 +106,9 @@ class BaseClient:
         try:  # to post data
             r = requests.post(
                 model_url,
-                data={"request": json.dumps(payload)},
-                files=files,
-                headers={"Authorization": (self.auth_token)},
+                json=model_instance,
+                #files=files,
+                headers={"access_token": self.auth_token},
             )
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
