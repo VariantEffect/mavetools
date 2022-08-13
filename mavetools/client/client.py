@@ -66,14 +66,15 @@ class Client(BaseClient):
 
         Parameters
         ----------
-        scoreset: ScoreSet
+        scoreset: dict
             Instance of the scoreset that will be POSTed.
+        files:
+            The files associated with the scoreset.
 
         Returns
         -------
-        requests.model.Response
-            The HTTP response object from the request, which contains the URN
-            of the newly-created model in the `Response.text` field.
+        str
+            The URN of the created model instance.
 
         Raises
         ------
