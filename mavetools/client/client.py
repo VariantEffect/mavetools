@@ -60,7 +60,7 @@ class Client(BaseClient):
         """
         return self.post_model_instance(experiment, "experiments")
 
-    def create_scoreset(self, scoreset):
+    def create_scoreset(self, scoreset, files):
         """
         Hit an API endpoint to post a scoreset.
 
