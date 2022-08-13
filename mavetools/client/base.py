@@ -97,7 +97,7 @@ class BaseClient:
 
         # do MaveCore validation here
 
-        # check for existance of self.auth_token, raise error if does not exist
+        # check for existence of self.auth_token, raise error if does not exist
         if not self.auth_token:
             error_message = "Need to include an auth token for POST requests!"
             logging.error(error_message)
