@@ -115,6 +115,8 @@ class BaseClient:
             logging.error(r.text)
             sys.exit(1)
 
+        # make second request to post files here, or inside the try block
+
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {model_instance}!")
 
