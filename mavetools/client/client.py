@@ -1,6 +1,4 @@
 from .base import BaseClient
-from mavetools.models.experiment import Experiment
-from mavetools.models.scoreset import ScoreSet
 
 
 class Client(BaseClient):
