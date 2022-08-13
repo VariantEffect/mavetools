@@ -93,6 +93,7 @@ class BaseClient:
         AuthTokenMissingException
             If the auth_token is missing
         """
+        model_url = f"{self.base_url}{endpoint}/"
 
         # save object type of model_instance
         model_class = type(model_instance)
