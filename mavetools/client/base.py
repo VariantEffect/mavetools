@@ -120,5 +120,5 @@ class BaseClient:
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {model_instance}!")
 
-        # return the HTTP response
-        return r
+        # return the URN of the created model instance
+        return json.loads(r.text)['urn']
