@@ -28,7 +28,7 @@ class BaseClient:
     class AuthTokenMissingException(Exception):
         pass
 
-    def get_model_instance(self, endpoint, instance_id):
+    def get_dataset(self, endpoint, urn):
         """
         Using a GET, hit an API endpoint to get info on a particular instance
         of a model class such as a ScoreSet.
@@ -66,7 +66,7 @@ class BaseClient:
 
         return r.json()
 
-    def post_model_instance(self, model_instance, endpoint, files=None):
+    def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
         Using a POST, hit an API endpoint to post a resource.
         Performs HTTP POST request.
