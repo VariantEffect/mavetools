@@ -30,10 +30,9 @@ class BaseClient:
 
     def get_dataset(self, endpoint, urn):
         """
-        Using a GET, hit an API endpoint to get info on a particular instance
-        of a model class such as a ScoreSet.
-        This will perform the HTTP GET request and then let the class itself
-        parse the JSON data.
+        Using a GET, hit an API endpoint to get a dataset such as a ScoreSet.
+        This will perform the HTTP GET request and return the dataset as a
+        JSON string.
 
         Parameters
         ----------
@@ -68,8 +67,8 @@ class BaseClient:
 
     def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
-        Using a POST, hit an API endpoint to post a resource.
-        Performs HTTP POST request.
+        Using an HTTP POST request, hit an API endpoint to post a dataset. When posting a Scoreset,
+        you must include a scores_df to have a complete upload.
 
         Parameters
         ----------
