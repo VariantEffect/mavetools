@@ -41,8 +41,8 @@ class BaseClient:
             used to instantiate the Client object. For example if you want an experiment from the base url
             'http://127.0.0.1:8000/api/v1/', the api_endpoint argument would be "experiments", making an API endpoint
             of 'http://127.0.0.1:8000/api/v1/experiments'.
-        instance_id : str
-            The id of the object we are retrieving.
+        urn : str
+            The URN of the object we are retrieving.
 
         Returns
         -------
@@ -72,15 +72,17 @@ class BaseClient:
 
         Parameters
         ----------
-        model_instance: dict
-            Instance of model that will be POSTed.
+        dataset: dict
+            Instance of the dataset that will be POSTed.
         endpoint: str
             The API endpoint where we want the request to be made. This is the url extension beyond the base url
             used to instantiate the Client object. For example if you want an experiment from the base url
             'http://127.0.0.1:8000/api/v1/', the api_endpoint argument would be "experiments", making an API endpoint
             of 'http://127.0.0.1:8000/api/v1/experiments'.
-        files
-            The files associated with the model instance.
+        scores_df: pandas.DataFrame
+            The scores file associated with a ScoreSet.
+        counts_df: pandas.DataFrame
+            The counts file associated with a ScoreSet.
 
         Returns
         -------
