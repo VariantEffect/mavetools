@@ -22,7 +22,7 @@ class Client(BaseClient):
         -------
         The experiment requested.
         """
-        return self.get_model_instance("experiments", urn)
+        return self.get_dataset("experiments", urn)
 
     def get_scoreset(self, urn):
         """
