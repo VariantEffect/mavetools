@@ -140,7 +140,7 @@ class BaseClient:
                 sys.exit(1)
 
         # No errors or exceptions at this point, log successful upload
-        logging.info(f"Successfully uploaded {model_instance}!")
+        logging.info(f"Successfully uploaded {dataset}!")
 
         # return the URN of the created model instance
         return json.loads(r.text)['urn']
