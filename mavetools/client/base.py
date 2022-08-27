@@ -102,7 +102,7 @@ class BaseClient:
 
         # check for existence of self.auth_token, raise error if does not exist
         if not self.auth_token:
-            error_message = "Need to include an auth token for POST requests!"
+            error_message = "Must include an auth token when creating datasets!"
             logging.error(error_message)
             raise self.AuthTokenMissingException(error_message)
 
