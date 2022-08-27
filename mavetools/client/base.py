@@ -105,6 +105,11 @@ class BaseClient:
             logging.error(error_message)
             raise self.AuthTokenMissingException(error_message)
 
+        if scores_df is None and endpoint == "scoresets":
+            error_message = "Must include a scores_df when creating a ScoreSet!"
+            logging.error(error_message)
+            raise ValueError(error_message)
+
         try:  # to post data
             r = requests.post(
                 model_url,
