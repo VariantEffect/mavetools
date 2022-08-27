@@ -97,8 +97,7 @@ class BaseClient:
             If the dataset is a ScoreSet and there is no scores_df provided.
         """
         model_url = f"{self.base_url}{endpoint}/"
-
-        # do MaveCore validation here
+        urn = None
 
         # check for existence of self.auth_token, raise error if does not exist
         if not self.auth_token:
