@@ -84,6 +84,8 @@ class Client(BaseClient):
         ------
         AuthTokenMissingException
             If the auth_token is missing
+        ValueError
+            If the dataset is a ScoreSet and there is no scores_df provided.
         """
         return self.post_model_instance(scoreset, "scoresets", files)
 
