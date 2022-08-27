@@ -70,8 +70,10 @@ class Client(BaseClient):
         ----------
         scoreset: dict
             Instance of the scoreset that will be POSTed.
-        files:
-            The files associated with the scoreset.
+        scores_df: pandas.DataFrame
+            The scores file associated with a ScoreSet.
+        counts_df: pandas.DataFrame
+            The counts file associated with a ScoreSet.
 
         Returns
         -------
