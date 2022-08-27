@@ -92,7 +92,9 @@ class BaseClient:
         Raises
         ------
         AuthTokenMissingException
-            If the auth_token is missing
+            If the auth_token is missing.
+        ValueError
+            If the dataset is a ScoreSet and there is no scores_df provided.
         """
         model_url = f"{self.base_url}{endpoint}/"
 
