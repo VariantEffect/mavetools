@@ -62,7 +62,7 @@ class Client(BaseClient):
         # validate here
         return self.create_dataset(experiment, "experiments")
 
-    def create_scoreset(self, scoreset, files):
+    def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
         """
         Hit an API endpoint to post a scoreset.
 
