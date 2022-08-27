@@ -122,7 +122,22 @@ class BaseClient:
             logging.error(r.text)
             sys.exit(1)
 
-        # make second request to post files here, or inside the try block
+        if scores_df is not None and urn is not None:
+            model_url = f"{self.base_url}scoresets/{urn}/variants/data"
+            file_upload = dict
+            file_upload["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
+            if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
+
+            try:  # to post data
+                r = requests.post(
+                    model_url,
+                    files=file_upload,
+                    headers={"X-API-key": self.auth_token},
+                )
+                r.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                logging.error(r.text)
+                sys.exit(1)
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {model_instance}!")
