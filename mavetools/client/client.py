@@ -38,7 +38,7 @@ class Client(BaseClient):
         -------
         The scoreset requested.
         """
-        return self.get_model_instance("scoresets", urn)
+        return self.get_dataset("scoresets", urn)
 
     def create_experiment(self, experiment):
         """
