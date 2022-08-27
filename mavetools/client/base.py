@@ -117,6 +117,7 @@ class BaseClient:
                 headers={"X-API-key": self.auth_token},
             )
             r.raise_for_status()
+            urn = json.loads(r.text)['urn']
         except requests.exceptions.HTTPError as e:
             logging.error(r.text)
             sys.exit(1)
