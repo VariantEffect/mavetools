@@ -113,9 +113,8 @@ class BaseClient:
         try:  # to post data
             r = requests.post(
                 model_url,
-                json=model_instance,
-                #files=files,
-                headers={"access_token": self.auth_token},
+                json=dataset,
+                headers={"X-API-key": self.auth_token},
             )
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
