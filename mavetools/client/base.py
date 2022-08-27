@@ -143,4 +143,4 @@ class BaseClient:
         logging.info(f"Successfully uploaded {dataset}!")
 
         # return the URN of the created model instance
-        return json.loads(r.text)['urn']
+        return urn
