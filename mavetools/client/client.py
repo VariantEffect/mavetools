@@ -59,7 +59,8 @@ class Client(BaseClient):
         AuthTokenMissingException
             If the auth_token is missing
         """
-        return self.post_model_instance(experiment, "experiments")
+        # validate here
+        return self.create_dataset(experiment, "experiments")
 
     def create_scoreset(self, scoreset, files):
         """
