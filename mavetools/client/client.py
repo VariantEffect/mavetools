@@ -87,7 +87,12 @@ class Client(BaseClient):
         ValueError
             If the dataset is a ScoreSet and there is no scores_df provided.
         """
-        return self.post_model_instance(scoreset, "scoresets", files)
+        if scores_df is None:
+            error_message = "Must include a scores_df when creating a ScoreSet!"
+            logging.error(error_message)
+            raise ValueError(error_message)
+        # validate here
+        return self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
 
 
