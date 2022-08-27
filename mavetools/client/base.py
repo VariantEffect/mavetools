@@ -46,8 +46,8 @@ class BaseClient:
 
         Returns
         -------
-        model_instance: str
-            An instance of the passed class as a JSON str.
+        str
+            An instance of the dataset as a JSON str.
 
         Raises
         ------
@@ -87,7 +87,7 @@ class BaseClient:
         Returns
         -------
         str
-            The URN of the created model instance.
+            The URN of the created dataset.
 
         Raises
         ------
