@@ -1,4 +1,5 @@
 from .base import BaseClient
+import logging
 
 
 class Client(BaseClient):
