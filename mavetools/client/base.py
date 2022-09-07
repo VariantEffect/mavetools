@@ -67,7 +67,7 @@ class BaseClient:
 
     def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
-        Using an HTTP POST request, hit an API endpoint to post a dataset. When posting a Scoreset,
+        Using an HTTP POST request, hit an API endpoint to create a dataset. When creating a Scoreset,
         you must include a scores_df to have a complete upload.
 
         Parameters
