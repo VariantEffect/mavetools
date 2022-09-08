@@ -1,6 +1,9 @@
+import aiohttp
+import asyncio
+import aiofiles
+from aiohttp import ClientSession, ClientResponseError
 import json
 import logging
-import requests
 import sys
 import asyncio
 
