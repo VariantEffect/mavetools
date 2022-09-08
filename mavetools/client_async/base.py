@@ -62,7 +62,7 @@ class BaseClient:
         model_url = f"{self.base_url}{endpoint}/"
         instance_url = f"{model_url}{urn}/"
         try:
-            r = requests.get(instance_url)
+            r = await self.session.request(method="GET", url=instance_url)
             r.raise_for_status()
         except ClientResponseError as e:
             logging.error(r.json())
@@ -119,11 +119,10 @@ class BaseClient:
             raise ValueError(error_message)
 
         try:  # to post data
-            r = requests.post(
-                model_url,
-                json=dataset,
-                headers={"X-API-key": self.auth_token},
-            )
+            r = await self.session.request(method="POST",
+                                           url=model_url,
+                                           json=dataset,
+                                           headers={"X-API-key": self.auth_token})
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
         except ClientResponseError as e:
@@ -137,11 +136,10 @@ class BaseClient:
             if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
             try:  # to post data
-                r = requests.post(
-                    model_url,
-                    files=file_upload,
-                    headers={"X-API-key": self.auth_token},
-                )
+                r = await self.session.request(method="POST",
+                                               url=model_url,
+                                               files=file_upload,
+                                               headers={"X-API-key": self.auth_token})
                 r.raise_for_status()
             except ClientResponseError as e:
                 logging.error(r.text)
