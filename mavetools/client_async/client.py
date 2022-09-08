@@ -1,7 +1,6 @@
 import asyncio
-import json
-from .base import BaseClient
 import logging
+from .base import BaseClient
 
 
 class Client(BaseClient):
