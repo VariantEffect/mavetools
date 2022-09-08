@@ -9,7 +9,7 @@ class Client(BaseClient):
     CRUD operations can be made using the client object.
     """
 
-    def get_experiment(self, urn):
+    async def get_experiment(self, urn):
         """
         Hit an API endpoint to get instance of experiment by passing the experiment URN value.
         Parsed JSON data is returned.
@@ -25,7 +25,7 @@ class Client(BaseClient):
         """
         return self.get_dataset("experiments", urn)
 
-    def get_scoreset(self, urn):
+    async def get_scoreset(self, urn):
         """
         Hit an API endpoint to get instance of scoreset by passing the experiment URN value.
         Parsed JSON data is returned.
@@ -41,7 +41,7 @@ class Client(BaseClient):
         """
         return self.get_dataset("scoresets", urn)
 
-    def create_experiment(self, experiment):
+    async def create_experiment(self, experiment):
         """
         Hit an API endpoint to post an experiment.
 
@@ -63,7 +63,7 @@ class Client(BaseClient):
         # validate here
         return self.create_dataset(experiment, "experiments")
 
-    def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
+    async def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
         """
         Hit an API endpoint to post a scoreset.
 
