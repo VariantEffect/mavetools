@@ -26,6 +26,7 @@ class BaseClient:
             default: ''
         """
         self.base_url = base_url
+        self.session = ClientSession
         if auth_token:
             self.auth_token = auth_token
 
