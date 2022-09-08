@@ -33,7 +33,7 @@ class BaseClient:
     class AuthTokenMissingException(Exception):
         pass
 
-    def get_dataset(self, endpoint, urn):
+    async def get_dataset(self, endpoint, urn):
         """
         Using a GET, hit an API endpoint to get a dataset such as a ScoreSet.
         This will perform the HTTP GET request and return the dataset as a
@@ -70,7 +70,10 @@ class BaseClient:
 
         return r.json()
 
-    def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
+    async def get_datasets(self):
+        pass
+
+    async def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
         Using an HTTP POST request, hit an API endpoint to post a dataset. When posting a Scoreset,
         you must include a scores_df to have a complete upload.
@@ -149,3 +152,6 @@ class BaseClient:
 
         # return the URN of the created model instance
         return urn
+
+    async def create_datasets(self):
+        pass
