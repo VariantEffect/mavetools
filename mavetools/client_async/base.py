@@ -64,7 +64,7 @@ class BaseClient:
         try:
             r = requests.get(instance_url)
             r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
+        except ClientResponseError as e:
             logging.error(r.json())
             raise SystemExit(e)
 
@@ -126,7 +126,7 @@ class BaseClient:
             )
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
-        except requests.exceptions.HTTPError as e:
+        except ClientResponseError as e:
             logging.error(r.text)
             sys.exit(1)
 
@@ -143,7 +143,7 @@ class BaseClient:
                     headers={"X-API-key": self.auth_token},
                 )
                 r.raise_for_status()
-            except requests.exceptions.HTTPError as e:
+            except ClientResponseError as e:
                 logging.error(r.text)
                 sys.exit(1)
 
