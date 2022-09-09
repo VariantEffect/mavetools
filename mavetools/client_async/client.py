@@ -69,7 +69,7 @@ class Client(BaseClient):
             If the auth_token is missing
         """
         # validate here
-        return self.create_dataset(experiment, "experiments")
+        return await self.create_dataset(experiment, "experiments")
 
     async def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
         """
