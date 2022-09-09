@@ -40,7 +40,14 @@ class Client(BaseClient):
         -------
         The scoreset requested.
         """
-        return self.get_dataset("scoresets", urn)
+        async with ClientSession() as self.session:
+            r = await self.get_dataset("scoresets", urn)
+        return r
+
+    async def get_scoresets(self, urn_list):
+        async with ClientSession() as self.session:
+            r = await asyncio.gather(*[self.get_dataset("scoresets", urn) for urn in urn_list])
+        return r
 
     async def create_experiment(self, experiment):
         """
