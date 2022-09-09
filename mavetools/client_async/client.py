@@ -101,7 +101,7 @@ class Client(BaseClient):
             logging.error(error_message)
             raise ValueError(error_message)
         # validate here
-        return self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
+        return await self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
 
 
