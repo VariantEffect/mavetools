@@ -24,7 +24,7 @@ class Client(BaseClient):
         -------
         The experiment requested.
         """
-        return self.get_dataset("experiments", urn)
+        return await self.get_dataset("experiments", urn)
 
     async def get_scoreset(self, urn):
         """
