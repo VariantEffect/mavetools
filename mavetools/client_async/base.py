@@ -68,10 +68,7 @@ class BaseClient:
             logging.error(r.json())
             raise SystemExit(e)
 
-        return r.json()
-
-    async def get_datasets(self):
-        pass
+        return await r.json()
 
     async def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
@@ -150,6 +147,3 @@ class BaseClient:
 
         # return the URN of the created model instance
         return urn
-
-    async def create_datasets(self):
-        pass
