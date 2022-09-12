@@ -113,6 +113,12 @@ class Client(BaseClient):
         # validate here
         return await self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
-
+    async def create_scoresets(self, scoreset_list):
+        async with ClientSession() as self.session:
+            r = await asyncio.gather(*[self.create_dataset(scoreset[0],
+                                                           "scoresets",
+                                                           scoreset[1],
+                                                           scoreset[2]) for scoreset in scoreset_list])
+        return r
 
 
