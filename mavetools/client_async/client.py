@@ -26,6 +26,11 @@ class Client(BaseClient):
         """
         return await self.get_dataset("experiments", urn)
 
+    async def get_experiments(self, urn_list):
+        async with ClientSession() as self.session:
+            r = await asyncio.gather(*[self.get_dataset("experiments", urn) for urn in urn_list])
+        return r
+
     async def get_scoreset(self, urn):
         """
         Hit an API endpoint to get instance of scoreset by passing the experiment URN value.
