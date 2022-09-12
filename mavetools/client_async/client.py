@@ -76,6 +76,11 @@ class Client(BaseClient):
         # validate here
         return await self.create_dataset(experiment, "experiments")
 
+    async def create_experiments(self, experiment_list):
+        async with ClientSession() as self.session:
+            r = await asyncio.gather(*[self.create_dataset(experiment, "experiments") for experiment in experiment_list])
+        return r
+
     async def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
         """
         Hit an API endpoint to post a scoreset.
