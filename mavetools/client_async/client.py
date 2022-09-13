@@ -22,11 +22,24 @@ class Client(BaseClient):
 
         Returns
         -------
-        The experiment requested.
+        str
+            The experiment requested as a JSON string.
         """
         return await self.get_dataset("experiments", urn)
 
     async def get_experiments(self, urn_list):
+        """
+        Get a list of experiments by passing a list of URN values corresponding to the experiments.
+
+        Parameters
+        ----------
+        urn_list: list
+
+        Returns
+        -------
+
+
+        """
         async with ClientSession() as self.session:
             r = await asyncio.gather(*[self.get_dataset("experiments", urn) for urn in urn_list])
         return r
@@ -43,13 +56,25 @@ class Client(BaseClient):
 
         Returns
         -------
-        The scoreset requested.
+        str
+            The scoreset requested as a JSON string.
         """
         async with ClientSession() as self.session:
             r = await self.get_dataset("scoresets", urn)
         return r
 
     async def get_scoresets(self, urn_list):
+        """
+        Get a list of scoresets by passing a list of URN values corresponding to the scoresets.
+
+        Parameters
+        ----------
+        urn_list
+
+        Returns
+        -------
+
+        """
         async with ClientSession() as self.session:
             r = await asyncio.gather(*[self.get_dataset("scoresets", urn) for urn in urn_list])
         return r
@@ -77,6 +102,17 @@ class Client(BaseClient):
         return await self.create_dataset(experiment, "experiments")
 
     async def create_experiments(self, experiment_list):
+        """
+        Create more than one experiment by passing a list of experiments formatted as dictionaries.
+
+        Parameters
+        ----------
+        experiment_list
+
+        Returns
+        -------
+
+        """
         async with ClientSession() as self.session:
             r = await asyncio.gather(*[self.create_dataset(experiment, "experiments") for experiment in experiment_list])
         return r
@@ -114,6 +150,17 @@ class Client(BaseClient):
         return await self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
     async def create_scoresets(self, scoreset_list):
+        """
+        Create more than one scoreset by passing a list of scoresets formatted as dictionaries.
+
+        Parameters
+        ----------
+        scoreset_list
+
+        Returns
+        -------
+
+        """
         async with ClientSession() as self.session:
             r = await asyncio.gather(*[self.create_dataset(scoreset[0],
                                                            "scoresets",
