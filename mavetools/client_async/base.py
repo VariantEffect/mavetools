@@ -121,7 +121,8 @@ class BaseClient:
                                            json=dataset,
                                            headers={"X-API-key": self.auth_token})
             r.raise_for_status()
-            urn = json.loads(r.text)['urn']
+            dataset = await r.json()
+            urn = dataset['urn']
         except ClientResponseError as e:
             logging.error(r.text)
             sys.exit(1)
