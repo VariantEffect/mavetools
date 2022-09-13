@@ -136,7 +136,7 @@ class BaseClient:
             try:  # to post data
                 r = await self.session.request(method="POST",
                                                url=model_url,
-                                               files=file_upload,
+                                               data=file_upload,
                                                headers={"X-API-key": self.auth_token})
                 r.raise_for_status()
             except ClientResponseError as e:
