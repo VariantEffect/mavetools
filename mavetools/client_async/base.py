@@ -66,7 +66,7 @@ class BaseClient:
             r.raise_for_status()
         except ClientResponseError as e:
             logging.error(r.json())
-            raise SystemExit(e)
+            #raise SystemExit(e)
 
         return await r.json()
 
@@ -125,7 +125,7 @@ class BaseClient:
             urn = dataset['urn']
         except ClientResponseError as e:
             logging.error(r.text)
-            sys.exit(1)
+            #sys.exit(1)
 
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
@@ -141,7 +141,7 @@ class BaseClient:
                 r.raise_for_status()
             except ClientResponseError as e:
                 logging.error(r.text)
-                sys.exit(1)
+                #sys.exit(1) # update implementation, catch errors and display in sensible way
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {dataset}!")
