@@ -61,7 +61,7 @@ class BaseClient:
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logging.error(r.json())
-            raise SystemExit(e)
+            #raise SystemExit(e)
 
         return r.json()
 
@@ -119,8 +119,9 @@ class BaseClient:
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
         except requests.exceptions.HTTPError as e:
+            # see what this error looks like, present them in understandable way
             logging.error(r.text)
-            sys.exit(1)
+            #sys.exit(1)
 
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
