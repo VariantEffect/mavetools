@@ -130,6 +130,7 @@ class BaseClient:
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
             file_upload = dict()
+            # TODO test this with a really big dataframe
             file_upload["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
             if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
