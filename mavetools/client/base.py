@@ -56,7 +56,7 @@ class BaseClient:
             If any mandatory fields are missing.
         """
         model_url = f"{self.base_url}{endpoint}/"
-        instance_url = f"{model_url}{urn}/"
+        instance_url = f"{model_url}{urn}"
         try:
             r = requests.get(instance_url)
             r.raise_for_status()
