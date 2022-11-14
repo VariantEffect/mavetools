@@ -58,10 +58,17 @@ class BaseClient:
         model_url = f"{self.base_url}{endpoint}/"
         instance_url = f"{model_url}{urn}"
         try:
-            r = requests.get(instance_url)
+            #time.sleep(0.01)
+            #r = requests.get(instance_url)
+            print("before request")
+            print(instance_url)
+            r = httpx.get(instance_url)
+            print("after request")
             r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            logging.error(r.json())
+        #except requests.exceptions.HTTPError as e:
+        except httpx.HTTPError as exc:
+            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+            #print(logging.error(r.json()))
             #raise SystemExit(e)
 
         return r.json()
@@ -112,14 +119,19 @@ class BaseClient:
             raise ValueError(error_message)
 
         try:  # to post data
+            print("Before request")
+            print(model_url)
             r = requests.post(
                 model_url,
                 json=dataset,
                 headers={"X-API-key": self.auth_token},
             )
+            print("After request")
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
         except requests.exceptions.HTTPError as e:
+        #except httpx.HTTPError as exc:
+            #print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
             # see what this error looks like, present them in understandable way
             logging.error(r.text)
             #sys.exit(1)
@@ -131,15 +143,21 @@ class BaseClient:
             if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
             try:  # to post data
+                print("Before request")
+                print(model_url)
+                # TODO resolve why httpx request will get a read timeout error
                 r = requests.post(
                     model_url,
                     files=file_upload,
                     headers={"X-API-key": self.auth_token},
                 )
+                print("After request")
                 r.raise_for_status()
             except requests.exceptions.HTTPError as e:
+            #except httpx.HTTPError as exc:
+                #print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
                 logging.error(r.text)
-                sys.exit(1)
+                #sys.exit(1)
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {dataset}!")
