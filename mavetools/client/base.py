@@ -120,18 +120,18 @@ class BaseClient:
             raise ValueError(error_message)
 
         try:  # to post data
-            r = requests.post(
+            r = httpx.post(
                 model_url,
                 json=dataset,
                 headers={"X-API-key": self.auth_token},
             )
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
-        except requests.exceptions.HTTPError as e:
-        #except httpx.HTTPError as exc:
-            #print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+        #except requests.exceptions.HTTPError as e:
+        except httpx.HTTPError as exc:
+            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
             # see what this error looks like, present them in understandable way
-            logging.error(r.text)
+            #logging.error(r.text)
             #sys.exit(1)
 
         if scores_df is not None and urn is not None:
