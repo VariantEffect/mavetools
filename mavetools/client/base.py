@@ -5,6 +5,7 @@ import httpx
 import sys
 import time
 
+
 class BaseClient:
     """
     The BaseClient object upon instantiation sets the base url where API requests will be made.
