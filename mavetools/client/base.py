@@ -146,18 +146,18 @@ class BaseClient:
             try:  # to post data
                 print("Before request")
                 print(model_url)
-                # TODO resolve why httpx request will get a read timeout error
-                r = requests.post(
+                r = httpx.post(
                     model_url,
                     files=file_upload,
                     headers={"X-API-key": self.auth_token},
+                    timeout=None,
                 )
                 print("After request")
                 r.raise_for_status()
-            except requests.exceptions.HTTPError as e:
-            #except httpx.HTTPError as exc:
-                #print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
-                logging.error(r.text)
+            #except requests.exceptions.HTTPError as e:
+            except httpx.HTTPError as exc:
+                print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+                #logging.error(r.text)
                 #sys.exit(1)
 
         # No errors or exceptions at this point, log successful upload
