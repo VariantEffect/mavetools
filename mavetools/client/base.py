@@ -120,14 +120,11 @@ class BaseClient:
             raise ValueError(error_message)
 
         try:  # to post data
-            print("Before request")
-            print(model_url)
             r = requests.post(
                 model_url,
                 json=dataset,
                 headers={"X-API-key": self.auth_token},
             )
-            print("After request")
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
         except requests.exceptions.HTTPError as e:
@@ -144,15 +141,12 @@ class BaseClient:
             if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
             try:  # to post data
-                print("Before request")
-                print(model_url)
                 r = httpx.post(
                     model_url,
                     files=file_upload,
                     headers={"X-API-key": self.auth_token},
                     timeout=None,
                 )
-                print("After request")
                 r.raise_for_status()
             #except requests.exceptions.HTTPError as e:
             except httpx.HTTPError as exc:
