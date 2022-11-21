@@ -27,6 +27,7 @@ class BaseClient:
         """
         self.base_url = base_url
         self.session = None
+        self.sslcontext = ssl.create_default_context(cafile=certifi.where())
         if auth_token:
             self.auth_token = auth_token
 
