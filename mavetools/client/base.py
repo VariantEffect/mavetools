@@ -1,9 +1,6 @@
 import json
 import logging
-import requests
 import httpx
-import sys
-import time
 
 
 class BaseClient:
