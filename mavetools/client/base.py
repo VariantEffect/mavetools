@@ -56,18 +56,10 @@ class BaseClient:
         model_url = f"{self.base_url}{endpoint}/"
         instance_url = f"{model_url}{urn}"
         try:
-            #time.sleep(0.01)
-            #r = requests.get(instance_url)
-            print("before request")
-            print(instance_url)
             r = httpx.get(instance_url)
-            print("after request")
             r.raise_for_status()
-        #except requests.exceptions.HTTPError as e:
         except httpx.HTTPError as exc:
             print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
-            #print(logging.error(r.json()))
-            #raise SystemExit(e)
 
         return r.json()
 
@@ -124,12 +116,8 @@ class BaseClient:
             )
             r.raise_for_status()
             urn = json.loads(r.text)['urn']
-        #except requests.exceptions.HTTPError as e:
         except httpx.HTTPError as exc:
             print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
-            # see what this error looks like, present them in understandable way
-            #logging.error(r.text)
-            #sys.exit(1)
 
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
@@ -145,11 +133,8 @@ class BaseClient:
                     timeout=None,
                 )
                 r.raise_for_status()
-            #except requests.exceptions.HTTPError as e:
             except httpx.HTTPError as exc:
                 print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
-                #logging.error(r.text)
-                #sys.exit(1)
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {dataset}!")
