@@ -40,7 +40,7 @@ class Client(BaseClient):
 
 
         """
-        async with ClientSession() as self.session:
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
             r = await asyncio.gather(*[self.get_dataset("experiments", urn) for urn in urn_list])
         return r
 
@@ -75,7 +75,7 @@ class Client(BaseClient):
         -------
 
         """
-        async with ClientSession() as self.session:
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:  #connector=TCPConnector(ssl=False)
             r = await asyncio.gather(*[self.get_dataset("scoresets", urn) for urn in urn_list])
         return r
 
@@ -113,7 +113,7 @@ class Client(BaseClient):
         -------
 
         """
-        async with ClientSession() as self.session:
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
             r = await asyncio.gather(*[self.create_dataset(experiment, "experiments") for experiment in experiment_list])
         return r
 
@@ -161,7 +161,7 @@ class Client(BaseClient):
         -------
 
         """
-        async with ClientSession() as self.session:
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
             r = await asyncio.gather(*[self.create_dataset(scoreset[0],
                                                            "scoresets",
                                                            scoreset[1],
