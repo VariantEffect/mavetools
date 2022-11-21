@@ -62,8 +62,7 @@ class BaseClient:
             r = await self.session.request(method="GET", url=instance_url)
             r.raise_for_status()
         except ClientResponseError as e:
-            logging.error(r.json())
-            #raise SystemExit(e)
+            print(f"Error response {e.status} while requesting {instance_url!r}.")
 
         return await r.json()
 
@@ -121,8 +120,7 @@ class BaseClient:
             dataset = await r.json()
             urn = dataset['urn']
         except ClientResponseError as e:
-            logging.error(r.text)
-            #sys.exit(1)
+            print(f"Error response {e.status} while requesting {model_url!r}.")
 
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
@@ -138,8 +136,7 @@ class BaseClient:
                                                headers={"X-API-key": self.auth_token})
                 r.raise_for_status()
             except ClientResponseError as e:
-                logging.error(r.text)
-                #sys.exit(1) # update implementation, catch errors and display in sensible way
+                print(f"Error response {e.status} while requesting {model_url!r}.")
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {dataset}!")
