@@ -1,4 +1,8 @@
-from mavetools.client.client import Client
+import asyncio
+from aiohttp import ClientSession, TCPConnector
+
+from mavetools.client.client import Client as Client
+from mavetools.client_async.client import Client as ClientAsync
 
 
 def get_scoreset(scoreset_urn):
