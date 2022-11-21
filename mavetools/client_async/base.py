@@ -1,11 +1,7 @@
-import aiohttp
-import asyncio
-import aiofiles
-from aiohttp import ClientSession, ClientResponseError
-import json
+from aiohttp import ClientResponseError
 import logging
-import sys
-import asyncio
+import ssl
+import certifi
 
 
 class BaseClient:
