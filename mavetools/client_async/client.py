@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from .base import BaseClient
-from aiohttp import ClientSession
+from aiohttp import ClientSession, TCPConnector
 
 
 class Client(BaseClient):
