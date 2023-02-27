@@ -5,7 +5,7 @@
 
 MaveTools
 =========
-MaveTools is a pure Python Library for bioinformatics and computational biology.
+MaveTools is a pure Python Module for bioinformatics and computational biology.
 It features useful tools that can be applied to MAVE data, such as that available
 at https://www.mavedb.org/.
 
@@ -21,13 +21,11 @@ Building a local copy of the documentation requires the following additional pac
    :maxdepth: 2
    :caption: Contents:
 
+   client
    convert
    mavedf
    validators
-   experiment_create
-   experiment_get
-   scoreset_create
-   scoreset_get
+   notebooks
 
 
 Indices and tables

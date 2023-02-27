@@ -11,7 +11,8 @@ def codon_sub_to_mavehgvs(
     target_id: Optional[str] = None,
     prefer_delins: bool = True,
 ) -> str:
-    """Create a MAVE-HGVS coding variant string describing the change between two codons.
+    """
+    Create a MAVE-HGVS coding variant string describing the change between two codons.
 
     Parameters
     ----------
@@ -32,7 +33,7 @@ def codon_sub_to_mavehgvs(
 
     Returns
     -------
-    str
+    variant_string : str
         MAVE-HGVS string for the substitution described by this codon.
 
     Raises
@@ -41,7 +42,6 @@ def codon_sub_to_mavehgvs(
         If either codon is not valid.
     ValueError
         If the position is less than 1.
-
     """
     if len(target_codon) != 3 or not dna_bases_validator(target_codon):
         raise ValueError("invalid target codon")
