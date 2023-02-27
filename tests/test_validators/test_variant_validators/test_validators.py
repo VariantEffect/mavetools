@@ -180,7 +180,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_missing_hgvs_columns(self):
         data = "{},{}\n{},1.0".format("not_hgvs", self.SCORE_COL, generate_hgvs())
@@ -190,7 +190,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_replaces_null_with_none_in_secondary_hgvs_column(self):
         hgvs_nt = generate_hgvs(prefix="c")
@@ -236,7 +236,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertFalse(dataset.is_valid)
                 self.assertEqual(len(dataset.errors), 1)
-                print(dataset.errors)
+                #print(dataset.errors)
 
     def test_invalid_no_additional_columns_outside_hgvs_ones(self):
         data = "{},{},{}\n{},{},{}".format(
@@ -253,7 +253,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_scores_missing_scores_column(self):
         data = "{},{}\n{},{}".format(
@@ -265,7 +265,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_missing_either_required_hgvs_column(self):
         data = "{},{}\n{},{}".format(
@@ -277,7 +277,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_empty_no_variants_parsed(self):
         data = "{},{}\n".format(self.HGVS_NT_COL, self.SCORE_COL)
@@ -288,7 +288,7 @@ class TestMaveDataset(TestCase):
         self.assertTrue(dataset.is_empty)
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_error_non_numeric_values_in_score_column(self):
         data = "{},{}\n{},{}".format(
@@ -312,7 +312,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_same_variant_defined_in_two_rows_in_hgvs_pro(self):
         hgvs = generate_hgvs(prefix="p")
@@ -323,7 +323,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_data_method_converts_null_values_to_None(self):
         hgvs = generate_hgvs()
@@ -392,7 +392,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 3)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_parses_numeric_column_values_into_float(self):
         hgvs = generate_hgvs(prefix="c")
@@ -468,7 +468,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertFalse(dataset.is_valid)
                 self.assertEqual(len(dataset.errors), 1)
-                print(dataset.errors)
+                #print(dataset.errors)
 
     def test_error_missing_value_in_pro_column_when_pro_is_primary(self):
         for v in null_values_list:
@@ -482,7 +482,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertFalse(dataset.is_valid)
                 self.assertEqual(len(dataset.errors), 1)
-                print(dataset.errors)
+                #print(dataset.errors)
 
     def test_df_indexed_by_primary_column(self):
         data = "{},{},{}\n{},{},1.0".format(
@@ -516,7 +516,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_hgvs_in_column(self):
         tests = [
@@ -542,7 +542,7 @@ class TestMaveDataset(TestCase):
 
                 self.assertFalse(dataset.is_valid)
                 self.assertEqual(len(dataset.errors), 1)
-                print(dataset.errors)
+                #print(dataset.errors)
 
     def test_invalid_genomic_and_transcript_mixed_in_nt_column(self):
         data = "{},{}\n{},1.0\n{},2.0".format(
@@ -557,7 +557,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 2)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_nt_not_genomic_when_splice_present(self):
         data = "{},{},{}\n{},{},1.0".format(
@@ -573,7 +573,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_splice_defined_when_nt_is_not(self):
         data = "{},{},{}\n,{},1.0".format(
@@ -588,7 +588,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 1)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_splice_not_defined_when_nt_is_genomic(self):
         data = "{},{}\n{},1.0".format(
@@ -600,7 +600,7 @@ class TestMaveDataset(TestCase):
 
         self.assertFalse(dataset.is_valid)
         self.assertEqual(len(dataset.errors), 2)
-        print(dataset.errors)
+        #print(dataset.errors)
 
     def test_invalid_zero_is_not_parsed_as_none(self):
         hgvs = generate_hgvs(prefix="c")
@@ -730,7 +730,7 @@ class TestMaveDataset(TestCase):
         dataset.validate(targetseq="ATC")
 
         self.assertFalse(dataset.is_valid)
-        print(dataset.errors)
+        #print(dataset.errors)
 
         self.assertEqual(dataset.n_errors, 1)
         self.assertIn("p.Val1Phe", dataset.errors[0])
@@ -744,7 +744,7 @@ class TestMaveDataset(TestCase):
         dataset.validate(targetseq="ATCG")
 
         self.assertFalse(dataset.is_valid)
-        print(dataset.errors)
+        #print(dataset.errors)
 
         self.assertEqual(dataset.n_errors, 1)
         self.assertIn("multiple of 3", dataset.errors[0])

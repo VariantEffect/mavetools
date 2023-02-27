@@ -18,20 +18,20 @@ class ScoreSet(APIObject, Dataset):
     """
 
     experiment: str = attr.ib(kw_only=True)
-    licence: Licence = attr.ib(kw_only=True)
-    target: Target = attr.ib(kw_only=True)
+    licenceId: Licence = attr.ib(kw_only=True)
+    targetGene: Target = attr.ib(kw_only=True)
     # optional attributes
-    dataset_columns: Optional[Any] = attr.ib(kw_only=True, default=None)
-    replaces: Optional[str] = attr.ib(kw_only=True, default=None)
-    score_columns: List[str] = attr.ib(kw_only=True)
-    count_columns: List[str] = attr.ib(kw_only=True)
+    datasetColumns: Optional[Any] = attr.ib(kw_only=True, default=None)
+    replacesId: Optional[str] = attr.ib(kw_only=True, default=None)
+    #score_columns: Optional[List[str] = attr.ib(kw_only=True)#TODO see how these should be structured within DatasetColumns
+    #count_columns: Optional[List[str]] = attr.ib(kw_only=True)#
     # optional attributes
     previous_version: Optional[str] = attr.ib(kw_only=True, default=None)
     next_version: Optional[str] = attr.ib(kw_only=True, default=None)
-    current_version: str = attr.ib(kw_only=True)
-    variant_count: int = attr.ib(kw_only=True)
-    data_usage_policy: str = attr.ib(kw_only=True)
-    is_meta_analysis: bool = attr.ib(kw_only=True)
+    #current_version: Optional[str] = attr.ib(kw_only=True)
+    numVariants: int = attr.ib(kw_only=True)
+    dataUsagePolicy: str = attr.ib(kw_only=True)
+    is_meta_analysis: Optional[bool] = attr.ib(kw_only=True, default=None)
 
     def api_url() -> str:
         """
@@ -63,9 +63,9 @@ class NewScoreSet(NewDataset):
 
     # the following fields are optional
     meta_analysis_for: Optional[str] = attr.ib(kw_only=True, default=None)
-    replaces: Optional[str] = attr.ib(kw_only=True, default=None)
-    licence: Optional[str] = attr.ib(kw_only=True, default=None)
-    data_usage_policy: Optional[str] = attr.ib(kw_only=True, default=None)
+    replacesId: Optional[str] = attr.ib(kw_only=True, default=None)
+    licenceId: Optional[str] = attr.ib(kw_only=True, default=None)
+    dataUsagePolicy: Optional[str] = attr.ib(kw_only=True, default=None)
 
     # These can be strings or open filepaths
     score_data: Union[str, BinaryIO] = attr.ib(kw_only=True)
@@ -81,7 +81,7 @@ class NewScoreSetRequest(APIObject):
     """
 
     scoreset: NewScoreSet = attr.ib(kw_only=True)
-    target: NewTarget = attr.ib(kw_only=True)
+    targetGene: NewTarget = attr.ib(kw_only=True)
 
     # These only need the ExternalIdentifier identifier field
     uniprot: SequenceOffset = attr.ib(kw_only=True, default=None)

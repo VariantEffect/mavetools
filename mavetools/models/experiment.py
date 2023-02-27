@@ -16,6 +16,10 @@ class Experiment(APIObject, Dataset):
     experimentset: str = attr.ib(kw_only=True, default=None)
     scoresets: List[str] = attr.ib(kw_only=True, default=None)
 
+    # TODO check where these belong
+    experimentSetUrn: str = attr.ib(kw_only=True)
+    numScoresets: int = attr.ib(kw_only=True)
+
     def api_url() -> str:
         """
         Returns url for experiments

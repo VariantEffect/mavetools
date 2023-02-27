@@ -3,15 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Convert
-=======
-Convert contains useful data conversion functions.
+Enrich
+======
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. automodule:: mavetools.convert.convert
+   :members:
 
-   codon
-   enrich
-   enrich2
-   notebooks
+.. automodule:: mavetools.convert.enrich
+   :members:

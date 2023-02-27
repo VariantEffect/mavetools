@@ -28,8 +28,8 @@ class TimeStamped:
     Instantiates TimeStamped object and declares attributes
     """
 
-    creation_date: str = attr.ib(kw_only=True)
-    modification_date: str = attr.ib(kw_only=True)
+    creationDate: str = attr.ib(kw_only=True)
+    modificationDate: str = attr.ib(kw_only=True)
 
 
 @attr.s
@@ -78,3 +78,6 @@ class NewDataset:
     doi_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
     sra_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
     pubmed_ids: Optional[List[str]] = attr.ib(kw_only=True, default=None)
+
+    # TODO check where these belong
+    private: bool = attr.ib(kw_only=True, default=True)

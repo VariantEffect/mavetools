@@ -3,15 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Convert
-=======
-Convert contains useful data conversion functions.
+Notebooks
+=========
+Example notebooks for implementing MaveTools
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   codon
-   enrich
-   enrich2
-   notebooks
+   experiment_create
+   experiment_get
+   scoreset_create
+   scoreset_get

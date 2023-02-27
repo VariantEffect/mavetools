@@ -1,73 +1,79 @@
-import json
+from .base import BaseClient
 import logging
-import requests
-import sys
 
 
-class Client:
-    def __init__(self, base_url="http://127.0.0.1:8000/api/", auth_token=""):
+class Client(BaseClient):
+    """
+    The Client object inherits the BaseClient and upon instantiation sets the base url where API requests will be made.
+    CRUD operations can be made using the client object.
+    """
+
+    def get_experiment(self, urn):
         """
-        Instantiates the Client object and sets the values for base_url and
-        auth_token
+        Hit an API endpoint to get instance of experiment by passing the experiment URN value.
+        Parsed JSON data is returned.
 
         Parameters
         ----------
-        base_url: the url in which the api endpoint exists
-            default: 'http://127.0.0.1:8000/api/'
-        auth_token: authorizes POST requests via the API and MaveDB
-            default: ''
-        """
-        self.base_url = base_url
-        if auth_token:
-            self.auth_token = auth_token
-
-    class AuthTokenMissingException(Exception):
-        pass
-
-    def get_model_instance(self, model_class, instance_id):
-        """
-        Using a GET, hit an API endpoint to get info on a particular instance
-        of a model class such as a ScoreSet.
-        This will perform the HTTP GET request and then let the class itself
-        parse the JSON data.
-
-        Parameters
-        ----------
-        model_class : ModelClass
-            The model class we want to which we want to cast the response.
-            (e.g., Experiment or Scoreset)
-        instance_id : str
-            The id of the object we are retrieving.
+        urn : str
+            The URN of the experiment to be retrieved.
 
         Returns
         -------
-        model_instance
-            An instance of the passed class.
-
-        Raises
-        ------
-        ValueError
-            If any mandatory fields are missing.
+        The experiment requested.
         """
-        model_url = f"{self.base_url}{model_class.api_url()}"
-        instance_url = f"{model_url}{instance_id}/"
-        try:
-            r = requests.get(instance_url)
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            logging.error(r.json())
-            raise SystemExit(e)
-        return model_class.deserialize(r.json())
+        return self.get_dataset("experiments", urn)
 
-    def post_model_instance(self, model_instance):
+    def get_scoreset(self, urn):
         """
-        Using a POST, hit an API endpoint to post a resource.
-        Performs HTTP POST request.
+        Hit an API endpoint to get instance of scoreset by passing the experiment URN value.
+        Parsed JSON data is returned.
 
         Parameters
         ----------
-        model_instance
-            instance of model that will be POSTed
+        urn : str
+            The URN of the scoreset to be retrieved.
+
+        Returns
+        -------
+        The scoreset requested.
+        """
+        return self.get_dataset("scoresets", urn)
+
+    def create_experiment(self, experiment):
+        """
+        Hit an API endpoint to post an experiment.
+
+        Parameters
+        ----------
+        experiment: dict
+            Instance of the experiment that will be POSTed.
+
+        Returns
+        -------
+        str
+            The URN of the created model instance.
+
+        Raises
+        ------
+        AuthTokenMissingException
+            If the auth_token is missing
+        """
+        # validate here
+        return self.create_dataset(experiment, "experiments")
+
+    def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
+        """
+        Hit an API endpoint to post a scoreset.
+
+        Parameters
+        ----------
+        scoreset: dict
+            Instance of the scoreset that will be POSTed.
+        scores_df: pandas.DataFrame
+            The scores file associated with a ScoreSet.
+        counts_df: pandas.DataFrame
+            The counts file associated with a ScoreSet.
 
         Returns
         -------
@@ -79,12 +85,15 @@ class Client:
         ------
         AuthTokenMissingException
             If the auth_token is missing
+        ValueError
+            If the dataset is a ScoreSet and there is no scores_df provided.
         """
-
-        # save object type of model_instance
-        model_class = type(model_instance)
-        model_url = f"{self.base_url}{model_class.api_url()}/"
-        payload, files = model_instance.post_payload()
+        if scores_df is None:
+            error_message = "Must include a scores_df when creating a ScoreSet!"
+            logging.error(error_message)
+            raise ValueError(error_message)
+        # validate here
+        return self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
         # check for existance of self.auth_token, raise error if does not exist
         if not self.auth_token:
