@@ -77,8 +77,9 @@ class Client(BaseClient):
 
         Returns
         -------
-        str
-            The URN of the created model instance.
+        requests.model.Response
+            The HTTP response object from the request, which contains the URN
+            of the newly-created model in the `Response.text` field.
 
         Raises
         ------
@@ -94,6 +95,26 @@ class Client(BaseClient):
         # validate here
         return self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
+        # check for existance of self.auth_token, raise error if does not exist
+        if not self.auth_token:
+            error_message = "Need to include an auth token for POST requests!"
+            logging.error(error_message)
+            raise AuthTokenMissingException(error_message)
 
+        try:  # to post data
+            r = requests.post(
+                model_url,
+                data={"request": json.dumps(payload)},
+                files=files,
+                headers={"Authorization": (self.auth_token)},
+            )
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            logging.error(r.text)
+            sys.exit(1)
 
+        # No errors or exceptions at this point, log successful upload
+        logging.info(f"Successfully uploaded {model_instance}!")
 
+        # return the HTTP response
+        return r

@@ -38,28 +38,23 @@ class Dataset(TimeStamped, Urn):
     Instantiates Dataset object and declares attributes
     """
     # record keeping attributes
-    publishedDate: str = attr.ib(kw_only=True)
-    createdBy: str = attr.ib(kw_only=True)
-    modifiedBy: str = attr.ib(kw_only=True)
+    publish_date: str = attr.ib(kw_only=True)
+    created_by: str = attr.ib(kw_only=True)
+    modified_by: str = attr.ib(kw_only=True)
 
     # required attributes
-    shortDescription: str = attr.ib(kw_only=True)
+    short_description: str = attr.ib(kw_only=True)
     title: str = attr.ib(kw_only=True)
-    # TODO check if this should be optional
-    contributors: Optional[List[str]] = attr.ib(kw_only=True, default=None)
+    contributors: List[str] = attr.ib(kw_only=True)
 
     # optional attribute
-    abstractText: str = attr.ib(kw_only=True)
-    methodText: str = attr.ib(kw_only=True)
+    abstract_text: str = attr.ib(kw_only=True)
+    method_text: str = attr.ib(kw_only=True)
     keywords: List[Keyword] = attr.ib(kw_only=True)
     sra_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    doiIdentifiers: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    pubmedIdentifiers: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
-    extraMetadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
-
-    # TODO check where these belong
-    processingState: str = attr.ib(kw_only=True, default=None)  # TODO check type of this variable
-    private: bool = attr.ib(kw_only=True, default=True)
+    doi_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    pubmed_ids: Optional[List[ExternalIdentifier]] = attr.ib(kw_only=True, default=None)
+    extra_metadata: Optional[Dict[str, str]] = attr.ib(kw_only=True, default=None)
 
     def deserialize():
         raise NotImplementedError()

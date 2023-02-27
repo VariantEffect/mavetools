@@ -21,7 +21,7 @@ if sys.version_info.major == 3 and sys.version_info.minor == 6:
 
 setup(
     name="mavetools",
-    version="0.1.1",
+    version="0.3.0",
     author="MaveDB Developers",
     author_email="alan.rubin@wehi.edu.au",
     description=(
