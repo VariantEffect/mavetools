@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mavetools"
+dynamic = ["version"]
+description = "Useful functions for manipulating Multiplex Assay of Variant Effect datasets."
+readme = "README.md"
+license = ""
+requires-python = ">=3.7"
+authors = [
+    { name = "MaveDB Developers", email = "alan.rubin@wehi.edu.au" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "attrs",
+    "fqfa>=1.2.1",
+    "idutils",
+    "mavehgvs",
+    "numpy",
+    "pandas",
+    "requests",
+    "tables",
+]
+
+[project.urls]
+repository = "https://github.com/VariantEffect/mavetools"
+documentation = "https://mavedb.org/docs/mavetools/"
+
+[tool.hatch.version]
+path = "mavetools/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/mavetools",
+]
