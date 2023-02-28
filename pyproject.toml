@@ -29,6 +29,7 @@ dependencies = [
     "pandas",
     "requests",
     "tables",
+    "joblib",
 ]
 
 [project.urls]
