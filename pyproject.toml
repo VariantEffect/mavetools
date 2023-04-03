@@ -21,7 +21,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
+    "aiohttp",
     "attrs",
+    "certifi",
     "fqfa>=1.2.1",
     "idutils",
     "mavehgvs",
