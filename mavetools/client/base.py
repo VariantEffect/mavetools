@@ -1,6 +1,7 @@
-import json
+from aiohttp import ClientResponseError
 import logging
-import httpx
+import ssl
+import certifi
 
 
 class BaseClient:
@@ -21,13 +22,15 @@ class BaseClient:
             default: ''
         """
         self.base_url = base_url
+        self.session = None
+        self.sslcontext = ssl.create_default_context(cafile=certifi.where())
         if auth_token:
             self.auth_token = auth_token
 
     class AuthTokenMissingException(Exception):
         pass
 
-    def get_dataset(self, endpoint, urn):
+    async def get_dataset(self, endpoint, urn):
         """
         Using a GET, hit an API endpoint to get a dataset such as a ScoreSet.
         This will perform the HTTP GET request and return the dataset as a
@@ -56,14 +59,14 @@ class BaseClient:
         model_url = f"{self.base_url}{endpoint}/"
         instance_url = f"{model_url}{urn}"
         try:
-            r = httpx.get(instance_url)
+            r = await self.session.request(method="GET", url=instance_url)
             r.raise_for_status()
-        except httpx.HTTPError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+        except ClientResponseError as e:
+            print(f"Error response {e.status} while requesting {instance_url!r}.")
 
-        return r.json()
+        return await r.json()
 
-    def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
+    async def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
         Using an HTTP POST request, hit an API endpoint to create a dataset. When creating a Scoreset,
         you must include a scores_df to have a complete upload.
@@ -109,32 +112,31 @@ class BaseClient:
             raise ValueError(error_message)
 
         try:  # to post data
-            r = httpx.post(
-                model_url,
-                json=dataset,
-                headers={"X-API-key": self.auth_token},
-            )
+            r = await self.session.request(method="POST",
+                                           url=model_url,
+                                           json=dataset,
+                                           headers={"X-API-key": self.auth_token})
             r.raise_for_status()
-            urn = json.loads(r.text)['urn']
-        except httpx.HTTPError as exc:
-            print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+            dataset = await r.json()
+            urn = dataset['urn']
+        except ClientResponseError as e:
+            print(f"Error response {e.status} while requesting {model_url!r}.")
 
         if scores_df is not None and urn is not None:
             model_url = f"{self.base_url}scoresets/{urn}/variants/data"
             file_upload = dict()
+            # TODO test this with a really big dataframe
             file_upload["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
             if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
             try:  # to post data
-                r = httpx.post(
-                    model_url,
-                    files=file_upload,
-                    headers={"X-API-key": self.auth_token},
-                    timeout=None,
-                )
+                r = await self.session.request(method="POST",
+                                               url=model_url,
+                                               data=file_upload,
+                                               headers={"X-API-key": self.auth_token})
                 r.raise_for_status()
-            except httpx.HTTPError as exc:
-                print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+            except ClientResponseError as e:
+                print(f"Error response {e.status} while requesting {model_url!r}.")
 
         # No errors or exceptions at this point, log successful upload
         logging.info(f"Successfully uploaded {dataset}!")

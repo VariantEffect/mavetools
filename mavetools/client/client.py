@@ -1,5 +1,7 @@
-from .base import BaseClient
+import asyncio
 import logging
+from .base import BaseClient
+from aiohttp import ClientSession, TCPConnector
 
 
 class Client(BaseClient):
@@ -8,7 +10,7 @@ class Client(BaseClient):
     CRUD operations can be made using the client object.
     """
 
-    def get_experiment(self, urn):
+    async def get_experiment(self, urn):
         """
         Hit an API endpoint to get instance of experiment by passing the experiment URN value.
         Parsed JSON data is returned.
@@ -20,11 +22,29 @@ class Client(BaseClient):
 
         Returns
         -------
-        The experiment requested.
+        str
+            The experiment requested as a JSON string.
         """
-        return self.get_dataset("experiments", urn)
+        return await self.get_dataset("experiments", urn)
 
-    def get_scoreset(self, urn):
+    async def get_experiments(self, urn_list):
+        """
+        Get a list of experiments by passing a list of URN values corresponding to the experiments.
+
+        Parameters
+        ----------
+        urn_list: list
+
+        Returns
+        -------
+
+
+        """
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
+            r = await asyncio.gather(*[self.get_dataset("experiments", urn) for urn in urn_list])
+        return r
+
+    async def get_scoreset(self, urn):
         """
         Hit an API endpoint to get instance of scoreset by passing the experiment URN value.
         Parsed JSON data is returned.
@@ -36,11 +56,30 @@ class Client(BaseClient):
 
         Returns
         -------
-        The scoreset requested.
+        str
+            The scoreset requested as a JSON string.
         """
-        return self.get_dataset("scoresets", urn)
+        async with ClientSession() as self.session:
+            r = await self.get_dataset("scoresets", urn)
+        return r
 
-    def create_experiment(self, experiment):
+    async def get_scoresets(self, urn_list):
+        """
+        Get a list of scoresets by passing a list of URN values corresponding to the scoresets.
+
+        Parameters
+        ----------
+        urn_list
+
+        Returns
+        -------
+
+        """
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:  #connector=TCPConnector(ssl=False)
+            r = await asyncio.gather(*[self.get_dataset("scoresets", urn) for urn in urn_list])
+        return r
+
+    async def create_experiment(self, experiment):
         """
         Hit an API endpoint to post an experiment.
 
@@ -60,9 +99,25 @@ class Client(BaseClient):
             If the auth_token is missing
         """
         # validate here
-        return self.create_dataset(experiment, "experiments")
+        return await self.create_dataset(experiment, "experiments")
 
-    def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
+    async def create_experiments(self, experiment_list):
+        """
+        Create more than one experiment by passing a list of experiments formatted as dictionaries.
+
+        Parameters
+        ----------
+        experiment_list
+
+        Returns
+        -------
+
+        """
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
+            r = await asyncio.gather(*[self.create_dataset(experiment, "experiments") for experiment in experiment_list])
+        return r
+
+    async def create_scoreset(self, scoreset, scores_df=None, counts_df=None):
         """
         Hit an API endpoint to post a scoreset.
 
@@ -77,9 +132,8 @@ class Client(BaseClient):
 
         Returns
         -------
-        requests.model.Response
-            The HTTP response object from the request, which contains the URN
-            of the newly-created model in the `Response.text` field.
+        str
+            The URN of the created model instance.
 
         Raises
         ------
@@ -93,28 +147,25 @@ class Client(BaseClient):
             logging.error(error_message)
             raise ValueError(error_message)
         # validate here
-        return self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
+        return await self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
-        # check for existance of self.auth_token, raise error if does not exist
-        if not self.auth_token:
-            error_message = "Need to include an auth token for POST requests!"
-            logging.error(error_message)
-            raise AuthTokenMissingException(error_message)
+    async def create_scoresets(self, scoreset_list):
+        """
+        Create more than one scoreset by passing a list of scoresets formatted as dictionaries.
 
-        try:  # to post data
-            r = requests.post(
-                model_url,
-                data={"request": json.dumps(payload)},
-                files=files,
-                headers={"Authorization": (self.auth_token)},
-            )
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            logging.error(r.text)
-            sys.exit(1)
+        Parameters
+        ----------
+        scoreset_list
 
-        # No errors or exceptions at this point, log successful upload
-        logging.info(f"Successfully uploaded {model_instance}!")
+        Returns
+        -------
 
-        # return the HTTP response
+        """
+        async with ClientSession(connector=TCPConnector(ssl=self.sslcontext)) as self.session:
+            r = await asyncio.gather(*[self.create_dataset(scoreset[0],
+                                                           "scoresets",
+                                                           scoreset[1],
+                                                           scoreset[2]) for scoreset in scoreset_list])
         return r
+
+
