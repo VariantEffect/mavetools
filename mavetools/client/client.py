@@ -1,3 +1,4 @@
+import os
 import asyncio
 import logging
 import ssl
@@ -5,27 +6,38 @@ import certifi
 from aiohttp import ClientSession, TCPConnector, ClientResponseError
 
 
+MAVEDB_API_URL = "MAVEDB_API_URL"
+
+
 class Client:
     """
     The Client object sets the base url where API requests will be made.
     CRUD operations can be made using the client object.
     """
-    def __init__(self, base_url="http://127.0.0.1:8002/api/v1/", auth_token=""):
+    def __init__(self, base_url=None, auth_token=None):
         """
         Instantiates the Client object and sets the values for base_url and
         auth_token
+
         Parameters
         ----------
         base_url: the url in which the api endpoint exists
-            default: 'http://127.0.0.1:8000/api/'
+            default: None
+            If this is None, the program will try to load an environment variable defined under
+            MAVEDB_API_URL, defined in this file.
         auth_token: authorizes POST requests via the API and MaveDB
-            default: ''
+            default: None
         """
-        self.base_url = base_url
+        if base_url is None:
+            if os.environ.get(MAVEDB_API_URL) is None:
+                raise ValueError(f"API base URL not provided and not defined in OS environment under '{MAVEDB_API_URL}'")
+            else:
+                self.base_url = os.environ.get(MAVEDB_API_URL)
+        else:
+            self.base_url = base_url
         self.session = None
         self.sslcontext = ssl.create_default_context(cafile=certifi.where())
-        if auth_token:
-            self.auth_token = auth_token
+        self.auth_token = auth_token
 
     class AuthTokenMissingException(Exception):
         pass
