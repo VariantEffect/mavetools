@@ -32,6 +32,7 @@ dependencies = [
     "requests",
     "tables",
     "joblib",
+    "mavedb>=2023.1",
 ]
 
 [project.urls]
