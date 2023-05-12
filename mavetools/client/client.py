@@ -3,80 +3,106 @@ import asyncio
 import logging
 import ssl
 import certifi
-from aiohttp import ClientSession, TCPConnector, ClientResponseError
-
+import aiohttp
+from urllib.parse import urlparse
+from aiohttp import ClientResponseError
+from mavedb.view_models.scoreset import ScoresetCreate
+from mavedb.view_models.experiment import ExperimentCreate
+from mavedb.lib.validation.constants.urn import MAVEDB_SCORESET_URN_RE, MAVEDB_EXPERIMENT_URN_RE, MAVEDB_EXPERIMENTSET_URN_RE
+from typing import Optional, Awaitable
 
 MAVEDB_API_URL = "MAVEDB_API_URL"
 
 
 class Client:
     """
-    The Client object sets the base url where API requests will be made.
-    CRUD operations can be made using the client object.
+    Client objects provide an object-oriented Python interface for the MaveDB API.
     """
-    def __init__(self, base_url=None, auth_token=None):
+    def __init__(self, base_url: Optional[str] = None, auth_token: Optional[str] = None):
         """
-        Instantiates the Client object and sets the values for base_url and
-        auth_token
+        Instantiate a new Client object.
 
         Parameters
         ----------
-        base_url: the url in which the api endpoint exists
-            default: None
-            If this is None, the program will try to load an environment variable defined under
-            MAVEDB_API_URL, defined in this file.
-        auth_token: authorizes POST requests via the API and MaveDB
-            default: None
+        base_url : Optional[str]
+            The url for the server record_type, e.g. 'http://localhost:8002/api/v1/'.
+            If this is None, the program will try to load an environment variable defined under MAVEDB_API_URL,
+            defined in this file.
+            If the url contains any queries or fragments, those will be discarded.
+        auth_token: Optional[str]
+            The API authorization token from the user's profile on the MaveDB server.
+            This token is required to enable data deposition (POST) operations.
         """
         if base_url is None:
             if os.environ.get(MAVEDB_API_URL) is None:
                 raise ValueError(f"API base URL not provided and not defined in OS environment under '{MAVEDB_API_URL}'")
             else:
-                self.base_url = os.environ.get(MAVEDB_API_URL)
+                base_url = os.environ.get(MAVEDB_API_URL)
+
+        # split the base_url into the base and api_root portions since aiohttp doesn't allow paths in base_url
+        parse_result = urlparse(base_url)
+        if parse_result.scheme:
+            base_url = f"{parse_result.scheme}://{parse_result.netloc}/"
         else:
-            self.base_url = base_url
-        self.session = None
-        self.sslcontext = ssl.create_default_context(cafile=certifi.where())
+            base_url = f"//{parse_result.netloc}/"
+        self.api_root = parse_result.path
+
+        self.session = aiohttp.ClientSession(base_url=base_url, connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())), raise_for_status=True)
         self.auth_token = auth_token
 
     class AuthTokenMissingException(Exception):
         pass
 
-    async def get_dataset(self, endpoint, urn):
+    async def get_dataset(self, urn : str, record_type : Optional[str] = None) -> Awaitable[str]:
         """
-        Using a GET, hit an API endpoint to get a dataset such as a ScoreSet.
-        This will perform the HTTP GET request and return the dataset as a
-        JSON string.
+        Request a dataset from the API in JSON format.
 
         Parameters
         ----------
-        endpoint : str
-            The API endpoint where we want the request to be made. This is the url extension beyond the base url
-            used to instantiate the Client object. For example if you want an experiment from the base url
-            'http://127.0.0.1:8000/api/v1/', the api_endpoint argument would be "experiments", making an API endpoint
-            of 'http://127.0.0.1:8000/api/v1/experiments'.
         urn : str
-            The URN of the object we are retrieving.
+            The URN of the dataset being requested.
+        record_type : Optional[str]
+            The type of record to get, one of "score_set", "experiment", or "experiment_set".
+            If this is None, the record_type will be inferred from the URN.
+            Note that this must be provided for `tmp:` records.
 
         Returns
         -------
-        str
-            An instance of the dataset as a JSON str.
+        Awaitable[str]
+            The dataset in JSON format.
 
         Raises
         ------
         ValueError
-            If any mandatory fields are missing.
+            If the URN cannot be inferred.
         """
-        model_url = f"{self.base_url}{endpoint}/"
-        instance_url = f"{model_url}{urn}"
-        try:
-            r = await self.session.request(method="GET", url=instance_url)
-            r.raise_for_status()
-        except ClientResponseError as e:
-            print(f"Error response {e.status} while requesting {instance_url!r}.")
+        # infer record_type if needed
+        if record_type is None:
+            if MAVEDB_SCORESET_URN_RE.match(urn):
+                record_type = "score_set"
+            elif MAVEDB_EXPERIMENT_URN_RE.match(urn):
+                record_type = "experiment"
+            elif MAVEDB_EXPERIMENTSET_URN_RE.match(urn):
+                record_type = "experiment_set"
+            else:
+                raise ValueError(f"unable to infer record_type for '{urn}'")
 
-        return await r.json()
+        # set API endpoint
+        if record_type == "score_set":
+            endpoint = "scoresets"
+        elif record_type == "experiment":
+            endpoint = "experiments"
+        elif record_type == "experiment_set":
+            endpoint = "experimentSets"
+        else:
+            raise ValueError(f"invalid record_type '{record_type}'")
+
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, endpoint, urn))
+        try:
+            async with self.session.get(url_path) as resp:
+                return await resp.json()
+        except ClientResponseError as e:
+            print(f"error {e.status} while requesting {url_path}")
 
     async def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
         """
@@ -289,9 +315,10 @@ class Client:
             If the dataset is a ScoreSet and there is no scores_df provided.
         """
         if scores_df is None:
-            error_message = "Must include a scores_df when creating a ScoreSet!"
+            error_message = "cannot create a new score set without a scores dataframe"
             logging.error(error_message)
             raise ValueError(error_message)
+
         # validate here
         return await self.create_dataset(scoreset, "scoresets", scores_df, counts_df)
 
