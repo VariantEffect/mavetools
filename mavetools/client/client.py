@@ -6,10 +6,10 @@ import certifi
 import aiohttp
 from urllib.parse import urlparse
 from aiohttp import ClientResponseError
-from mavedb.view_models.scoreset import ScoresetCreate
-from mavedb.view_models.experiment import ExperimentCreate
 from mavedb.lib.validation.constants.urn import MAVEDB_SCORESET_URN_RE, MAVEDB_EXPERIMENT_URN_RE, MAVEDB_EXPERIMENTSET_URN_RE
-from typing import Optional, Awaitable
+from typing import Optional, Awaitable, Mapping
+import pandas as pd
+from mavetools.client.util import infer_record_type, validate_dataset_with_create_model
 
 MAVEDB_API_URL = "MAVEDB_API_URL"
 
@@ -50,8 +50,11 @@ class Client:
         self.session = aiohttp.ClientSession(base_url=base_url, connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())), raise_for_status=True)
         self.auth_token = auth_token
 
-    class AuthTokenMissingException(Exception):
-        pass
+        self.endpoints = {
+            "score_set" : "scoresets",
+            "experiment" : "experiments",
+            "experiment_set" : "experimentSets",
+        }
 
     async def get_dataset(self, urn : str, record_type : Optional[str] = None) -> Awaitable[str]:
         """
@@ -75,6 +78,8 @@ class Client:
         ------
         ValueError
             If the URN cannot be inferred.
+        ValueError
+            If the record_type is invalid.
         """
         # infer record_type if needed
         if record_type is None:
@@ -86,42 +91,32 @@ class Client:
                 record_type = "experiment_set"
             else:
                 raise ValueError(f"unable to infer record_type for '{urn}'")
-
-        # set API endpoint
-        if record_type == "score_set":
-            endpoint = "scoresets"
-        elif record_type == "experiment":
-            endpoint = "experiments"
-        elif record_type == "experiment_set":
-            endpoint = "experimentSets"
-        else:
+        elif record_type not in self.endpoints.keys():
             raise ValueError(f"invalid record_type '{record_type}'")
 
-        url_path = "/".join(x.strip("/") for x in ("", self.api_root, endpoint, urn))
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn))
         try:
             async with self.session.get(url_path) as resp:
                 return await resp.json()
         except ClientResponseError as e:
             print(f"error {e.status} while requesting {url_path}")
 
-    async def create_dataset(self, dataset, endpoint, scores_df=None, counts_df=None):
+    async def create_dataset(self, dataset : Mapping, scores_df : Optional[pd.DataFrame] = None, counts_df : Optional[pd.DataFrame] = None):
         """
-        Using an HTTP POST request, hit an API endpoint to create a dataset. When creating a Scoreset,
-        you must include a scores_df to have a complete upload.
+        Submit a dataset to the API.
+
+        If the dataset being submitted is a score set, it must include a `scores_df` and optional `counts_df`.
+
+        #TODO: support other types for the scores and counts, such as .csv files already on disk
 
         Parameters
         ----------
-        dataset: dict
+        dataset: Mapping
             Instance of the dataset that will be POSTed.
-        endpoint: str
-            The API endpoint where we want the request to be made. This is the url extension beyond the base url
-            used to instantiate the Client object. For example if you want an experiment from the base url
-            'http://127.0.0.1:8000/api/v1/', the api_endpoint argument would be "experiments", making an API endpoint
-            of 'http://127.0.0.1:8000/api/v1/experiments'.
-        scores_df: pandas.DataFrame
-            The scores file associated with a ScoreSet.
-        counts_df: pandas.DataFrame
-            The counts file associated with a ScoreSet.
+        scores_df: Optional[pd.DataFrame]
+            The scores file associated with score set.
+        counts_df: Optional[pd.DataFrame]
+            The counts file associated with score set.
 
         Returns
         -------
@@ -130,54 +125,57 @@ class Client:
 
         Raises
         ------
-        AuthTokenMissingException
+        ValueError
             If the auth_token is missing.
         ValueError
             If the dataset is a ScoreSet and there is no scores_df provided.
         """
-        model_url = f"{self.base_url}{endpoint}/"
-        urn = None
-
         # check for existence of self.auth_token, raise error if does not exist
         if not self.auth_token:
-            error_message = "Must include an auth token when creating datasets!"
-            logging.error(error_message)
-            raise self.AuthTokenMissingException(error_message)
-
-        if scores_df is None and endpoint == "scoresets":
-            error_message = "Must include a scores_df when creating a ScoreSet!"
-            logging.error(error_message)
+            error_message = "client must have an auth token to create datasets"
             raise ValueError(error_message)
+
+        record_type = infer_record_type(dataset)
+        if record_type is None:
+            raise ValueError("could not infer record type for dataset")
+
+        if record_type == "score_set" and scores_df is None:
+            raise ValueError("must include a scores_df when creating a score set")
+
+        # perform validation
+        validate_dataset_with_create_model(dataset)
+
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type]))
+        urn = None
 
         try:  # to post data
             r = await self.session.request(method="POST",
-                                           url=model_url,
+                                           url=url_path,
                                            json=dataset,
                                            headers={"X-API-key": self.auth_token})
             r.raise_for_status()
             dataset = await r.json()
             urn = dataset['urn']
         except ClientResponseError as e:
-            print(f"Error response {e.status} while requesting {model_url!r}.")
+            print(f"error response {e.status} while requesting {url_path}")
 
-        if scores_df is not None and urn is not None:
-            model_url = f"{self.base_url}scoresets/{urn}/variants/data"
-            file_upload = dict()
+        if record_type == "score_set":
+            url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn, "variants", "data"))
+
             # TODO test this with a really big dataframe
-            file_upload["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
-            if counts_df is not None: file_upload["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
+            upload_data = dict()
+            upload_data["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
+            if counts_df is not None:
+                upload_data["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
 
             try:  # to post data
                 r = await self.session.request(method="POST",
-                                               url=model_url,
-                                               data=file_upload,
+                                               url=url_path,
+                                               data=upload_data,
                                                headers={"X-API-key": self.auth_token})
                 r.raise_for_status()
             except ClientResponseError as e:
-                print(f"Error response {e.status} while requesting {model_url!r}.")
-
-        # No errors or exceptions at this point, log successful upload
-        logging.info(f"Successfully uploaded {dataset}!")
+                print(f"error response {e.status} while uploading data to {url_path}")
 
         # return the URN of the created model instance
         return urn
