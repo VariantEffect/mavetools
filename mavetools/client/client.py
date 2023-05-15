@@ -31,7 +31,7 @@ class Client:
             If the url contains any queries or fragments, those will be discarded.
         auth_token: Optional[str]
             The API authorization token from the user's profile on the MaveDB server.
-            This token is required to enable data deposition (POST) operations.
+            This token is required to enable data deposition (POST) operations and private record access.
         """
         if base_url is None:
             if os.environ.get(MAVEDB_API_URL) is None:
@@ -48,7 +48,10 @@ class Client:
         self.api_root = parse_result.path
 
         self.session = aiohttp.ClientSession(base_url=base_url, connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())), raise_for_status=True)
-        self.auth_token = auth_token
+        if auth_token is None:
+            self.auth_token = ""
+        else:
+            self.auth_token = auth_token
 
         self.endpoints = {
             "score_set" : "scoresets",
@@ -96,7 +99,7 @@ class Client:
 
         url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn))
         try:
-            async with self.session.get(url_path) as resp:
+            async with self.session.get(url_path, headers={"X-API-key": self.auth_token}) as resp:
                 return await resp.json()
         except ClientResponseError as e:
             print(f"error {e.status} while requesting {url_path}")
@@ -159,14 +162,14 @@ class Client:
         except ClientResponseError as e:
             print(f"error response {e.status} while requesting {url_path}")
 
-        if record_type == "score_set":
+        if record_type == "score_set" and urn is not None:
             url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn, "variants", "data"))
 
             # TODO test this with a really big dataframe
             upload_data = dict()
-            upload_data["scores_file"] = bytes(scores_df.to_csv(), encoding='utf-8')
+            upload_data["scores_file"] = bytes(scores_df.to_csv(index=False), encoding='utf-8')
             if counts_df is not None:
-                upload_data["counts_file"] = bytes(counts_df.to_csv(), encoding='utf-8')
+                upload_data["counts_file"] = bytes(counts_df.to_csv(index=False), encoding='utf-8')
 
             try:  # to post data
                 r = await self.session.request(method="POST",
