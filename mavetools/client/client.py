@@ -1,15 +1,16 @@
 import os
-import asyncio
-import logging
 import ssl
 import certifi
 import aiohttp
+import pandas as pd
+import humps
 from urllib.parse import urlparse
 from aiohttp import ClientResponseError
 from mavedb.lib.validation.constants.urn import MAVEDB_SCORESET_URN_RE, MAVEDB_EXPERIMENT_URN_RE, MAVEDB_EXPERIMENTSET_URN_RE
 from typing import Optional, Awaitable, Mapping
-import pandas as pd
 from mavetools.client.util import infer_record_type, validate_dataset_with_create_model
+from mavedb.lib.validation.dataframe import validate_and_standardize_dataframe_pair
+from mavedb.lib.validation.exceptions import ValidationError
 
 MAVEDB_API_URL = "MAVEDB_API_URL"
 
@@ -104,13 +105,11 @@ class Client:
         except ClientResponseError as e:
             print(f"error {e.status} while requesting {url_path}")
 
-    async def create_dataset(self, dataset : Mapping, scores_df : Optional[pd.DataFrame] = None, counts_df : Optional[pd.DataFrame] = None):
+    async def create_dataset(self, dataset : Mapping, scores_df : Optional[pd.DataFrame] = None, counts_df : Optional[pd.DataFrame] = None) -> Optional[str]:
         """
         Submit a dataset to the API.
 
         If the dataset being submitted is a score set, it must include a `scores_df` and optional `counts_df`.
-
-        #TODO: support other types for the scores and counts, such as .csv files already on disk
 
         Parameters
         ----------
@@ -123,8 +122,8 @@ class Client:
 
         Returns
         -------
-        str
-            The URN of the created dataset.
+        Optional[str]
+            The URN of the created dataset if successful; else None.
 
         Raises
         ------
@@ -158,27 +157,50 @@ class Client:
                                            headers={"X-API-key": self.auth_token})
             r.raise_for_status()
             dataset = await r.json()
+            dataset = humps.decamelize(dataset)
             urn = dataset['urn']
         except ClientResponseError as e:
             print(f"error response {e.status} while requesting {url_path}")
 
         if record_type == "score_set" and urn is not None:
-            url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn, "variants", "data"))
-
-            # TODO test this with a really big dataframe
-            upload_data = dict()
-            upload_data["scores_file"] = bytes(scores_df.to_csv(index=False), encoding='utf-8')
-            if counts_df is not None:
-                upload_data["counts_file"] = bytes(counts_df.to_csv(index=False), encoding='utf-8')
-
-            try:  # to post data
-                r = await self.session.request(method="POST",
-                                               url=url_path,
-                                               data=upload_data,
-                                               headers={"X-API-key": self.auth_token})
-                r.raise_for_status()
-            except ClientResponseError as e:
-                print(f"error response {e.status} while uploading data to {url_path}")
+            await self.upload_dataframes(dataset, scores_df, counts_df)
 
         # return the URN of the created model instance
         return urn
+
+    async def upload_dataframes(self, score_set : Mapping, scores_df : pd.DataFrame, counts_df : Optional[pd.DataFrame] = None) -> None:
+        """
+        Validate and upload data frames for a score set.
+
+        Parameters
+        ----------
+        score_set
+        scores_df
+        counts_df
+
+        Returns
+        -------
+
+        """
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set['urn'], "variants", "data"))
+
+        try:
+            new_scores_df, new_counts_df = validate_and_standardize_dataframe_pair(scores_df, counts_df, target_seq=score_set['target_gene']['wt_sequence']['sequence'], target_seq_type=score_set['target_gene']['wt_sequence']['sequence_type'])
+        except ValidationError as e:
+            print(f"data frames for '{score_set['urn']}' failed to validate: {e}")
+            return
+
+        # TODO test this with a really big dataframe
+        upload_data = dict()
+        upload_data["scores_file"] = bytes(new_scores_df.to_csv(index=False), encoding='utf-8')
+        if new_counts_df is not None:
+            upload_data["counts_file"] = bytes(new_counts_df.to_csv(index=False), encoding='utf-8')
+
+        try:  # to post data
+            r = await self.session.request(method="POST",
+                                           url=url_path,
+                                           data=upload_data,
+                                           headers={"X-API-key": self.auth_token})
+            r.raise_for_status()
+        except ClientResponseError as e:
+            print(f"error response {e.status} while uploading data to {url_path}")
