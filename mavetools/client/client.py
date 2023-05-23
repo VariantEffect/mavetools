@@ -174,12 +174,21 @@ class Client:
 
         Parameters
         ----------
-        score_set
-        scores_df
-        counts_df
+        score_set: Mapping
+            Object for the score set associated with these data frames.
+            Used to get the URN and target sequence information.
+        scores_df: pd.DataFrame
+            Pandas data frame containing the scores.
+        counts_df: Optional[pd.DataFrame]
+            Pandas data frame containing the counts (if available).
 
         Returns
         -------
+        None
+
+        Raises
+        ------
+        None
 
         """
         url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set['urn'], "variants", "data"))
