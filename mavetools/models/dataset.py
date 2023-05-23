@@ -37,6 +37,7 @@ class Dataset(TimeStamped, Urn):
     """
     Instantiates Dataset object and declares attributes
     """
+
     # record keeping attributes
     publish_date: str = attr.ib(kw_only=True)
     created_by: str = attr.ib(kw_only=True)

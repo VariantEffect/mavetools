@@ -56,9 +56,7 @@ def codon_sub_to_mavehgvs(
     if target_codon == variant_codon:
         variant_string = "c.="
     else:
-        variant_pos = (
-            aa_position - 1
-        ) * 3 + 1  # nucleotide position of the start of the codon
+        variant_pos = (aa_position - 1) * 3 + 1  # nucleotide position of the start of the codon
         changes = [x != y for x, y in zip(target_codon, variant_codon)]
         if sum(changes) == 1:  # single substitution
             codon_pos = changes.index(True)
@@ -71,9 +69,7 @@ def codon_sub_to_mavehgvs(
                 )
             elif changes[0]:  # delins of first two bases
                 if prefer_delins:
-                    variant_string = (
-                        f"c.{variant_pos}_{variant_pos + 1}delins{variant_codon[:2]}"
-                    )
+                    variant_string = f"c.{variant_pos}_{variant_pos + 1}delins{variant_codon[:2]}"
                 else:
                     variant_string = (
                         f"c.[{variant_pos}{target_codon[0]}>{variant_codon[0]};"

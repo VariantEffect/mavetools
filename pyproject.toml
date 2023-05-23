@@ -40,6 +40,17 @@ dependencies = [
 repository = "https://github.com/VariantEffect/mavetools"
 documentation = "https://mavedb.org/docs/mavetools/"
 
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "pre-commit",
+    "pytest",
+]
+
+[tool.black]
+line-length = 120
+
 [tool.hatch.version]
 path = "mavetools/__init__.py"
 

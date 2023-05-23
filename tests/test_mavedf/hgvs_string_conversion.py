@@ -33,12 +33,8 @@ class Test(TestCase):
     def test_four_base_change(self):
         # test four base change
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
-        self.assertEqual(
-            legacy_to_mave_hgvs_nt("c.[1C>A;7G>C;8G>T;9T>C]"), "c.[1C>A;7_9delinsCTC]"
-        )
-        self.assertEqual(
-            legacy_to_mave_hgvs_nt("c.[1C>A;2A>C;3A>T;4T>C]"), "c.[1_3delinsACT;4T>C]"
-        )
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;7G>C;8G>T;9T>C]"), "c.[1C>A;7_9delinsCTC]")
+        self.assertEqual(legacy_to_mave_hgvs_nt("c.[1C>A;2A>C;3A>T;4T>C]"), "c.[1_3delinsACT;4T>C]")
         self.assertEqual(
             legacy_to_mave_hgvs_nt("c.[1C>A;2A>C;8G>T;9T>C]"),
             "c.[1_2delinsAC;8_9delinsTC]",

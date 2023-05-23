@@ -1,4 +1,3 @@
-
 def delins_to_subs(target, delins, offset=0):
     """
     The code that converts codon changes to mavehgvs variants prefers to define single events
@@ -39,18 +38,18 @@ def delins_to_subs(target, delins, offset=0):
 
     # find range of indices in delins
     start_delins, end_delins = delins.split("_")
-    start_delins = int(''.join(i for i in start_delins if i.isdigit()))
-    end_delins = int(''.join(i for i in end_delins if i.isdigit()))
+    start_delins = int("".join(i for i in start_delins if i.isdigit()))
+    end_delins = int("".join(i for i in end_delins if i.isdigit()))
 
     # throw error if the end of variant is outside the bounds of the target
     if end_delins + offset > len(target):
         raise ValueError("variant outside of length of bounds of target")
 
     # save bases in delins
-    bases_delins = ''.join(i for i in delins if i.isupper())
+    bases_delins = "".join(i for i in delins if i.isupper())
 
     # with range, get appropriate subsequence from target
-    bases_target = target[start_delins-1+offset:end_delins+offset]
+    bases_target = target[start_delins - 1 + offset : end_delins + offset]
 
     # throw error if bases_delins and bases_target are identical
     if bases_delins == bases_target:
@@ -60,7 +59,7 @@ def delins_to_subs(target, delins, offset=0):
     for i in range(len(bases_target)):
         # where they differ, add to return string, with appropriate index
         if bases_target[i] != bases_delins[i]:
-            multi_variant = multi_variant + str(start_delins+i) + bases_target[i] + ">" + bases_delins[i] + ";"
+            multi_variant = multi_variant + str(start_delins + i) + bases_target[i] + ">" + bases_delins[i] + ";"
 
     # close off multi_variant
     multi_variant = multi_variant[:-1] + "]"
