@@ -1,6 +1,7 @@
 from typing import Mapping, Optional
 from mavedb.view_models.scoreset import ScoresetCreate
 from mavedb.view_models.experiment import ExperimentCreate
+import humps
 
 
 def infer_record_type(record : Mapping) -> Optional[str]:
@@ -18,7 +19,7 @@ def infer_record_type(record : Mapping) -> Optional[str]:
         One of "experiment" or "score_set" if the dataset type can be inferred; else None.
     """
     # TODO: make this more specific
-    if ("title", "targetGene") in record.keys():
+    if all(x in humps.decamelize(record) for x in ("title", "target_gene")):
         return "score_set"
     elif "title" in record.keys():
         return "experiment"

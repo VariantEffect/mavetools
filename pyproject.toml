@@ -33,6 +33,7 @@ dependencies = [
     "tables",
     "joblib",
     "mavedb>=2023.1",
+    "pyhumps",
 ]
 
 [project.urls]
