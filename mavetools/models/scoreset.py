@@ -23,12 +23,12 @@ class ScoreSet(APIObject, Dataset):
     # optional attributes
     datasetColumns: Optional[Any] = attr.ib(kw_only=True, default=None)
     replacesId: Optional[str] = attr.ib(kw_only=True, default=None)
-    #score_columns: Optional[List[str] = attr.ib(kw_only=True)#TODO see how these should be structured within DatasetColumns
-    #count_columns: Optional[List[str]] = attr.ib(kw_only=True)#
+    # score_columns: Optional[List[str] = attr.ib(kw_only=True)#TODO see how these should be structured within DatasetColumns
+    # count_columns: Optional[List[str]] = attr.ib(kw_only=True)#
     # optional attributes
     previous_version: Optional[str] = attr.ib(kw_only=True, default=None)
     next_version: Optional[str] = attr.ib(kw_only=True, default=None)
-    #current_version: Optional[str] = attr.ib(kw_only=True)
+    # current_version: Optional[str] = attr.ib(kw_only=True)
     numVariants: int = attr.ib(kw_only=True)
     dataUsagePolicy: str = attr.ib(kw_only=True)
     is_meta_analysis: Optional[bool] = attr.ib(kw_only=True, default=None)

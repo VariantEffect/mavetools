@@ -52,15 +52,11 @@ class HGVSPatternsBackend(ValidationBackend):
         single_match = re.fullmatch(dna.dna_single_variant, variant)
         multi_match = re.fullmatch(dna.dna_multi_variant, variant)
         if not (single_match or multi_match):
-            raise exceptions.HGVSValidationError(
-                "'{}' is not valid HGVS syntax.".format(variant)
-            )
+            raise exceptions.HGVSValidationError("'{}' is not valid HGVS syntax.".format(variant))
         return variant
 
 
-def validate_variants(
-    variants, validation_backend=None, n_jobs=1, verbose=0, backend="multiprocessing"
-):
+def validate_variants(variants, validation_backend=None, n_jobs=1, verbose=0, backend="multiprocessing"):
     """
     Validate each variant's HGVS_ syntax.
     Parameters
@@ -90,11 +86,7 @@ def validate_variants(
 def validate_has_column(df, column):
     """Validates that a `DataFrame` contains `column` in it's columns."""
     if column not in df.columns:
-        raise KeyError(
-            "Missing column '{}'. Existing columns are {}.".format(
-                column, ", ".join(df.columns)
-            )
-        )
+        raise KeyError("Missing column '{}'. Existing columns are {}.".format(column, ", ".join(df.columns)))
 
 
 def validate_columns_are_numeric(df):
@@ -103,15 +95,8 @@ def validate_columns_are_numeric(df):
         if column in [constants.pro_variant_col, constants.nt_variant_col]:
             continue
         else:
-            if not (
-                np.issubdtype(df.dtypes[column], np.floating)
-                or np.issubdtype(df.dtypes[column], np.integer)
-            ):
-                raise TypeError(
-                    "Expected only float or int data columns. Got {}.".format(
-                        str(df.dtypes[column])
-                    )
-                )
+            if not (np.issubdtype(df.dtypes[column], np.floating) or np.issubdtype(df.dtypes[column], np.integer)):
+                raise TypeError("Expected only float or int data columns. Got {}.".format(str(df.dtypes[column])))
 
 
 def validate_hgvs_uniqueness(df: pd.DataFrame, cname: str) -> None:
@@ -143,9 +128,7 @@ def validate_hgvs_uniqueness(df: pd.DataFrame, cname: str) -> None:
             dup_error_string = ", ".join(dups[: constants.MAX_ERROR_VARIANTS])
             if len(dups) > constants.MAX_ERROR_VARIANTS:
                 dup_error_string += ", ..."
-            raise ValueError(
-                f"found {len(dups)} duplicate HGVS strings in '{cname}': {dup_error_string}"
-            )
+            raise ValueError(f"found {len(dups)} duplicate HGVS strings in '{cname}': {dup_error_string}")
 
 
 def validate_datasets_define_same_variants(scores_df, counts_df):
@@ -165,9 +148,7 @@ def validate_datasets_define_same_variants(scores_df, counts_df):
     if scores_columns != counts_columns:
         raise AssertionError(
             "Dataframes define different hgvs columns. "
-            "Scores defines '{}' and counts defines '{}'.".format(
-                ", ".join(scores_columns), ", ".join(counts_columns)
-            )
+            "Scores defines '{}' and counts defines '{}'.".format(", ".join(scores_columns), ", ".join(counts_columns))
         )
 
     if constants.nt_variant_col in scores_columns:
@@ -179,14 +160,11 @@ def validate_datasets_define_same_variants(scores_df, counts_df):
             not_equal_selector = scores_nt != counts_nt
             neq_list = [
                 "{} ({})".format(x, y)
-                for x, y in zip(
-                    scores_nt[not_equal_selector], counts_nt[not_equal_selector]
-                )
+                for x, y in zip(scores_nt[not_equal_selector], counts_nt[not_equal_selector])
                 if (x is not np.NaN) and (y is not np.NaN)
             ]
             raise AssertionError(
-                "Scores and counts do not define the same "
-                "nucleotide variants: {}.".format(", ".join(neq_list))
+                "Scores and counts do not define the same " "nucleotide variants: {}.".format(", ".join(neq_list))
             )
 
     if constants.pro_variant_col in scores_columns:
@@ -198,14 +176,11 @@ def validate_datasets_define_same_variants(scores_df, counts_df):
             not_equal_selector = scores_pro != counts_pro
             neq_list = [
                 "{} ({})".format(x, y)
-                for x, y in zip(
-                    scores_pro[not_equal_selector], counts_pro[not_equal_selector]
-                )
+                for x, y in zip(scores_pro[not_equal_selector], counts_pro[not_equal_selector])
                 if (x is not np.NaN) and (y is not np.NaN)
             ]
             raise AssertionError(
-                "Scores and counts do not define the same protein variants: "
-                "{}.".format(", ".join(neq_list))
+                "Scores and counts do not define the same protein variants: " "{}.".format(", ".join(neq_list))
             )
 
 
@@ -224,33 +199,25 @@ def validate_mavedb_compliance(df, df_type):
 
     primary_col = None
     if has_nt_col:
-        defines_nt = not all(
-            df.loc[:, constants.nt_variant_col].progress_apply(utilities.is_null)
-        )
+        defines_nt = not all(df.loc[:, constants.nt_variant_col].progress_apply(utilities.is_null))
         if defines_nt:
             primary_col = constants.nt_variant_col
 
     if has_pro_col and primary_col is None:
-        defines_pro = not all(
-            df.loc[:, constants.pro_variant_col].progress_apply(utilities.is_null)
-        )
+        defines_pro = not all(df.loc[:, constants.pro_variant_col].progress_apply(utilities.is_null))
         if defines_pro:
             primary_col = constants.pro_variant_col
 
     if primary_col is None:
         raise ValueError(
-            "Neither '{}' or '{}' defined any variants.".format(
-                constants.nt_variant_col, constants.pro_variant_col
-            )
+            "Neither '{}' or '{}' defined any variants.".format(constants.nt_variant_col, constants.pro_variant_col)
         )
 
     null_primary = df.loc[:, primary_col].progress_apply(utilities.is_null)
     if any(null_primary):
         raise ValueError(
             "Primary column (inferred as '{}') cannot "
-            "contain the null values {} (case-insensitive).".format(
-                primary_col, "NaN, Na, None, whitespace, Undefined"
-            )
+            "contain the null values {} (case-insensitive).".format(primary_col, "NaN, Na, None, whitespace, Undefined")
         )
 
     try:

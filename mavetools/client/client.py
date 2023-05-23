@@ -6,7 +6,11 @@ import pandas as pd
 import humps
 from urllib.parse import urlparse
 from aiohttp import ClientResponseError
-from mavedb.lib.validation.constants.urn import MAVEDB_SCORESET_URN_RE, MAVEDB_EXPERIMENT_URN_RE, MAVEDB_EXPERIMENTSET_URN_RE
+from mavedb.lib.validation.constants.urn import (
+    MAVEDB_SCORESET_URN_RE,
+    MAVEDB_EXPERIMENT_URN_RE,
+    MAVEDB_EXPERIMENTSET_URN_RE,
+)
 from typing import Optional, Awaitable, Mapping
 from mavetools.client.util import infer_record_type, validate_dataset_with_create_model
 from mavedb.lib.validation.dataframe import validate_and_standardize_dataframe_pair
@@ -19,6 +23,7 @@ class Client:
     """
     Client objects provide an object-oriented Python interface for the MaveDB API.
     """
+
     def __init__(self, base_url: Optional[str] = None, auth_token: Optional[str] = None):
         """
         Instantiate a new Client object.
@@ -36,7 +41,9 @@ class Client:
         """
         if base_url is None:
             if os.environ.get(MAVEDB_API_URL) is None:
-                raise ValueError(f"API base URL not provided and not defined in OS environment under '{MAVEDB_API_URL}'")
+                raise ValueError(
+                    f"API base URL not provided and not defined in OS environment under '{MAVEDB_API_URL}'"
+                )
             else:
                 base_url = os.environ.get(MAVEDB_API_URL)
 
@@ -48,19 +55,23 @@ class Client:
             base_url = f"//{parse_result.netloc}/"
         self.api_root = parse_result.path
 
-        self.session = aiohttp.ClientSession(base_url=base_url, connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())), raise_for_status=True)
+        self.session = aiohttp.ClientSession(
+            base_url=base_url,
+            connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())),
+            raise_for_status=True,
+        )
         if auth_token is None:
             self.auth_token = ""
         else:
             self.auth_token = auth_token
 
         self.endpoints = {
-            "score_set" : "scoresets",
-            "experiment" : "experiments",
-            "experiment_set" : "experimentSets",
+            "score_set": "scoresets",
+            "experiment": "experiments",
+            "experiment_set": "experimentSets",
         }
 
-    async def get_dataset(self, urn : str, record_type : Optional[str] = None) -> Awaitable[str]:
+    async def get_dataset(self, urn: str, record_type: Optional[str] = None) -> Awaitable[str]:
         """
         Request a dataset from the API in JSON format.
 
@@ -105,7 +116,9 @@ class Client:
         except ClientResponseError as e:
             print(f"error {e.status} while requesting {url_path}")
 
-    async def create_dataset(self, dataset : Mapping, scores_df : Optional[pd.DataFrame] = None, counts_df : Optional[pd.DataFrame] = None) -> Optional[str]:
+    async def create_dataset(
+        self, dataset: Mapping, scores_df: Optional[pd.DataFrame] = None, counts_df: Optional[pd.DataFrame] = None
+    ) -> Optional[str]:
         """
         Submit a dataset to the API.
 
@@ -151,14 +164,13 @@ class Client:
         urn = None
 
         try:  # to post data
-            r = await self.session.request(method="POST",
-                                           url=url_path,
-                                           json=dataset,
-                                           headers={"X-API-key": self.auth_token})
+            r = await self.session.request(
+                method="POST", url=url_path, json=dataset, headers={"X-API-key": self.auth_token}
+            )
             r.raise_for_status()
             dataset = await r.json()
             dataset = humps.decamelize(dataset)
-            urn = dataset['urn']
+            urn = dataset["urn"]
         except ClientResponseError as e:
             print(f"error response {e.status} while requesting {url_path}")
 
@@ -168,7 +180,9 @@ class Client:
         # return the URN of the created model instance
         return urn
 
-    async def upload_dataframes(self, score_set : Mapping, scores_df : pd.DataFrame, counts_df : Optional[pd.DataFrame] = None) -> None:
+    async def upload_dataframes(
+        self, score_set: Mapping, scores_df: pd.DataFrame, counts_df: Optional[pd.DataFrame] = None
+    ) -> None:
         """
         Validate and upload data frames for a score set.
 
@@ -191,25 +205,31 @@ class Client:
         None
 
         """
-        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set['urn'], "variants", "data"))
+        url_path = "/".join(
+            x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data")
+        )
 
         try:
-            new_scores_df, new_counts_df = validate_and_standardize_dataframe_pair(scores_df, counts_df, target_seq=score_set['target_gene']['wt_sequence']['sequence'], target_seq_type=score_set['target_gene']['wt_sequence']['sequence_type'])
+            new_scores_df, new_counts_df = validate_and_standardize_dataframe_pair(
+                scores_df,
+                counts_df,
+                target_seq=score_set["target_gene"]["wt_sequence"]["sequence"],
+                target_seq_type=score_set["target_gene"]["wt_sequence"]["sequence_type"],
+            )
         except ValidationError as e:
             print(f"data frames for '{score_set['urn']}' failed to validate: {e}")
             return
 
         # TODO test this with a really big dataframe
         upload_data = dict()
-        upload_data["scores_file"] = bytes(new_scores_df.to_csv(index=False), encoding='utf-8')
+        upload_data["scores_file"] = bytes(new_scores_df.to_csv(index=False), encoding="utf-8")
         if new_counts_df is not None:
-            upload_data["counts_file"] = bytes(new_counts_df.to_csv(index=False), encoding='utf-8')
+            upload_data["counts_file"] = bytes(new_counts_df.to_csv(index=False), encoding="utf-8")
 
         try:  # to post data
-            r = await self.session.request(method="POST",
-                                           url=url_path,
-                                           data=upload_data,
-                                           headers={"X-API-key": self.auth_token})
+            r = await self.session.request(
+                method="POST", url=url_path, data=upload_data, headers={"X-API-key": self.auth_token}
+            )
             r.raise_for_status()
         except ClientResponseError as e:
             print(f"error response {e.status} while uploading data to {url_path}")

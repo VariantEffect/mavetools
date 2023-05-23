@@ -4,7 +4,6 @@ from mavetools.mavedf.mavedf import MaveDf
 
 
 class Test(TestCase):
-
     # scenario 1 - no bases of codon changed
     def test_no_change(self):
         # edge case - legacy hgvs format
@@ -19,9 +18,7 @@ class Test(TestCase):
         target_seq = "CAATTTGGTTGGTCTGCTAATATGGAA"
         df = MaveDf(data)
         df.add_variant_data(target_seq)
-        self.assertEqual(
-            df.pandas_df["variant_codon"][0], None
-        )  # TTT but no way to know after converting from legacy
+        self.assertEqual(df.pandas_df["variant_codon"][0], None)  # TTT but no way to know after converting from legacy
 
         # typical case - standard hgvs format
         data = StringIO(

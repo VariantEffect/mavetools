@@ -26,9 +26,7 @@ __all__ = [
 class ProgramTestCase(unittest.TestCase):
     def setUp(self):
         self._data_dir = tempfile.TemporaryDirectory()  # store the object
-        self.data_dir = os.path.join(
-            self._data_dir.name, "data"
-        )  # store the directory path
+        self.data_dir = os.path.join(self._data_dir.name, "data")  # store the directory path
         shutil.copytree(
             src=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data"),
             dst=self.data_dir,

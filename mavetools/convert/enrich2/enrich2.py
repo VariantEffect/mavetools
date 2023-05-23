@@ -31,6 +31,7 @@ class Enrich2(base.BaseProgram):
     The Enrich2 object contains information associated with the Enrich2 dataset (src) specified at
     the object's instantiation.
     """
+
     __doc__ = base.BaseProgram.__doc__
     LOG_MSG = "Writing {elem} {df_type} for condition '{cnd}' to '{path}'."
 
@@ -64,9 +65,7 @@ class Enrich2(base.BaseProgram):
             input_type=input_type,
         )
         if is_coding and not abs(offset) % 3 == 0:
-            raise ValueError(
-                "Enrich2 offset for a coding " "dataset must be a multiple of 3."
-            )
+            raise ValueError("Enrich2 offset for a coding " "dataset must be a multiple of 3.")
 
     def convert(self):
         """
@@ -107,11 +106,7 @@ class Enrich2(base.BaseProgram):
             If hgvs column does not exist in Enrich2 object df
         """
         if not (self.input_is_h5 or self.input_is_tsv):
-            raise TypeError(
-                "Expected a HDF5 or TSV file. Found extension '{}'.".format(
-                    self.extension
-                )
-            )
+            raise TypeError("Expected a HDF5 or TSV file. Found extension '{}'.".format(self.extension))
 
         if self.input_is_h5:
             result = pd.HDFStore(self.src, mode="r")
@@ -124,18 +119,10 @@ class Enrich2(base.BaseProgram):
                 skiprows=self.skip_header_rows,
             )
             if self.input_is_scores_based and self.score_column not in df.columns:
-                raise KeyError(
-                    "Input is missing the required score column '{}'.".format(
-                        self.score_column
-                    )
-                )
+                raise KeyError("Input is missing the required score column '{}'.".format(self.score_column))
 
             if self.hgvs_column not in df.columns:
-                raise KeyError(
-                    "Input is missing the required hgvs column '{}'.".format(
-                        self.hgvs_column
-                    )
-                )
+                raise KeyError("Input is missing the required hgvs column '{}'.".format(self.hgvs_column))
 
             df.index = df[self.hgvs_column]
             result = df
@@ -183,9 +170,7 @@ class Enrich2(base.BaseProgram):
         else:
             # it should not be possible to get here since the variant must be valid
             # and therefore fit one of the other categories
-            raise ValueError(
-                "Could not infer type of HGVS string from '{}'.".format(variant)
-            )  # pragma: no cover
+            raise ValueError("Could not infer type of HGVS string from '{}'.".format(variant))  # pragma: no cover
 
     def parse_tsv_input(self, df):
         """
@@ -207,13 +192,9 @@ class Enrich2(base.BaseProgram):
         synonymous_table = constants.synonymous_table
         variants_table = constants.variants_table
         has_syn = (
-            "/main/{}/scores".format(synonymous_table) in store
-            or "/main/{}/counts".format(synonymous_table) in store
+            "/main/{}/scores".format(synonymous_table) in store or "/main/{}/counts".format(synonymous_table) in store
         )
-        has_var = (
-            "/main/{}/scores".format(variants_table) in store
-            or "/main/{}/counts".format(variants_table) in store
-        )
+        has_var = "/main/{}/scores".format(variants_table) in store or "/main/{}/counts".format(variants_table) in store
         elements = []
         if has_syn:
             elements.append(synonymous_table)
@@ -225,25 +206,15 @@ class Enrich2(base.BaseProgram):
         for element in elements:
             rep_condition_dfs = get_replicate_score_dataframes(store, element)
             for cnd, score_df in rep_condition_dfs.items():
-                count_df = get_count_dataframe_by_condition(
-                    store, cnd, element, score_df.index
-                )
+                count_df = get_count_dataframe_by_condition(store, cnd, element, score_df.index)
 
-                mave_scores_df = self.convert_h5_df(
-                    df=score_df, element=element, df_type=constants.score_type, cnd=cnd
-                )
+                mave_scores_df = self.convert_h5_df(df=score_df, element=element, df_type=constants.score_type, cnd=cnd)
                 assert_index_equal(score_df.index, count_df.index)
-                mave_counts_df = self.convert_h5_df(
-                    df=count_df, element=element, df_type=constants.count_type, cnd=cnd
-                )
+                mave_counts_df = self.convert_h5_df(df=count_df, element=element, df_type=constants.count_type, cnd=cnd)
 
                 # This step checks both df define the same variants
-                mave_scores_df, mave_counts_df = drop_null(
-                    mave_scores_df, mave_counts_df
-                )
-                validators.validate_datasets_define_same_variants(
-                    mave_scores_df, mave_counts_df
-                )
+                mave_scores_df, mave_counts_df = drop_null(mave_scores_df, mave_counts_df)
+                validators.validate_datasets_define_same_variants(mave_scores_df, mave_counts_df)
 
                 # If we have reached this point, all validators have passed.
                 # Write to file if so.
@@ -253,9 +224,7 @@ class Enrich2(base.BaseProgram):
                     df_type=constants.score_type,
                     cnd=cnd,
                 )
-                mave_scores_df.to_csv(
-                    score_filepath, sep=",", index=None, na_rep=np.NaN
-                )
+                mave_scores_df.to_csv(score_filepath, sep=",", index=None, na_rep=np.NaN)
 
                 count_filepath = self.convert_h5_filepath(
                     basename=self.src_filename,
@@ -263,9 +232,7 @@ class Enrich2(base.BaseProgram):
                     df_type=constants.count_type,
                     cnd=cnd,
                 )
-                mave_counts_df.to_csv(
-                    count_filepath, sep=",", index=None, na_rep=np.NaN
-                )
+                mave_counts_df.to_csv(count_filepath, sep=",", index=None, na_rep=np.NaN)
         store.close()
 
     def convert_h5_filepath(self, basename, element, df_type, cnd):
@@ -281,9 +248,7 @@ class Enrich2(base.BaseProgram):
         filename = "mavedb_{}_{}_{}_{}.csv".format(basename, element, df_type, cnd)
         filename = re.sub(r"\s+", "_", filename)
         filepath = os.path.normpath(os.path.join(self.output_directory, filename))
-        logger.info(
-            self.LOG_MSG.format(elem=element, df_type="scores", cnd=cnd, path=filepath)
-        )
+        logger.info(self.LOG_MSG.format(elem=element, df_type="scores", cnd=cnd, path=filepath))
         return filepath
 
     def convert_h5_df(self, df, element, df_type, cnd=None):
@@ -369,8 +334,7 @@ class Enrich2(base.BaseProgram):
         else:
             mixed_variants = [p.strip().split(" ") for p in variant.split(",")]
             mixed_variants = [
-                (utilities.format_variant(nt), utilities.format_variant(pro))
-                for (nt, pro) in mixed_variants
+                (utilities.format_variant(nt), utilities.format_variant(pro)) for (nt, pro) in mixed_variants
             ]
             # Group variants by their codon position. This will shuffle
             # variant ordering compared to the input string.
@@ -392,9 +356,7 @@ class Enrich2(base.BaseProgram):
 
                 # Infer the correct synonymous syntax from the relevant
                 # mutations within the codon.
-                synonymous_events = [
-                    (nt, pro) for (nt, pro) in codon_group if "p.=" in pro
-                ]
+                synonymous_events = [(nt, pro) for (nt, pro) in codon_group if "p.=" in pro]
                 if synonymous_events and len(codon_group) != len(synonymous_events):
                     logger.warning(
                         "Codon group '{grp}' from variant '{var}' "
@@ -406,9 +368,7 @@ class Enrich2(base.BaseProgram):
                     )
                     parsed_variants[variant_index[nt]] = (nt, inferred_pro)
 
-                non_synonymous_events = [
-                    (nt, pro) for (nt, pro) in codon_group if "p.=" not in pro
-                ]
+                non_synonymous_events = [(nt, pro) for (nt, pro) in codon_group if "p.=" not in pro]
                 for nt, pro in non_synonymous_events:
                     parsed_variants[variant_index[nt]] = (nt, pro)
 
@@ -444,10 +404,7 @@ class Enrich2(base.BaseProgram):
         string_rep = ", ".join([str(v) for v in codon_variants])
 
         if len(set(c.codon_position() for c in codon_variants)) > 1:
-            raise ValueError(
-                "Codon group '{grp}' contains variants from "
-                "different codons.".format(grp=string_rep)
-            )
+            raise ValueError("Codon group '{grp}' contains variants from " "different codons.".format(grp=string_rep))
 
         # Enrich2 uses 1-based positions
         for v in codon_variants:
@@ -489,11 +446,7 @@ class Enrich2(base.BaseProgram):
         mut_codon = wt_codon
         for v in codon_variants:
             within_frame_pos = v.codon_frame_position()
-            mut_codon = (
-                mut_codon[: (within_frame_pos - 1)]
-                + v.alt
-                + mut_codon[(within_frame_pos - 1) + 1 :]
-            )
+            mut_codon = mut_codon[: (within_frame_pos - 1)] + v.alt + mut_codon[(within_frame_pos - 1) + 1 :]
 
         wt_aa = AA_CODES[CODON_TABLE[wt_codon.upper()]]
         mut_aa = AA_CODES[CODON_TABLE[mut_codon.upper()]]
@@ -528,15 +481,9 @@ class Enrich2(base.BaseProgram):
                 if len(variants) == 1:
                     return v
                 else:
-                    raise ValueError(
-                        "special variant strings may not be combined with HGVS-like variants"
-                    )
+                    raise ValueError("special variant strings may not be combined with HGVS-like variants")
             if not re.fullmatch(protein.pro_single_variant, v):
-                raise ValueError(
-                    "'{variant}' contains invalid protein HGVS syntax.".format(
-                        variant=v
-                    )
-                )
+                raise ValueError("'{variant}' contains invalid protein HGVS syntax.".format(variant=v))
         variants = [v[2:] for v in variants]
         return utilities.hgvs_pro_from_event_list(variants)
 
@@ -556,24 +503,13 @@ class Enrich2(base.BaseProgram):
                 if len(variants) == 1:
                     return v
                 else:
-                    raise ValueError(
-                        "special variant strings may not be combined with HGVS-like variants"
-                    )
+                    raise ValueError("special variant strings may not be combined with HGVS-like variants")
             if not re.fullmatch(dna.dna_single_variant, v):
-                raise ValueError(
-                    "'{variant}' contains invalid DNA/RNA HGVS syntax.".format(
-                        variant=v
-                    )
-                )
+                raise ValueError("'{variant}' contains invalid DNA/RNA HGVS syntax.".format(variant=v))
 
         prefix = variants[0][0]  # First char of first variant.
-        n_prefix_types = len(
-            set([v[0] for v in variants if v not in constants.special_variants])
-        )
+        n_prefix_types = len(set([v[0] for v in variants if v not in constants.special_variants]))
         if n_prefix_types != 1:
-            raise ValueError(
-                "'{variant}' contains variants with multiple prefix "
-                "types.".format(variant=variant)
-            )
+            raise ValueError("'{variant}' contains variants with multiple prefix " "types.".format(variant=variant))
         variants = [v[2:] for v in variants]
         return utilities.hgvs_nt_from_event_list(variants, prefix=prefix)

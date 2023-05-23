@@ -16,11 +16,7 @@ auth_token = "AseyaNLLhqv9jAm0joMkq2oqB0bw3GKxTclkT2NtG340RF6CfdM2UC3j8Fv4RpbQ"
 # auth_token =
 # if the base url exists, the client object is instantiated with that value
 # otherwise the client object is instantiated with default value which points to localhost
-client = (
-    Client(base_url, auth_token=auth_token)
-    if base_url
-    else Client(auth_token=auth_token)
-)
+client = Client(base_url, auth_token=auth_token) if base_url else Client(auth_token=auth_token)
 
 # GET
 scoreset = client.get_model_instance(ScoreSet, scoreset_urn)

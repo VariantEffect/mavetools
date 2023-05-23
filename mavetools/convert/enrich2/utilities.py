@@ -157,17 +157,15 @@ class NucleotideSubstitutionEvent(object):
         self.variant = variant.strip()
         if self.variant.startswith("p"):
             raise exceptions.InvalidVariantType(
-                "'{}' is not a valid DNA/RNA "
-                "substitution event.".format(self.variant)
+                "'{}' is not a valid DNA/RNA " "substitution event.".format(self.variant)
             )
         var = Variant(self.variant)
-        if var.variant_type != 'sub' and var.sequence != '=':
+        if var.variant_type != "sub" and var.sequence != "=":
             raise exceptions.InvalidVariantType(
-                "'{}' is not a valid DNA/RNA "
-                "substitution event.".format(self.variant)
+                "'{}' is not a valid DNA/RNA " "substitution event.".format(self.variant)
             )
         self.position = int(str(var.positions))
-        if var.sequence == '=':
+        if var.sequence == "=":
             self.silent = True
             self.ref = None
             self.alt = None
@@ -282,21 +280,19 @@ class ProteinSubstitutionEvent(object):
         self.variant = variant.strip()
         if not self.variant.startswith("p"):
             raise exceptions.InvalidVariantType(
-                "'{}' is not a valid DNA/RNA "
-                "substitution event.".format(self.variant)
+                "'{}' is not a valid DNA/RNA " "substitution event.".format(self.variant)
             )
         var = Variant(self.variant)
-        if var.variant_type != 'sub' and var.sequence != '=':
+        if var.variant_type != "sub" and var.sequence != "=":
             raise exceptions.InvalidVariantType(
-                "'{}' is not a valid amino acid "
-                "substitution event.".format(self.variant)
+                "'{}' is not a valid amino acid " "substitution event.".format(self.variant)
             )
         self._position = None
-        self.position = int(''.join([n for n in str(var.positions) if n in "0123456789"]))
+        self.position = int("".join([n for n in str(var.positions) if n in "0123456789"]))
 
-        if var.sequence == '=':
+        if var.sequence == "=":
             self.silent = True
-            self.ref = ''.join([n for n in str(var.positions) if n not in "0123456789"])
+            self.ref = "".join([n for n in str(var.positions) if n not in "0123456789"])
             self.alt = self.ref
         else:
             self.silent = False
@@ -336,10 +332,7 @@ class ProteinSubstitutionEvent(object):
 
         """
         if value < 1:
-            raise ValueError(
-                "Protein position cannot be less "
-                "Attempted to set {} in {}".format(value, self.variant)
-            )
+            raise ValueError("Protein position cannot be less " "Attempted to set {} in {}".format(value, self.variant))
         self._position = value
 
     @property
@@ -384,6 +377,7 @@ def split_variant(variant):
     if len(variant.split(";")) > 1:
         return ["{}.{}".format(prefix, e.strip()) for e in variant[3:-1].split(";")]
     return [variant]
+
 
 """
 def normalize_variant(variant):
@@ -462,9 +456,7 @@ def hgvs_pro_from_event_list(events):
 
     match = re.fullmatch(protein.pro_single_variant, mave_hgvs) or re.fullmatch(protein.pro_multi_variant, mave_hgvs)
     if not match:
-        raise exceptions.HGVSMatchError(
-            "Could not validate parsed variant '{variant}'.".format(variant=mave_hgvs)
-        )
+        raise exceptions.HGVSMatchError("Could not validate parsed variant '{variant}'.".format(variant=mave_hgvs))
     return mave_hgvs
 
 
@@ -495,16 +487,12 @@ def hgvs_nt_from_event_list(events, prefix):
     if len(events) == 1:
         mave_hgvs = "{}.{}".format(prefix, format_variant(events[0]))
     else:
-        mave_hgvs = "{}.[{}]".format(
-            prefix, ";".join(format_variant(e) for e in events)
-        )
+        mave_hgvs = "{}.[{}]".format(prefix, ";".join(format_variant(e) for e in events))
 
     match = re.fullmatch(dna.dna_single_variant, mave_hgvs) or re.fullmatch(dna.dna_multi_variant, mave_hgvs)
 
     if not match:
-        raise exceptions.HGVSMatchError(
-            "Could not validate parsed variant '{hgvs}'.".format(hgvs=mave_hgvs)
-        )
+        raise exceptions.HGVSMatchError("Could not validate parsed variant '{hgvs}'.".format(hgvs=mave_hgvs))
 
     return mave_hgvs
 
@@ -525,11 +513,7 @@ def non_hgvs_columns(columns):
     pandas.core.indexes.base.Index
         All entries not equal to the HGVS column names.
     """
-    data_columns = [
-        x
-        for x in columns
-        if x != constants.nt_variant_col and x != constants.pro_variant_col
-    ]
+    data_columns = [x for x in columns if x != constants.nt_variant_col and x != constants.pro_variant_col]
     return pd.Index(data_columns)
 
 
@@ -549,9 +533,5 @@ def hgvs_columns(columns):
     pandas.core.indexes.base.Index
         All entries equal to the HGVS column names.
     """
-    data_columns = [
-        x
-        for x in columns
-        if x == constants.nt_variant_col or x == constants.pro_variant_col
-    ]
+    data_columns = [x for x in columns if x == constants.nt_variant_col or x == constants.pro_variant_col]
     return pd.Index(data_columns)

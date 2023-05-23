@@ -5,7 +5,6 @@ from mavetools.mavedf.df_to_pandas import df_to_pandas
 
 
 class Test(TestCase):
-
     # scenario 1 - valid input file
     def test_df_to_pandas(self):
         # typical case - return metadata

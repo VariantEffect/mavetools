@@ -4,7 +4,7 @@ from mavedb.view_models.experiment import ExperimentCreate
 import humps
 
 
-def infer_record_type(record : Mapping) -> Optional[str]:
+def infer_record_type(record: Mapping) -> Optional[str]:
     """
     Infer the type of the record.
 
@@ -27,7 +27,7 @@ def infer_record_type(record : Mapping) -> Optional[str]:
         return None
 
 
-def validate_dataset_with_create_model(dataset : Mapping) -> None:
+def validate_dataset_with_create_model(dataset: Mapping) -> None:
     """
     Validate a dataset using a MaveDB view model before uploading it to the API.
 

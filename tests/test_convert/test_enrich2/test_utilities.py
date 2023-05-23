@@ -173,6 +173,7 @@ class TestSplitVariant(unittest.TestCase):
     def test_split_hgvs_returns_list_of_single_variants(self):
         self.assertListEqual(["c.100A>G", "c.101A>G"], utilities.split_variant("c.[100A>G;101A>G]"))
 
+
 """
 class TestNormalizeVariant(unittest.TestCase):
     # TODO
@@ -194,6 +195,7 @@ class TestNormalizeVariant(unittest.TestCase):
         self.assertEqual(utilities.normalize_variant("r.100a>x"), "r.100a>n")
         self.assertEqual(utilities.normalize_variant("r.100_102delinsnnn"), "r.100_102delinsnnn")
 """
+
 
 class TestFormatVariant(unittest.TestCase):
     def test_stripts_white_space(self):
@@ -260,8 +262,7 @@ class TestHGVSNTFromEventList(unittest.TestCase):
 class TestNonHgvsColumns(unittest.TestCase):
     def test_returns_non_hgvs_columns(self):
         self.assertListEqual(
-            ["score"],
-            list(utilities.non_hgvs_columns(["score", constants.nt_variant_col, constants.pro_variant_col]))
+            ["score"], list(utilities.non_hgvs_columns(["score", constants.nt_variant_col, constants.pro_variant_col]))
         )
 
 
@@ -269,7 +270,7 @@ class TestHgvsColumns(unittest.TestCase):
     def test_returns_only_hgvs_columns(self):
         self.assertListEqual(
             [constants.nt_variant_col, constants.pro_variant_col],
-            list(utilities.hgvs_columns(["score", constants.nt_variant_col, constants.pro_variant_col]))
+            list(utilities.hgvs_columns(["score", constants.nt_variant_col, constants.pro_variant_col])),
         )
 
 
