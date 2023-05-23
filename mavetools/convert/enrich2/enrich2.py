@@ -342,9 +342,9 @@ class Enrich2(base.BaseProgram):
             # if column in constants.variant_columns:    # this never fires
             #    astype = str
             if np.issubdtype(column_type, np.floating):
-                astype = np.float
+                astype = float
             elif np.issubdtype(column_type, np.signedinteger):
-                astype = np.int
+                astype = int
             else:
                 logger.warning("Dropping non-numeric column '{}'".format(column))
                 continue

@@ -69,8 +69,8 @@ class MaveDf:
         for i in range(len(self.pandas_df["hgvs_nt"])):
 
             # check for legacy hgvs format (i.e., c.[1C>A;2=;3=]) and update if needed
-            self.pandas_df["hgvs_nt"][i] = legacy_to_mave_hgvs_nt(
-                self.pandas_df["hgvs_nt"][i]
+            self.pandas_df.loc[i, "hgvs_nt"] = legacy_to_mave_hgvs_nt(
+                self.pandas_df.loc[i, "hgvs_nt"]
             )
 
             # new implementation

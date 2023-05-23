@@ -489,11 +489,14 @@ def hgvs_nt_from_event_list(events, prefix):
     HGVSMatchError
         If string is not in Mave HGVS format.
     """
+    # remove duplicates
+    events = sorted(set(events), key=events.index)
+
     if len(events) == 1:
         mave_hgvs = "{}.{}".format(prefix, format_variant(events[0]))
     else:
         mave_hgvs = "{}.[{}]".format(
-            prefix, ";".join([format_variant(e) for e in events])
+            prefix, ";".join(format_variant(e) for e in events)
         )
 
     match = re.fullmatch(dna.dna_single_variant, mave_hgvs) or re.fullmatch(dna.dna_multi_variant, mave_hgvs)
