@@ -627,8 +627,8 @@ class TestNucleotideHGVSParing(ProgramTestCase):
     def test_strips_ws(self):
         result = self.enrich2.parse_nucleotide_variant(" c.101A>G ")
         self.assertEqual(result, "c.101A>G")
-        result = self.enrich2.parse_nucleotide_variant(" c.2A>G, c.2A>G ")
-        self.assertEqual(result, "c.[2A>G;2A>G]")
+        result = self.enrich2.parse_nucleotide_variant(" c.2A>G, c.101A>G ")
+        self.assertEqual(result, "c.[2A>G;101A>G]")
 
 
 # Mixed parsing tests

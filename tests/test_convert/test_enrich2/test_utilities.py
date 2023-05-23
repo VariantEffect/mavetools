@@ -240,14 +240,17 @@ class TestHGVSNTFromEventList(unittest.TestCase):
         result = utilities.hgvs_nt_from_event_list([" 45A>G "], prefix="c")
         self.assertEqual(result, "c.45A>G")
 
-    def test_combines_muilt_events(self):
+    def test_combines_multi_events(self):
         result = utilities.hgvs_nt_from_event_list(["45A>G", "127_128delinsAAA"], prefix="n")
         self.assertEqual(result, "n.[45A>G;127_128delinsAAA]")
 
     def test_does_not_keep_duplicate_events(self):
         # TODO
-        result = utilities.hgvs_nt_from_event_list(["45a>u", "45a>u"], prefix="r")
-        self.assertEqual(result, "r.[45a>u]")
+        result = utilities.hgvs_nt_from_event_list(["45A>T", "45A>T"], prefix="c")
+        self.assertEqual(result, "c.45A>T")
+
+        result = utilities.hgvs_nt_from_event_list(["45A>T", "127_128delinsAAA", "45A>T"], prefix="c")
+        self.assertEqual(result, "c.[45A>T;127_128delinsAAA]")
 
     def test_error_invalid_hgvs(self):
         with self.assertRaises(exceptions.HGVSMatchError):
