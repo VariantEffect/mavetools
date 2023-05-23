@@ -68,9 +68,7 @@ class NewTarget:
 
     # existing_target: str = attr.ib(kw_only=True, default=None)
     name: str = attr.ib(kw_only=True)
-    reference_sequence: Optional[ReferenceSequence] = attr.ib(
-        kw_only=True, default=None
-    )
+    reference_sequence: Optional[ReferenceSequence] = attr.ib(kw_only=True, default=None)
     type: str = attr.ib(kw_only=True)
     sequence_type: str = attr.ib(kw_only=True)
     sequence_text: str = attr.ib(kw_only=True, default=None)

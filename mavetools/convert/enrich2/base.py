@@ -4,7 +4,7 @@ import logging
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-#from hgvsp import is_multi
+# from hgvsp import is_multi
 from mavehgvs import Variant
 from fqfa.constants.iupac.protein import AA_CODES
 from fqfa.validator.validator import dna_bases_validator
@@ -61,19 +61,19 @@ class BaseProgram(metaclass=ABCMeta):
     """
 
     def __init__(
-            self,
-            src,
-            wt_sequence,
-            offset=0,
-            dst=None,
-            one_based=True,
-            skip_header_rows=0,
-            skip_footer_rows=0,
-            score_column="score",
-            hgvs_column="hgvs",
-            input_type=None,
-            sheet_name=None,
-            is_coding=True,
+        self,
+        src,
+        wt_sequence,
+        offset=0,
+        dst=None,
+        one_based=True,
+        skip_header_rows=0,
+        skip_footer_rows=0,
+        score_column="score",
+        hgvs_column="hgvs",
+        input_type=None,
+        sheet_name=None,
+        is_coding=True,
     ):
         # Check the input is a readable file.
         self.src = os.path.normpath(os.path.expanduser(src))
@@ -92,9 +92,7 @@ class BaseProgram(metaclass=ABCMeta):
         if self.dst is None:
             dst, _ = os.path.split(src)
             if self.ext.lower() == ".h5":
-                dst = os.path.normpath(
-                    os.path.join(os.path.expanduser(dst), self.src_filename)
-                )
+                dst = os.path.normpath(os.path.join(os.path.expanduser(dst), self.src_filename))
             self.dst = dst
         else:
             self.dst = os.path.normpath(os.path.expanduser(dst))
@@ -194,12 +192,9 @@ class BaseProgram(metaclass=ABCMeta):
         variant : str
             A nucleotide substitution variant with valid HGVS_ syntax.
         """
-        #if is_multi(variant):
+        # if is_multi(variant):
         if Variant(variant).is_multi_variant():
-            _ = [
-                self.validate_against_wt_sequence(v)
-                for v in utilities.split_variant(variant)
-            ]
+            _ = [self.validate_against_wt_sequence(v) for v in utilities.split_variant(variant)]
             return
 
         if variant in constants.special_variants:
@@ -212,10 +207,9 @@ class BaseProgram(metaclass=ABCMeta):
         zero_based_pos = variant.position - int(self.one_based)
         if zero_based_pos < 0:
             raise IndexError(
-                (
-                    "Encountered a negative position in {}. "
-                    "Positions might not be one-based."
-                ).format(variant, self.one_based)
+                ("Encountered a negative position in {}. " "Positions might not be one-based.").format(
+                    variant, self.one_based
+                )
             )
 
         if zero_based_pos >= len(self.wt_sequence):
@@ -253,12 +247,9 @@ class BaseProgram(metaclass=ABCMeta):
         variant : str
             A protein substitution variant with valid HGVS_ syntax.
         """
-        #if is_multi(variant):
+        # if is_multi(variant):
         if Variant(variant).is_multi_variant():
-            _ = [
-                self.validate_against_protein_sequence(v)
-                for v in utilities.split_variant(variant)
-            ]
+            _ = [self.validate_against_protein_sequence(v) for v in utilities.split_variant(variant)]
             return
 
         if variant in constants.special_variants or "p.=" in variant:

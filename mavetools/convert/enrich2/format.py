@@ -40,10 +40,7 @@ def apply_offset(variant, offset, enrich2=None):
             nt_instance = nt
             nt.position -= offset
             if nt.position < 1:
-                raise ValueError(
-                    "Position after offset {} "
-                    "applied to {} is negative.".format(offset, nt.variant)
-                )
+                raise ValueError("Position after offset {} " "applied to {} is negative.".format(offset, nt.variant))
             if enrich2:
                 enrich2.validate_against_wt_sequence(nt.format)
             nt = nt.format
@@ -67,9 +64,7 @@ def apply_offset(variant, offset, enrich2=None):
             if use_brackets:
                 pro = "({})".format(pro)
 
-        variants.append(
-            "{} {}".format("" if nt is None else nt, "" if pro is None else pro).strip()
-        )
+        variants.append("{} {}".format("" if nt is None else nt, "" if pro is None else pro).strip())
 
     return ", ".join(variants)
 
@@ -154,14 +149,10 @@ def get_replicate_score_dataframes(store, element=constants.variants_table):
     scores_key = "/main/{}/scores".format(element)
     shared_key = "/main/{}/scores_shared".format(element)
     if scores_key not in store:
-        logger.warning(
-            "Store is missing key {}. Skipping score file output.".format(scores_key)
-        )
+        logger.warning("Store is missing key {}. Skipping score file output.".format(scores_key))
         return condition_dfs
     if shared_key not in store:
-        logger.warning(
-            "Store is missing key {}. Skipping score file output.".format(shared_key)
-        )
+        logger.warning("Store is missing key {}. Skipping score file output.".format(shared_key))
         return condition_dfs
 
     for cnd in store["/main/{}/scores".format(element)].columns.levels[0]:
@@ -169,14 +160,10 @@ def get_replicate_score_dataframes(store, element=constants.variants_table):
             store["/main/{}/scores".format(element)][cnd].index,
             store["/main/{}/scores_shared".format(element)][cnd].index,
         )
-        condition_dfs[cnd] = store["/main/{}/scores".format(element)].loc[
-            :, idx[cnd, :, :]
-        ]
+        condition_dfs[cnd] = store["/main/{}/scores".format(element)].loc[:, idx[cnd, :, :]]
         condition_dfs[cnd].columns = condition_dfs[cnd].columns.levels[1]
 
-        rep_scores = store["/main/{}/scores_shared".format(element)].loc[
-            :, idx[cnd, :, :]
-        ]
+        rep_scores = store["/main/{}/scores_shared".format(element)].loc[:, idx[cnd, :, :]]
         rep_scores.columns = flatten_column_names(rep_scores.columns, (2, 1))
 
         condition_dfs[cnd] = pd.merge(
@@ -189,9 +176,7 @@ def get_replicate_score_dataframes(store, element=constants.variants_table):
     return condition_dfs
 
 
-def get_count_dataframe_by_condition(
-    store, cnd, element=constants.variants_table, filtered=None
-):
+def get_count_dataframe_by_condition(store, cnd, element=constants.variants_table, filtered=None):
     """
     Return a DataFrame corresponding the condition cnd.
     Store is an open Enrich2 HDF5 file from an Experiment.
@@ -202,19 +187,13 @@ def get_count_dataframe_by_condition(
 
     count_key = "/main/{}/counts".format(element)
     if count_key not in store:
-        logger.warning(
-            "Store is missing key {}. Skipping count file output.".format(count_key)
-        )
+        logger.warning("Store is missing key {}. Skipping count file output.".format(count_key))
         return None
 
     if filtered is None:
         scores_key = "/main/{}/scores".format(element)
         if scores_key not in store:
-            logger.warning(
-                "Store is missing key {}. Skipping count file output.".format(
-                    scores_key
-                )
-            )
+            logger.warning("Store is missing key {}. Skipping count file output.".format(scores_key))
             return None
         filtered = store["/main/{}/scores".format(element)].index
 
@@ -224,4 +203,3 @@ def get_count_dataframe_by_condition(
     df = store_df.loc[filtered, idx[cnd, :, :]]
     df.columns = flatten_column_names(df.columns, (1, 2))
     return df
-

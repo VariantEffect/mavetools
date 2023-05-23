@@ -55,9 +55,7 @@ class TestGetCountDataFrames(ProgramTestCase):
 
     def test_column_names_combine_selection_and_timepoint(self):
         cnd_df = enrich2.get_count_dataframe_by_condition(self.store, cnd="c1")
-        self.assertListEqual(
-            list(cnd_df.columns), ["rep1_t0", "rep1_t1", "rep2_t0", "rep2_t1"]
-        )
+        self.assertListEqual(list(cnd_df.columns), ["rep1_t0", "rep1_t1", "rep2_t0", "rep2_t1"])
 
     def test_index_of_dfs_match_index_of_scores(self):
         cnd_df = enrich2.get_count_dataframe_by_condition(self.store, cnd="c1")
@@ -92,9 +90,7 @@ class TestFlattenColumnNames(unittest.TestCase):
         )
 
     def test_column_names_combine_columns_using_ordering(self):
-        cnames = enrich2.flatten_column_names(
-            self.df.loc[:, pd.IndexSlice["c1", :, :]].columns, ordering=(2, 1)
-        )
+        cnames = enrich2.flatten_column_names(self.df.loc[:, pd.IndexSlice["c1", :, :]].columns, ordering=(2, 1))
         self.assertListEqual(cnames, ["t0_rep1", "t1_rep1", "t0_rep2", "t1_rep2"])
 
 
@@ -113,9 +109,7 @@ class TestReplicateScoreDataFrames(ProgramTestCase):
             [["c1", "c2"], ["rep1", "rep2"], ["SE", "score"]],
             names=["condition", "selection", "value"],
         )
-        index = pd.MultiIndex.from_product(
-            [["c1", "c2"], ["SE", "epsilon", "score"]], names=["condition", "value"]
-        )
+        index = pd.MultiIndex.from_product([["c1", "c2"], ["SE", "epsilon", "score"]], names=["condition", "value"])
 
         hgvs = ["c.1A>G", "c.2A>G"]
         self.store["/main/variants/scores/"] = pd.DataFrame(
@@ -302,36 +296,26 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
     def test_doesnt_open_invalid_rows_file_if_there_are_no_invalid_rows(self):
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
-        invalid_rows_path = os.path.join(
-            os.path.dirname(self.path), "enrich2_invalid_rows.csv"
-        )
+        invalid_rows_path = os.path.join(os.path.dirname(self.path), "enrich2_invalid_rows.csv")
 
         df = pd.DataFrame(data={"score": [1]}, index=["c.1A>G (p.Lys1Val)"])
-        self.enrich2.convert_h5_df(
-            df=df, element=constants.variants_table, df_type=constants.score_type
-        )
+        self.enrich2.convert_h5_df(df=df, element=constants.variants_table, df_type=constants.score_type)
         self.assertFalse(os.path.isfile(invalid_rows_path))
 
     def test_drops_non_numeric_columns(self):
         df = pd.DataFrame(data={"score": [1], "B": ["a"]}, index=["c.1A>G (p.Lys1Val)"])
-        result = self.enrich2.convert_h5_df(
-            df=df, element=constants.variants_table, df_type=constants.score_type
-        )
+        result = self.enrich2.convert_h5_df(df=df, element=constants.variants_table, df_type=constants.score_type)
         self.assertNotIn("B", result)
 
     def test_type_casts_numeric_to_int_and_float(self):
         df = pd.DataFrame(data={"score": [1], "B": [1.2]}, index=["c.1A>G (p.Lys1Val)"])
-        result = self.enrich2.convert_h5_df(
-            df=df, element=constants.variants_table, df_type=constants.score_type
-        )
+        result = self.enrich2.convert_h5_df(df=df, element=constants.variants_table, df_type=constants.score_type)
         self.assertTrue(np.issubdtype(result["score"].values[0], np.signedinteger))
         self.assertTrue(np.issubdtype(result["B"].values[0], np.floating))
 
     def test_sets_index_as_input_index(self):
         df = pd.DataFrame({"score": [1], "B": ["a"]}, index=["c.1A>T (p.Lys1Val)"])
-        result = self.enrich2.convert_h5_df(
-            df=df, element=constants.variants_table, df_type=constants.score_type
-        )
+        result = self.enrich2.convert_h5_df(df=df, element=constants.variants_table, df_type=constants.score_type)
         assert_index_equal(result.index, df.index)
 
     def test_opens_invalid_rows_file_for_invalid_rows(self):
@@ -339,13 +323,9 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
         df = pd.DataFrame(data={"score": [1], "B": ["a"]}, index=["c.1T>G (p.Lys1Val)"])
         with self.assertRaises(ValueError):
-            self.enrich2.convert_h5_df(
-                df=df, element=constants.variants_table, df_type=constants.score_type
-            )
+            self.enrich2.convert_h5_df(df=df, element=constants.variants_table, df_type=constants.score_type)
 
-        invalid_rows_path = os.path.join(
-            os.path.dirname(self.path), "enrich2_invalid_rows.csv"
-        )
+        invalid_rows_path = os.path.join(os.path.dirname(self.path), "enrich2_invalid_rows.csv")
 
         self.assertTrue(os.path.isfile(invalid_rows_path))
 
@@ -371,9 +351,7 @@ class TestEnrich2ConvertH5Df(ProgramTestCase):
     def test_invalid_rows_file_contains_error_description(self):
         self.path = os.path.join(self.data_dir, "enrich2", "enrich2.tsv")
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
-        invalid_rows_path = os.path.join(
-            os.path.dirname(self.path), "enrich2_invalid_rows.csv"
-        )
+        invalid_rows_path = os.path.join(os.path.dirname(self.path), "enrich2_invalid_rows.csv")
 
         df = pd.DataFrame(
             data={"score": [1.1, 1.2]},
@@ -480,9 +458,7 @@ class TestEnrich2ParseRow(ProgramTestCase):
     def test_nt_variant_is_none_special_variant_is_from_synonymous_table(self):
         self.assertEqual(
             (None, constants.enrich2_synonymous),
-            self.enrich2.parse_row(
-                (constants.enrich2_synonymous, constants.synonymous_table)
-            ),
+            self.enrich2.parse_row((constants.enrich2_synonymous, constants.synonymous_table)),
         )
 
     @patch("mavetools.convert.enrich2.enrich2.apply_offset", return_value="c.3T>C (p.Thr1=)")
@@ -587,9 +563,7 @@ class TestNucleotideHGVSParing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence="AAA")
 
     def test_parses_non_coding_nt_variants_into_multi_variant(self):
-        nt = self.enrich2.parse_nucleotide_variant(
-            "c.-455T>A, c.-122A>T, c.-101A>T, c.-42T>A"
-        )
+        nt = self.enrich2.parse_nucleotide_variant("c.-455T>A, c.-122A>T, c.-101A>T, c.-42T>A")
         self.assertEqual(nt, "c.[-455T>A;-122A>T;-101A>T;-42T>A]")
 
     def test_combines_into_multi_variant_syntax(self):
@@ -642,20 +616,16 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         self.enrich2 = enrich2.Enrich2(self.path, wt_sequence=self.wt)
 
     def test_parses_nt_variants_into_multi_variant(self):
-        nt, _ = self.enrich2.parse_mixed_variant(
-            "c.1A>T (p.Thr1Tyr), c.2C>A (p.Thr1Tyr)"
-        )
+        nt, _ = self.enrich2.parse_mixed_variant("c.1A>T (p.Thr1Tyr), c.2C>A (p.Thr1Tyr)")
         self.assertEqual(nt, "c.[1A>T;2C>A]")
-        #self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(nt))
+        # self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(nt))
         self.assertIsNotNone(re.fullmatch(dna.dna_multi_variant, nt))
 
     def test_parses_pro_variants_into_multi_variant(self):
         self.enrich2.wt_sequence = "ACTCAA"
-        _, pro = self.enrich2.parse_mixed_variant(
-            "c.1A>T (p.Thr1Pro), c.4C>A (p.Gln2Lys)"
-        )
+        _, pro = self.enrich2.parse_mixed_variant("c.1A>T (p.Thr1Pro), c.4C>A (p.Gln2Lys)")
         self.assertEqual(pro, "p.[Thr1Pro;Gln2Lys]")
-        #self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(pro))
+        # self.assertIsNotNone(hgvsp.multi_variant_re.fullmatch(pro))
         self.assertIsNotNone(re.fullmatch(protein.pro_multi_variant, pro))
 
     def test_error_list_len_different(self):
@@ -667,15 +637,11 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
 
     def test_variant_order_maintained(self):
         self.enrich2.wt_sequence = "AAAAAT"
-        nt, pro = self.enrich2.parse_mixed_variant(
-            "c.1= (p.Lys1Ile), c.6T>G (p.Asn2Lys), c.2A>T (p.Lys1Ile)"
-        )
+        nt, pro = self.enrich2.parse_mixed_variant("c.1= (p.Lys1Ile), c.6T>G (p.Asn2Lys), c.2A>T (p.Lys1Ile)")
         self.assertEqual(nt, "c.[1=;6T>G;2A>T]")
         self.assertEqual(pro, "p.[Lys1Ile;Asn2Lys]")
 
-    @patch.object(
-        enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1="
-    )
+    @patch.object(enrich2.Enrich2, "infer_silent_aa_substitution", return_value="p.Lys1=")
     def test_groups_codons(self, patch):
         self.enrich2.wt_sequence = "AAAAAT"
         variant = "c.1= (p.=), c.6T>G (p.Asn2Lys), c.2= (p.=)"
@@ -692,9 +658,7 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
     def test_nt_variant_is_none_special_variant_is_from_synonymous_table(self):
         self.assertEqual(
             (None, constants.enrich2_synonymous),
-            self.enrich2.parse_row(
-                (constants.enrich2_synonymous, constants.synonymous_table)
-            ),
+            self.enrich2.parse_row((constants.enrich2_synonymous, constants.synonymous_table)),
         )
 
     def test_valueerror_multiple_prefix_types(self):
@@ -713,9 +677,9 @@ class TestEnrich2MixedHGVSParsing(ProgramTestCase):
         nt, pro = self.enrich2.parse_mixed_variant("c.3T>C (p.=)")
         self.assertEqual(nt, "c.3T>C")
         self.assertEqual(pro, "p.Thr1=")
-        #self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(nt))
+        # self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(nt))
         self.assertIsNotNone(re.fullmatch(dna.dna_single_variant, nt))
-        #self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(pro))
+        # self.assertIsNotNone(hgvsp.single_variant_re.fullmatch(pro))
         self.assertIsNotNone(re.fullmatch(protein.pro_single_variant, pro))
 
     def test_protein_set_as_nt_when_table_is_not_syn_and_variant_is_special(self):

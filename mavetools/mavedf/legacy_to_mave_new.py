@@ -113,9 +113,7 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs):
                 else:  # value is in list form
                     adjacent_values.append(value[0])
             else:  # check if next value is adjacent to previous
-                if (
-                    adjacent_values[-1][0] - value[0] == -1
-                ):  # value is adjacent to previous value
+                if adjacent_values[-1][0] - value[0] == -1:  # value is adjacent to previous value
                     # add value to adjacent values
                     adjacent_values.append(value)
                 else:  # value is not adjacent to previous values
@@ -139,9 +137,7 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs):
                         )
                         for adj_val in adjacent_values:
                             # add new base
-                            constructing_mave_hgvs = (
-                                constructing_mave_hgvs + adj_val[2] + ";"
-                            )
+                            constructing_mave_hgvs = constructing_mave_hgvs + adj_val[2] + ";"
                     # set previous values as empty
                     adjacent_values.clear()
                     # add new value to adjacent values
@@ -159,11 +155,7 @@ def legacy_to_mave_hgvs_nt(legacy_hgvs):
             )
         else:  # more than one value in adjacent_values
             constructing_mave_hgvs = (
-                constructing_mave_hgvs
-                + str(adjacent_values[0][0])
-                + "_"
-                + str(adjacent_values[-1][0])
-                + "delins"
+                constructing_mave_hgvs + str(adjacent_values[0][0]) + "_" + str(adjacent_values[-1][0]) + "delins"
             )
             for adj_val in adjacent_values:
                 # add new base

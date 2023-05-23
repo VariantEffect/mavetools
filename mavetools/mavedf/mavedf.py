@@ -67,11 +67,8 @@ class MaveDf:
 
         # iterate through df and parse hgvs_nt column to get data
         for i in range(len(self.pandas_df["hgvs_nt"])):
-
             # check for legacy hgvs format (i.e., c.[1C>A;2=;3=]) and update if needed
-            self.pandas_df.loc[i, "hgvs_nt"] = legacy_to_mave_hgvs_nt(
-                self.pandas_df.loc[i, "hgvs_nt"]
-            )
+            self.pandas_df.loc[i, "hgvs_nt"] = legacy_to_mave_hgvs_nt(self.pandas_df.loc[i, "hgvs_nt"])
 
             # new implementation
             # instantiate mavevariant
@@ -110,9 +107,7 @@ class MaveDf:
             elif is_deletion(hgvs):  # target_codon was deleted
                 variant_codon = None
                 sub_one = None  # no nucleotide substitutions
-            elif is_substitution_one_base(
-                hgvs
-            ):  # variant_codon has one nucleotide substitution
+            elif is_substitution_one_base(hgvs):  # variant_codon has one nucleotide substitution
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get index of nucleotide substitution
@@ -122,9 +117,7 @@ class MaveDf:
                 # set other possible indices for codon substitution to None
                 sub_two = None
                 sub_three = None
-            elif is_substitution_two_bases_nonadjacent(
-                hgvs
-            ):  # variant has two nucleotide substitutions, non-adjacent
+            elif is_substitution_two_bases_nonadjacent(hgvs):  # variant has two nucleotide substitutions, non-adjacent
                 # instantiate Variant object
                 variant = Variant(hgvs)
                 # get indices of nucleotide substitutions
@@ -143,9 +136,7 @@ class MaveDf:
                 sub_one = int(str(variant.positions[0])) % 3 - 1
                 # get string of substituted nucleotides
                 sub_nucs = variant.sequence
-                if (
-                    len(sub_nucs) == 2
-                ):  # variant codon has two adjacent nucleotide substitutions
+                if len(sub_nucs) == 2:  # variant codon has two adjacent nucleotide substitutions
                     # assign additional nucleotide substitution indices
                     sub_two = sub_one + 1
                     # get nucleotides of substitutions

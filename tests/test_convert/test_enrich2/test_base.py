@@ -112,16 +112,12 @@ class TestPaths(ProgramTestCase):
 
     def test_output_file_joins_dst_and_dst_filename(self):
         p = BaseTest(src=self.src, wt_sequence="AAA")
-        self.assertEqual(
-            p.output_file, os.path.join(self.data_dir, "enrich", "mavedb_enrich.csv")
-        )
+        self.assertEqual(p.output_file, os.path.join(self.data_dir, "enrich", "mavedb_enrich.csv"))
 
     def test_output_directory_expands_user_and_norms_path(self):
         p = BaseTest(src=self.src, wt_sequence="AAA")
         p.dst = "~//user//"
-        self.assertEqual(
-            p.output_directory, os.path.join(os.path.expanduser("~"), "user")
-        )
+        self.assertEqual(p.output_directory, os.path.join(os.path.expanduser("~"), "user"))
 
 
 class TestWtSequence(ProgramTestCase):
@@ -259,7 +255,7 @@ class TestBaseProgramValidateAgainstProteinSeq(ProgramTestCase):
 
     def test_validates_multi(self):
         self.base.validate_against_protein_sequence("p.[Met1Lys;Lys2Thr]")
-        with self.assertRaises(MaveHgvsParseError): # cannot contain target identical
+        with self.assertRaises(MaveHgvsParseError):  # cannot contain target identical
             self.base.validate_against_protein_sequence("p.[Met1Lys;Met2=]")
 
     def test_error_invalid_position_multi(self):

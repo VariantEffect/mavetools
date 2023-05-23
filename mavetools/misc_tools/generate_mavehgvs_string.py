@@ -2,6 +2,8 @@ from mavehgvs.variant import Variant
 import mavehgvs
 import pandas as pd
 
+
+# TODO: delete this file probably?
 def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=False):
     """
     This function generates a mavehgvs formatted string from a valid prefix, the wt amino acid, codon or base, the
@@ -42,16 +44,17 @@ def generate_mavehgvs_string(prefix, wt, mutant, position: int, multi_variant=Fa
         hgvs = protein_mavehgvs(wt, mutant, position)
     # if c or n is in prefix
     elif prefix == "c" or prefix == "n":
-
-
+        pass  # TODO: this is broken
     return hgvs
 
+
 def protein_mavehgvs(wt, mutant, position: int):
-    if pd.isna(position): return None
+    if pd.isna(position):
+        return None
     if wt == mutant:
         hgvs = "p." + wt + str(position) + "="
     else:
         hgvs = "p." + wt + str(position) + mutant
     # validate variant
     hgvs_validate = mavehgvs.Variant(hgvs)
-    return hgvs #, hgvs_validate
+    return hgvs  # , hgvs_validate

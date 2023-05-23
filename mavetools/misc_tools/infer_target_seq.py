@@ -25,11 +25,30 @@ def infer_target_seq(variant_list):
         there are variants for positions 1-10 and 12-15 but not 11). The function would also throw an error if
         there are conflicting target residues for the same position.
     """
-    aa_dict = {"A": "Ala", "C": "Cys", "D": "Asp", "E": "Glu", "F": "Phe",
-               "G": "Gly", "H": "His", "I": "Ile", "K": "Lys", "L": "Leu",
-               "M": "Met", "N": "Asn", "P": "Pro", "Q": "Gln", "R": "Arg",
-               "S": "Ser", "T": "Thr", "V": "Val", "W": "Trp", "Y": "Tyr",
-               "*": "Ter", "WTSYN": ""}
+    aa_dict = {
+        "A": "Ala",
+        "C": "Cys",
+        "D": "Asp",
+        "E": "Glu",
+        "F": "Phe",
+        "G": "Gly",
+        "H": "His",
+        "I": "Ile",
+        "K": "Lys",
+        "L": "Leu",
+        "M": "Met",
+        "N": "Asn",
+        "P": "Pro",
+        "Q": "Gln",
+        "R": "Arg",
+        "S": "Ser",
+        "T": "Thr",
+        "V": "Val",
+        "W": "Trp",
+        "Y": "Tyr",
+        "*": "Ter",
+        "WTSYN": "",
+    }
 
     # declare target_seq
     target_seq = ""
@@ -38,7 +57,7 @@ def infer_target_seq(variant_list):
     for variant in variant_list:
         # check if Variaint is not a multivariant and is a substitution
         if variant.is_multi_variant() is False:
-            if variant.variant_type == 'sub':
+            if variant.variant_type == "sub":
                 # check if variant is protein data
                 # TODO consider using is_protein method
                 if str(variant.positions)[0] in "ACGHILMOPSTV":  # protein variant
@@ -46,14 +65,14 @@ def infer_target_seq(variant_list):
                     print(str(variant.positions)[0])
                     # get position, target_base of variant
                     position = int(str(variant.positions)[3:])
-                    target_aa = str(variant.positions)[:-len(str(position))]
+                    target_aa = str(variant.positions)[: -len(str(position))]
                     # check if position is beyond current length of target_seq
                     while int(position) > len(target_seq):
                         # append target_seq with N until we reach position
-                        target_seq = target_seq + 'N'
+                        target_seq = target_seq + "N"
                     # now that they are the same length, add target base
                     target_aa = list(aa_dict.keys())[list(aa_dict.values()).index(target_aa)]
-                    target_seq = target_seq[0:position - 1] + target_aa + target_seq[position:]
+                    target_seq = target_seq[0 : position - 1] + target_aa + target_seq[position:]
                 else:  # nucleotide variant
                     print(str(variant.positions))
                     print(str(variant.positions)[0])
@@ -63,10 +82,10 @@ def infer_target_seq(variant_list):
                     # check if position is beyond current length of target_seq
                     while int(position) > len(target_seq):
                         # append target_seq with N until we reach position
-                        target_seq = target_seq + 'N'
+                        target_seq = target_seq + "N"
                     # now that they are the same length, add target base
-                    target_seq = target_seq[0:position-1] + target_base + target_seq[position:]
-            if variant.variant_type == 'delins':
+                    target_seq = target_seq[0 : position - 1] + target_base + target_seq[position:]
+            if variant.variant_type == "delins":
                 # do this
                 continue
         if variant.is_multi_variant():
@@ -75,23 +94,23 @@ def infer_target_seq(variant_list):
                     if str(variant.positions[i])[0] in "ACGHILMOPSTV":  # protein variant
                         # get position, target_base of variant
                         position = int(str(variant.positions[i])[3:])
-                        target_aa = str(variant.positions[i])[:-len(str(position))]
+                        target_aa = str(variant.positions[i])[: -len(str(position))]
                         # check if position is beyond current length of target_seq
                         while int(position) > len(target_seq):
                             # append target_seq with N until we reach position
-                            target_seq = target_seq + 'N'
+                            target_seq = target_seq + "N"
                         # now that they are the same length, add target base
                         target_aa = list(aa_dict.keys())[list(aa_dict.values()).index(target_aa)]
-                        target_seq = target_seq[0:position - 1] + target_aa + target_seq[position:]
+                        target_seq = target_seq[0 : position - 1] + target_aa + target_seq[position:]
                     else:  # nucleotide variant
                         position = int(str(variant.positions[i]))
                         target_base = str(variant.sequence[i][0])
                         # check if position is beyond current length of target_seq
                         while int(position) > len(target_seq):
                             # append target_seq with N until we reach position
-                            target_seq = target_seq + 'N'
+                            target_seq = target_seq + "N"
                         # now that they are the same length, add target base
-                        target_seq = target_seq[0:position - 1] + target_base + target_seq[position:]
+                        target_seq = target_seq[0 : position - 1] + target_base + target_seq[position:]
 
     if "N" in target_seq:
         raise ValueError("Gaps in target seq.")
