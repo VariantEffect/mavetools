@@ -6,8 +6,5 @@
 Enrich
 ======
 
-.. automodule:: mavetools.convert.convert
-   :members:
-
 .. automodule:: mavetools.convert.enrich
    :members:

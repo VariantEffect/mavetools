@@ -6,8 +6,5 @@
 Codon
 =====
 
-.. automodule:: mavetools.convert.convert
-   :members:
-
 .. automodule:: mavetools.convert.codon
    :members:

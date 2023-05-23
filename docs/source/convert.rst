@@ -14,4 +14,3 @@ Convert contains useful data conversion functions.
    codon
    enrich
    enrich2
-   notebooks
