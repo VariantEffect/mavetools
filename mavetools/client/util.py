@@ -1,5 +1,5 @@
 from typing import Mapping, Optional
-from mavedb.view_models.scoreset import ScoresetCreate
+from mavedb.view_models.score_set import ScoreSetCreate
 from mavedb.view_models.experiment import ExperimentCreate
 import humps
 
@@ -48,7 +48,7 @@ def validate_dataset_with_create_model(dataset: Mapping) -> None:
     """
     record_type = infer_record_type(dataset)
     if record_type == "score_set":
-        ScoresetCreate(**dataset)
+        ScoreSetCreate(**dataset)
     elif record_type == "experiment":
         ExperimentCreate(**dataset)
     else:

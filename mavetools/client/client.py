@@ -7,7 +7,7 @@ import humps
 from urllib.parse import urlparse
 from aiohttp import ClientResponseError
 from mavedb.lib.validation.constants.urn import (
-    MAVEDB_SCORESET_URN_RE,
+    MAVEDB_SCORE_SET_URN_RE,
     MAVEDB_EXPERIMENT_URN_RE,
     MAVEDB_EXPERIMENTSET_URN_RE,
 )
@@ -66,9 +66,9 @@ class Client:
             self.auth_token = auth_token
 
         self.endpoints = {
-            "score_set": "scoresets",
+            "score_set": "score-sets",
             "experiment": "experiments",
-            "experiment_set": "experimentSets",
+            "experiment_set": "experiment-sets",
         }
 
     async def get_dataset(self, urn: str, record_type: Optional[str] = None) -> Awaitable[str]:
@@ -98,7 +98,7 @@ class Client:
         """
         # infer record_type if needed
         if record_type is None:
-            if MAVEDB_SCORESET_URN_RE.match(urn):
+            if MAVEDB_SCORE_SET_URN_RE.match(urn):
                 record_type = "score_set"
             elif MAVEDB_EXPERIMENT_URN_RE.match(urn):
                 record_type = "experiment"
