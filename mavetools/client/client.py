@@ -6,10 +6,10 @@ import pandas as pd
 import humps
 from urllib.parse import urlparse
 from aiohttp import ClientResponseError
-from mavedb.lib.validation.constants.urn import (
+from mavedb.lib.validation.urn_re import (
     MAVEDB_SCORE_SET_URN_RE,
     MAVEDB_EXPERIMENT_URN_RE,
-    MAVEDB_EXPERIMENTSET_URN_RE,
+    MAVEDB_EXPERIMENT_SET_URN_RE,
 )
 from typing import Optional, Awaitable, Mapping
 from mavetools.client.util import infer_record_type, validate_dataset_with_create_model
@@ -102,7 +102,7 @@ class Client:
                 record_type = "score_set"
             elif MAVEDB_EXPERIMENT_URN_RE.match(urn):
                 record_type = "experiment"
-            elif MAVEDB_EXPERIMENTSET_URN_RE.match(urn):
+            elif MAVEDB_EXPERIMENT_SET_URN_RE.match(urn):
                 record_type = "experiment_set"
             else:
                 raise ValueError(f"unable to infer record_type for '{urn}'")
