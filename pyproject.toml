@@ -52,9 +52,13 @@ dev = [
 line-length = 120
 
 [tool.hatch.version]
-path = "mavetools/__init__.py"
+path = "src/mavetools/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mavetools"]
 
 [tool.hatch.build.targets.sdist]
-include = [
-    "/mavetools",
+exclude = [
+    "docs",
+    ".github",
 ]
