@@ -46,10 +46,16 @@ dev = [
     "flake8",
     "pre-commit",
     "pytest",
+    "Flake8-pyproject",
+    "mypy",
 ]
 
 [tool.black]
 line-length = 120
+
+[tool.flake8]
+extend-ignore = ["E203", "E501"]
+max-complexity = 10
 
 [tool.hatch.version]
 path = "src/mavetools/__init__.py"
