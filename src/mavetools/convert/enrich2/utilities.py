@@ -11,65 +11,6 @@ from fqfa.constants.translation.table import CODON_TABLE
 from . import constants, exceptions
 
 
-def slicer(seq, size):
-    """
-    Slices a string into chunks of `size`.
-
-    Parameters
-    __________
-    seq : string
-        string to be sliced
-    size : int
-        len of each slice
-
-    Returns
-    _______
-    generator
-        sliced string as generator object
-    """
-    return (seq[pos : pos + size] for pos in range(0, len(seq), size))
-
-
-def translate_dna(wt_sequence, offset=0):
-    """
-    Translates a DNA wild-type sequence starting from an `offset`.
-
-    Parameters
-    ----------
-    wt_sequence : str
-        The wild-type sequence to translate.
-    offset : int
-        Number of bases at the beginning of `wt_sequence` to ignore before
-        beginning translation.
-
-    Returns
-    -------
-    protein_seq : str
-        The translated wild-type sequence.
-
-    Raises
-    ______
-    ValueError
-        If the offset is negative.
-    ValueError
-        If the length of the sequence derived based on offset is not multiple of 3.
-    """
-    if offset < 0:
-        raise ValueError("Offset must not be negative.")
-
-    coding_region = wt_sequence[offset:]
-    if len(coding_region) % 3 != 0:
-        raise ValueError(
-            "Length of sequence derived using an offset of {} is "
-            "not a multiple of 3 and cannot be translated.".format(offset)
-        )
-    protein_seq = ""
-    for codon in slicer(coding_region, 3):
-        # Let if fail loudly for now
-        protein_seq += CODON_TABLE[codon.upper()]
-    return protein_seq
-
-
 def is_null(value):
     """
     Checks if the value of the passed string is null, undefined, none, na, n/a, nan or empty.

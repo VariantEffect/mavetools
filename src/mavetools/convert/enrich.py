@@ -1,6 +1,4 @@
-from typing import Optional
-
-from mavehgvs import Variant, MaveHgvsParseError
+from mavehgvs import Variant
 from fqfa import infer_sequence_type, translate_dna
 from fqfa.constants import AA_CODES
 

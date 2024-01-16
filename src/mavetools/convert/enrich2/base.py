@@ -3,8 +3,9 @@ import re
 import logging
 import numpy as np
 from abc import ABCMeta, abstractmethod
+from more_itertools import batched
+from fqfa.util.translate import translate_dna
 
-# from hgvsp import is_multi
 from mavehgvs import Variant
 from fqfa.constants.iupac.protein import AA_CODES
 from fqfa.validator.validator import dna_bases_validator
@@ -132,8 +133,8 @@ class BaseProgram(metaclass=ABCMeta):
         if dna_bases_validator(seq) is None:
             raise ValueError("{} is not a valid DNA sequence.".format(seq))
         if self.is_coding:
-            self.protein_sequence = utilities.translate_dna(seq, offset=0)
-            self.codons = list(utilities.slicer(seq, 3))
+            self.protein_sequence, _ = translate_dna(seq)
+            self.codons = ["".join(x) for x in batched(seq, 3)]
         self._wt_sequence = seq
 
     @property

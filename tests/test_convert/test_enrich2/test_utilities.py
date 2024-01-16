@@ -5,30 +5,6 @@ import numpy as np
 from mavetools.convert.enrich2 import utilities, constants, exceptions
 
 
-class TestSlicer(unittest.TestCase):
-    def test_slicer_returns_chunks_of_size_n(self):
-        self.assertEqual(list(utilities.slicer("aaabbbccc", 3)), ["aaa", "bbb", "ccc"])
-
-    def test_slicer_returns_clips_if_cannot_chunk(self):
-        self.assertEqual(list(utilities.slicer("aaaabbbbccc", 4)), ["aaaa", "bbbb", "ccc"])
-
-
-class TestTranslateWTSequence(unittest.TestCase):
-    def test_translate_wt_seq_no_offset(self):
-        self.assertEqual(utilities.translate_dna("GTGGCGGAG", offset=0), "VAE")
-
-    def test_translate_wt_seq_with_offset(self):
-        self.assertEqual(utilities.translate_dna("GTGGCGGAG", offset=3), "AE")
-
-    def test_translate_wt_error_not_multiple_of_three(self):
-        with self.assertRaises(ValueError):
-            utilities.translate_dna("GTGG")
-
-    def test_error_offset_negative(self):
-        with self.assertRaises(ValueError):
-            utilities.translate_dna("GTGGCGGAG", offset=-3)
-
-
 class TestIsNull(unittest.TestCase):
     def test_is_null_true_for_none_nan_and_na(self):
         for v in constants.extra_na:
