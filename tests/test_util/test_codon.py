@@ -1,5 +1,5 @@
 import unittest
-from mavetools.convert.codon import codon_sub_to_mavehgvs
+from mavetools.util.codon import codon_sub_to_mavehgvs
 
 
 class TestCodonSubToMaveHgvs(unittest.TestCase):
