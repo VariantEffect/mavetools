@@ -1,18 +1,17 @@
-from typing import Optional
 from fqfa.validator import dna_bases_validator
+from mavehgvs import Variant
 
-__all__ = ["codon_sub_to_mavehgvs"]
+__all__ = ["codon_sub_to_variant"]
 
 
-def codon_sub_to_mavehgvs(
+def codon_sub_to_variant(
     target_codon: str,
     variant_codon: str,
     aa_position: int,
-    target_id: Optional[str] = None,
     prefer_delins: bool = True,
-) -> str:
+) -> Variant:
     """
-    Create a MAVE-HGVS coding variant string describing the change between two codons.
+    Create a MAVE-HGVS variant describing the change between two codons.
 
     Parameters
     ----------
@@ -23,18 +22,15 @@ def codon_sub_to_mavehgvs(
     aa_position : int
         The amino acid position for this codon in the target.
         This will be used to calculate the nucleotide positions.
-    target_id : Optional[str]
-        Optional target identifier for the resulting variant.
-        Default ``None``.
     prefer_delins : bool
-        If True, consecutive two-base changes will be described as a deletion-insertion;
-        otherwise they will be described as two single-nucleotide substitutions.
+        If True, consecutive changes will be described as a deletion-insertion;
+        otherwise they will be described as single-nucleotide substitutions.
         Default ``True``.
 
     Returns
     -------
-    variant_string : str
-        MAVE-HGVS string for the substitution described by this codon.
+    Variant
+        MAVE-HGVS variant object for the substitution described by this codon.
 
     Raises
     ------
@@ -88,7 +84,4 @@ def codon_sub_to_mavehgvs(
         else:  # pragma: nocover
             raise ValueError("invalid codon substitution")
 
-    if target_id is not None:
-        return f"{target_id}:{variant_string}"
-    else:
-        return variant_string
+    return Variant(variant_string)
