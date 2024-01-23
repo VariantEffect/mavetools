@@ -1,5 +1,4 @@
 from mavehgvs import Variant
-from fqfa import infer_sequence_type, translate_dna
 from fqfa.constants import AA_CODES
 
 __all__ = ["seqid_to_variant"]
