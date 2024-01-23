@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Useful functions for manipulating Multiplex Assay of Variant Effect datasets."
 readme = "README.md"
 license = ""
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 authors = [
     { name = "MaveDB Developers", email = "alan.rubin@wehi.edu.au" },
 ]
@@ -49,6 +49,7 @@ dev = [
     "pytest",
     "Flake8-pyproject",
     "mypy",
+    "coverage",
 ]
 
 [tool.black]
