@@ -208,23 +208,24 @@ class Client:
         url_path = "/".join(
             x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data")
         )
-
+        """
+        # TODO: this needs to be updated for the current multi-target validator
         try:
             new_scores_df, new_counts_df = validate_and_standardize_dataframe_pair(
                 scores_df,
                 counts_df,
-                target_seq=score_set["target_gene"]["wt_sequence"]["sequence"],
-                target_seq_type=score_set["target_gene"]["wt_sequence"]["sequence_type"],
+                score_set["target_genes"],
+                None,
             )
         except ValidationError as e:
             print(f"data frames for '{score_set['urn']}' failed to validate: {e}")
             return
-
+        """
         # TODO test this with a really big dataframe
         upload_data = dict()
-        upload_data["scores_file"] = bytes(new_scores_df.to_csv(index=False), encoding="utf-8")
-        if new_counts_df is not None:
-            upload_data["counts_file"] = bytes(new_counts_df.to_csv(index=False), encoding="utf-8")
+        upload_data["scores_file"] = bytes(scores_df.to_csv(index=False), encoding="utf-8")
+        if counts_df is not None:
+            upload_data["counts_file"] = bytes(counts_df.to_csv(index=False), encoding="utf-8")
 
         try:  # to post data
             r = await self.session.request(
