@@ -19,7 +19,7 @@ def infer_record_type(record: Mapping) -> Optional[str]:
         One of "experiment" or "score_set" if the dataset type can be inferred; else None.
     """
     # TODO: make this more specific
-    if all(x in humps.decamelize(record) for x in ("title", "target_gene")):
+    if all(x in humps.decamelize(record) for x in ("title", "target_genes")):
         return "score_set"
     elif "title" in record.keys():
         return "experiment"
