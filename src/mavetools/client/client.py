@@ -55,15 +55,17 @@ class Client:
             base_url = f"//{parse_result.netloc}/"
         self.api_root = parse_result.path
 
+        connector = aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where()), force_close=True)
         self.session = aiohttp.ClientSession(
             base_url=base_url,
-            connector=aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where())),
+            connector=connector,
             raise_for_status=True,
         )
         if auth_token is None:
             self.auth_token = ""
         else:
             self.auth_token = auth_token
+        print("started session using force_close")
 
         self.endpoints = {
             "score_set": "score-sets",
