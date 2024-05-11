@@ -111,7 +111,7 @@ class Client:
         elif record_type not in self.endpoints.keys():
             raise ValueError(f"invalid record_type '{record_type}'")
 
-        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn))
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], urn, ""))
         try:
             async with self.session.get(url_path, headers={"X-API-key": self.auth_token}) as resp:
                 return await resp.json()
@@ -162,7 +162,7 @@ class Client:
         # perform validation
         validate_dataset_with_create_model(dataset)
 
-        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type]))
+        url_path = "/".join(x.strip("/") for x in ("", self.api_root, self.endpoints[record_type], ""))
         urn = None
 
         try:  # to post data
@@ -208,7 +208,7 @@ class Client:
 
         """
         url_path = "/".join(
-            x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data")
+            x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data", "")
         )
         """
         # TODO: this needs to be updated for the current multi-target validator
