@@ -114,6 +114,8 @@ def get_refseq_sequences(refseqs, seq_type='protein'):
         dictionary of {refseq_identifier:sequence}
     """
 
+    Entrez.email = ''
+
     ret_type = 'fasta_cds_aa'
     if seq_type == 'protein':
         ret_type = 'fasta'

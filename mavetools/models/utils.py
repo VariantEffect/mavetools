@@ -1,6 +1,7 @@
 import attr
 import collections
 import os
+import math
 from typing import BinaryIO
 
 from .licence import Licence
@@ -30,6 +31,41 @@ ONE_TO_THREE = {
     'X': 'UNK'
 }
 
+ONE_TO_THREE_LC = {
+    'C': 'Cys',
+    'D': 'Asp',
+    'S': 'Ser',
+    'V': 'Val',
+    'Q': 'Gln',
+    'K': 'Lys',
+    'P': 'Pro',
+    'T': 'Thr',
+    'F': 'Phe',
+    'A': 'Ala',
+    'H': 'His',
+    'G': 'Gly',
+    'I': 'Ile',
+    'L': 'Leu',
+    'R': 'Arg',
+    'W': 'Trp',
+    'N': 'Asn',
+    'Y': 'Tyr',
+    'M': 'Met',
+    'E': 'Glu',
+    'X': 'Unk'
+}
+
+def aac_to_hgvs_pro(aac):
+    aa1 = aac[0]
+    aa2 = aac[-1]
+    pos = aac[1:-1]
+
+    aa1_three_letter = ONE_TO_THREE_LC[aa1]
+    aa2_three_letter = ONE_TO_THREE_LC[aa2]
+
+    hgvs_pro = f'p.{aa1_three_letter}{pos}{aa2_three_letter}'
+
+    return hgvs_pro
 
 def attrs_filter(attr, value):
     """
@@ -109,6 +145,9 @@ def get_variant_type(hgvs_pro):
 
     if hgvs_pro.count('ins') > 0:
         return 'insertion'
+    
+    if hgvs_pro.count('dup') > 0:
+        return 'duplication'
 
     return 'sav'
 
@@ -141,7 +180,7 @@ def median(l):
     return med
 
 
-def score_scale_function(reported_score, median_synonymous, bottom_perc_median):
+def score_scale_function(reported_score, median_synonymous, bottom_perc_median, top_perc_median):
     """
     Scaling function for variant effect scores.
     Based on 'Analysis of Large-Scale Mutagenesis Data To Assess the Impact of Single Amino Acid Substitutions' doi: 10.1534/genetics.117.300064
@@ -173,7 +212,26 @@ def score_scale_function(reported_score, median_synonymous, bottom_perc_median):
         sign = -1
 
     #Addapted scaling function
-    scaled_score = sign * ((reported_score - median_synonymous) / (-1*abs(bottom_perc_median - median_synonymous))) + 1
+    if (sign * (reported_score - median_synonymous)) > 0:
+        stretch = -1*abs(bottom_perc_median - median_synonymous)
+    else:
+        stretch = -1*abs(top_perc_median - median_synonymous)
+
+    if stretch == 0:
+        scaled_score = 1
+    else:
+        scaled_score = sign * ((reported_score - median_synonymous) / stretch) + 1
+
+    return scaled_score
+
+def second_scale(score, min_value, max_value, shift):
+    if shift is None:
+        return score
+    zero_one_score = (score - min_value)
+
+    zero_one_scaled_score = zero_one_score ** (1 / shift)
+
+    scaled_score = zero_one_scaled_score + min_value
 
     return scaled_score
 
@@ -250,11 +308,49 @@ def parseFasta(path=None, new_file=None, lines=None, page=None, left_split=None,
     return seq_map
 
 
-def disect_hgvs_pro(hgvs_pro):
+def disect_hgvs(hgvs):
 
     """
-    Routine to split a hgvs_pro into its parts.
-    Works only for SAV-like hgvs_pro identifiers!!!
+    Routine to split a hgvs into its parts.
+
+    Parameters
+    ----------
+
+    hgvs
+        hgvs identifier.
+
+    Returns
+    -------
+
+    precursor
+        hgvs precursor symbol (for example "p." for protein hgvs_pro)
+
+    parts
+        list with disected hgvs mutation identifiers
+    """
+
+    precursor = hgvs[:2]
+    hgvs_body = hgvs[2:]
+
+    if len(hgvs_body) < 4:
+        muts = [('invalid', hgvs_body)]
+
+    elif hgvs_body[0] == '[':
+        muts = []
+
+        for mut in hgvs_body[1:-1].split(';'):
+            muts.append(disect_hgvs_mut(mut))
+
+    else:
+        muts = [disect_hgvs_mut(hgvs_body)]
+
+    return precursor, muts
+
+
+def disect_hgvs_pro_sav(hgvs_pro):
+
+    """
+    Routine to split a SAV hgvs_pro into its parts.
 
     Parameters
     ----------
@@ -264,6 +360,9 @@ def disect_hgvs_pro(hgvs_pro):
 
     Returns
     -------
+
+    precursor
+        hgvs precursor symbol (for example "p." for protein hgvs_pro)
 
     left_part
         Wildtype amino acid of the SAV.
@@ -275,10 +374,110 @@ def disect_hgvs_pro(hgvs_pro):
         Position of the SAV in the corresponding protein sequence.
     """
 
-    left_part = hgvs_pro[:5]
-    right_part = hgvs_pro[-3:]
-    pos = int(hgvs_pro[5:-3])
+    precursor = hgvs_pro[:2]
+    hgvs_body = hgvs_pro[2:]
+
+    left_part, right_part, pos = disect_hgvs_single_pos(hgvs_body)
+    return precursor, left_part, right_part, pos
+
+
+def disect_hgvs_single_pos(hgvs_single_pos):
+
+    if hgvs_single_pos.count(':') > 0:
+        hgvs_single_pos = hgvs_single_pos.rsplit(':',1)[1]
+    if hgvs_single_pos[:2] == 'p.':
+        hgvs_single_pos = hgvs_single_pos[2:]
+
+    left_part = hgvs_single_pos[:3]
+    if hgvs_single_pos[-1] == '=':
+        right_part = hgvs_single_pos[-1]
+        pos = int(hgvs_single_pos[3:-1])
+    else:
+        right_part = hgvs_single_pos[-3:]
+        pos = int(hgvs_single_pos[3:-3])
     return left_part, right_part, pos
+
+def disect_hgvs_mut(hgvs_mut):
+
+    if len(hgvs_mut) < 4 or hgvs_mut[-1] == '?':
+        return 'invalid', hgvs_mut
+
+    if hgvs_mut.count('_') > 0:
+
+        if hgvs_mut.count('delins') > 0:
+            separator = 'delins'
+        elif hgvs_mut.count('ins') > 0:
+            separator = 'ins'
+        elif hgvs_mut.count('del') > 0:
+            separator = 'del'
+        else:
+            print(hgvs_mut)
+            sys.exit(1)
+
+        left_tuple, right_body = hgvs_mut.split('_')
+        left_part = left_tuple[:3]
+        left_pos = int(left_tuple[3:])
+
+        if right_body.count('delins') > 0:
+            separator = 'delins'
+        elif right_body.count('del') > 0:
+            separator = 'del'
+        elif right_body.count('ins') > 0:
+            separator = 'ins'
+        else:
+            print(hgvs_mut)
+            sys.exit(1)
+        right_tuple,tail = right_body.split(separator)
+        right_part = right_tuple[:3]
+        right_pos = int(right_tuple[3:])
+
+        return 'indel', left_part, left_pos, right_part, right_pos, f'{separator}{tail}'
+    
+    elif hgvs_mut.count('del') > 0 or hgvs_mut.count('ins') > 0:
+        """TODO
+        if hgvs_mut.count('delins') > 0:
+            separator = 'delins'
+        elif hgvs_mut.count('ins') > 0:
+            separator = 'ins'
+        elif hgvs_mut.count('del') > 0:
+            separator = 'del'
+        """
+        return 'invalid', hgvs_mut
+
+    elif hgvs_mut.count('fs') > 0:
+        if hgvs_mut.count('fs*') > 0:
+            mut_body, fs_number = hgvs_mut.split('fs*')
+            left_part, right_part, pos = disect_hgvs_single_pos(mut_body)
+            return 'frameshift', left_part, right_part, pos, f'fs*{fs_number}'
+        else:
+            left_part = hgvs_mut[:3]
+            pos = int(hgvs_mut[3:-2])
+            right_part = 'fs'
+            return 'frameshift', left_part, right_part, pos, ''
+
+    else:
+        left_part, right_part, pos = disect_hgvs_single_pos(hgvs_mut)
+        return 'sav', left_part, right_part, pos
+
+
+def apply_offset_to_hgvs_mut_parts(parts, offset):
+    if parts[0] == 'invalid':
+        return parts[1]
+    elif parts[0] == 'sav':
+        left_part, right_part, pos = parts[1:]
+        new_pos = pos + offset
+        return f'{left_part}{new_pos}{right_part}'
+    elif parts[0] == 'frameshift':
+        left_part, right_part, pos, tail = parts[1:]
+        new_pos = pos + offset
+        return f'{left_part}{new_pos}{right_part}{tail}'
+    else:
+        left_part, left_pos, right_part, right_pos, tail = parts[1:]
+        new_left_pos = left_pos + offset
+        new_right_pos = right_pos + offset
+
+        return f'{left_part}{new_left_pos}_{right_part}{new_right_pos}{tail}'
+
 
 def apply_offset_to_hgvs_pro(hgvs_pro, offset):
 
@@ -304,10 +503,16 @@ def apply_offset_to_hgvs_pro(hgvs_pro, offset):
     if offset == 0:
         return hgvs_pro
 
-    left_part, right_part, old_pos = disect_hgvs_pro(hgvs_pro)
-
-    new_pos = old_pos + offset
-    new_hgvs_pro = f'{left_part}{new_pos}{right_part}'
+    precursor, muts = disect_hgvs(hgvs_pro)
+    if len(muts) == 1:
+        new_mut = apply_offset_to_hgvs_mut_parts(muts[0], offset)
+        new_hgvs_pro = f'{precursor}{new_mut}'
+    else:
+        new_muts = []
+        for mut in muts:
+            new_muts.append(apply_offset_to_hgvs_mut_parts(mut, offset))
+        internal_string = ';'.join(new_muts)
+        new_hgvs_pro = f'{precursor}[{internal_string}]'
     return new_hgvs_pro
 
 
@@ -350,8 +555,8 @@ def offset_loop(seq, offset, hgvs_pros, urn, verbosity = 0):
 
     for hgvs_pro in hgvs_pros:
 
-        left_part, right_part, old_pos = disect_hgvs_pro(hgvs_pro)
-        wt_aa_three_letter = left_part[2:].upper()
+        precursor, left_part, right_part, old_pos = disect_hgvs_pro_sav(hgvs_pro)
+        wt_aa_three_letter = left_part.upper()
 
         new_pos = old_pos + offset
         try:

@@ -15,32 +15,41 @@ class ReferenceSequence:
 
 
 @attr.s
-class SequenceOffset(ExternalIdentifier):
+class SequenceIdentifier():
     """
-    Instantiates SequenceOffset and declares attributes
+    Instantiates SequenceIdentifier and declares attributes
     """
 
+    identifier: ExternalIdentifier = attr.ib(kw_only=True)
     offset: int = attr.ib(kw_only=True)
 
 
 @attr.s
-class ReferenceGenome:
+class Taxonomy:
     """
-    Instantiates SequenceOffset and declares attributes
+    Instantiates Taxonomy and declares attributes
     """
 
-    short_name: str = attr.ib(kw_only=True)
-    organism_name: str = attr.ib(kw_only=True, default=None)
-    assembly_identifier: ExternalIdentifier = attr.ib(kw_only=True, default=None)
-
+    taxId: str = attr.ib(kw_only=True)
+    organismName: str = attr.ib(kw_only=True, default=None)
+    commonName: str = attr.ib(kw_only=True)
+    rank: str = attr.ib(kw_only=True)
+    hasDescribedSpeciesName: bool = attr.ib(kw_only=True)
+    articleReference: str = attr.ib(kw_only=True)
+    genomeId: str = attr.ib(kw_only=True)
+    id: int = attr.ib(kw_only=True)
+    url: str = attr.ib(kw_only=True)
 
 @attr.s
-class ReferenceMap:
+class TargetSequence:
     """
-    Instantiates ReferenceMap object and declares genome attribute
+    Instantiates targetSequence object and declares attributes
     """
 
-    genome: ReferenceGenome = attr.ib(kw_only=True)
+    sequenceType: str = attr.ib(kw_only=True)
+    sequence: str = attr.ib(kw_only=True)
+    label: str = attr.ib(kw_only=True)
+    taxonomy: Taxonomy = attr.ib(kw_only=True)
 
 
 @attr.s
@@ -50,14 +59,12 @@ class Target:
     """
 
     name: str = attr.ib(kw_only=True)
+    category: str = attr.ib(kw_only=True)
+    ExternalIdentifiers: List[SequenceIdentifier] = attr.ib(kw_only=True)
     reference_sequence: ReferenceSequence = attr.ib(kw_only=True)
-    uniprot: SequenceOffset = attr.ib(kw_only=True)
-    ensembl: SequenceOffset = attr.ib(kw_only=True)
-    refseq: SequenceOffset = attr.ib(kw_only=True)
-
-    reference_maps: List[ReferenceMap] = attr.ib(kw_only=True)
-    scoreset: str = attr.ib(kw_only=True)
-    type: str = attr.ib(kw_only=True)
+    id: int = attr.ib(kw_only=True)
+    targetSequence: TargetSequence = attr.ib(kw_only=True)
+    targetAccession: str = attr.ib(kw_only=True)
 
 
 @attr.s

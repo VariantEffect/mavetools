@@ -67,8 +67,11 @@ class ClientTemplate:
                 if not scoreset['target']['reference_maps'][0]['genome']['organism_name'] in organisms:
                     continue
 
+            if len(scoreset['targetGenes']) == 0:
+                continue
+
             if experiment_types is not None:
-                if not scoreset['target']['type'] in experiment_types:
+                if not scoreset['targetGenes'][0]['category'] in experiment_types:
                     continue
 
             urn = scoreset['urn']
@@ -79,10 +82,10 @@ class ClientTemplate:
 
             scoreset_obj = ScoreSet.deserialize(scoreset)
 
-            experiment_urn = scoreset_obj.experiment
+            experiment_urn = scoreset_obj.urn
 
             if not experiment_urn in experiment_dict:
-                experiment_dict[experiment_urn] = MlExperiment(experiment_urn, {}, scoreset_obj)
+                experiment_dict[experiment_urn] = MlExperiment(experiment_urn, {}, scoreset_obj, urn = experiment_urn)
 
             experiment_dict[experiment_urn].scoreset_dict[urn] = scoreset_obj
 
@@ -108,8 +111,9 @@ class LocalClient(ClientTemplate):
         """
 
         self.local_instance_path = local_instance_path
-        self.meta_data_folder = f'{local_instance_path}/meta_data/'
-        self.scoreset_data_folder = f'{local_instance_path}/scoreset_data/'
+        self.meta_data_folder = f'{local_instance_path}/main.json'
+        self.main_meta_data = self.load_meta_data(self.meta_data_folder)
+        self.scoreset_data_folder = f'{local_instance_path}/csv/'
 
     def get_meta_file_path(self, urn):
         """
@@ -169,7 +173,6 @@ class LocalClient(ClientTemplate):
         meta_data
             json object of the metadata.
         """
-
         return self.load_meta_data(self.get_meta_file_path(urn))
 
     def search_database(self, keywords = None, organisms = None, experiment_types = ['Protein coding']):
@@ -195,13 +198,12 @@ class LocalClient(ClientTemplate):
             A dictionary mapping experiment urns to their corresponding MLExperiment objects.
         """
 
+        experiment_sets = self.main_meta_data['experimentSets']
         scoreset_list = []
-        for meta_data_file in os.listdir(self.meta_data_folder):
-            meta_data_file = f'{self.meta_data_folder}{meta_data_file}'
-
-            meta_data = self.load_meta_data(meta_data_file)
-
-            scoreset_list.append(meta_data)
+        for experiment_set in experiment_sets:
+            for experiment in experiment_set['experiments']:
+                for scoreSet in experiment['scoreSets']:
+                    scoreset_list.append(scoreSet)
 
         experiment_dict = self.parse_json_scoreset_list(scoreset_list, keywords = keywords, organisms = organisms, experiment_types = experiment_types)
 
@@ -227,7 +229,17 @@ class LocalClient(ClientTemplate):
 
         scoreset_list = []
         for urn in urns:
-            scoreset_list.append(self.get_meta_data(urn))
+            try:
+                scoreset_list.append(self.get_meta_data(urn))
+            except:
+                n = 1
+                while True:
+                    try:
+                        scoreset_urn = f'{urn}-{n}'
+                        scoreset_list.append(self.get_meta_data(scoreset_urn))
+                    except:
+                        break
+                    n += 1
         return self.parse_json_scoreset_list(scoreset_list)
 
     def retrieve_score_table(self, urn):
@@ -248,7 +260,9 @@ class LocalClient(ClientTemplate):
             Scoreset table as a string.
         """
 
-        score_table_file = f'{self.scoreset_data_folder}/{urn}.csv'
+        fixed_urn = urn.replace(':',"-")
+
+        score_table_file = f'{self.scoreset_data_folder}/{fixed_urn}.scores.csv'
         f = open(score_table_file, 'r')
         text = f.read()
         f.close()

@@ -10,6 +10,7 @@ local_instance_path = f'../../localMaveDB'
 
 #Provide paths to where the dataset will be written.
 outfile = 'mave_db_scaled_savs.fasta'
+statfile = 'mave_db_scaled_savs_statistics.tsv'
 seq_file = 'mave_db_scaled_savs_only_sequences.fasta'
 
 #Create a local client object
@@ -27,8 +28,11 @@ ml_dataset.retrieve_data(client)
 #Aggregate scoresets from same experiments
 ml_dataset.aggregate_scoresetdata()
 
+ml_dataset.write_dataset_statistics(statfile)
+
 #Scale all SAV effect scores
 ml_dataset.scale_all_savs()
 
 #Write the output
 ml_dataset.write_scaled_sav_fasta(outfile, sequences_only_file = seq_file)
+
