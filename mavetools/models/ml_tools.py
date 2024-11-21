@@ -87,6 +87,7 @@ class MlDataset:
     def load_protein_gym(self, path_to_reference_file):
 
         proteingym_folder = path_to_reference_file.rsplit('/',1)[0]
+        proteingym_folder = f'{proteingym_folder}/DMS_ProteinGym_substitutions'
 
         f = open(path_to_reference_file, 'r')
         lines = f.readlines()
