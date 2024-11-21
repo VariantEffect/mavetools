@@ -464,7 +464,7 @@ class MlDataset:
         f.close()
 
 
-    def write_scaled_sav_fasta(self, outfile, sequences_only_file = None):
+    def write_scaled_sav_fasta(self, outfile, sequences_only_file = None, write_unscaled = False):
 
         """
         Writes scaled SAV effect scores together with their full target protein sequences to a fasta file.
@@ -499,6 +499,8 @@ class MlDataset:
             except:
                 print(f'Couldnt find scaled sav scores for {experiment_urn}')
                 continue
+            if write_unscaled:
+                scaled_sav_scores = self.experiments[experiment_urn].experiment_scoresetdata.sav_scores
             if len(scaled_sav_scores) == 0:
                 print(f'Scaled sav scores empty for {experiment_urn}')
                 continue

@@ -169,7 +169,7 @@ class ScoreSetData:
     got aggregated (see aggregate_scoresetdata function of MLdataset class in ml_tools.py).
     """
 
-    def __init__(self, urn, csv_formatted_data, hgvs_pro_pos = None, score_pos = None, hgvs_nt_pos = None, score_dict = None):
+    def __init__(self, urn, csv_formatted_data, hgvs_pro_pos = None, score_pos = None, hgvs_nt_pos = None, score_dict = None, verbosity = 1):
 
         """
         Initialization routine that builds a class instance from the content of a MaveDB scoreset table.
@@ -200,7 +200,8 @@ class ScoreSetData:
         """
 
         #Initialize several class attributes
-        print(f'Initialising ScoreSetData Object for {urn} {score_dict is None}')
+        if verbosity >= 2:
+            print(f'Initialising ScoreSetData Object for {urn} {score_dict is None}')
         self.urn = urn
         if score_dict is None:
             self.score_dict = {}
