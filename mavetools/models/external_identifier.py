@@ -11,5 +11,6 @@ class ExternalIdentifier:
     identifier: str = attr.ib(kw_only=True)
     # optional attributes
     url: Optional[str] = attr.ib(kw_only=True, default=None)
-    dbversion: Optional[str] = attr.ib(kw_only=True, default=None)
-    dbname: Optional[str] = attr.ib(kw_only=True, default=None)
+    dbVersion: Optional[str] = attr.ib(kw_only=True, default=None)
+    dbName: Optional[str] = attr.ib(kw_only=True, default=None)
+    referebceHtml: Optional[str] = attr.ib(kw_only=True, default=None)
