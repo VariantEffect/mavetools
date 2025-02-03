@@ -35,6 +35,7 @@ dependencies = [
     "mavedb>=2023.1",
     "pyhumps",
     "more-itertools",
+    "tqdm",
 ]
 
 [project.urls]
@@ -50,6 +51,7 @@ dev = [
     "Flake8-pyproject",
     "mypy",
     "coverage",
+    "sphinx",
 ]
 
 [tool.black]
