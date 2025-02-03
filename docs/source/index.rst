@@ -1,13 +1,8 @@
-.. mavetools documentation master file, created by
-   sphinx-quickstart on Thu Sep 30 13:39:15 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 MaveTools
 =========
 MaveTools is a pure Python Module for bioinformatics and computational biology.
-It features useful tools that can be applied to MAVE data, such as that available
-at https://www.mavedb.org/.
+It features useful tools that can be applied to MAVE data, including that available
+from `MaveDB <https://www.mavedb.org/>`_.
 
 Install MaveTools using pip::
 
@@ -17,12 +12,17 @@ Building a local copy of the documentation requires the following additional pac
 
     pip3 install sphinx
 
+To install MaveTools as a developer please use::
+
+    pip3 install mavetools[dev]
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   client
    convert
-   mavedf
+   util
 
 
 Indices and tables
