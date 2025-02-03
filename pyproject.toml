@@ -7,7 +7,7 @@ name = "mavetools"
 dynamic = ["version"]
 description = "Useful functions for manipulating Multiplex Assay of Variant Effect datasets."
 readme = "README.md"
-license = ""
+license = "BSD-3-Clause"
 requires-python = ">=3.8"
 authors = [
     { name = "MaveDB Developers", email = "alan.rubin@wehi.edu.au" },
