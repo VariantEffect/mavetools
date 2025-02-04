@@ -36,6 +36,8 @@ dependencies = [
     "pyhumps",
     "more-itertools",
     "tqdm",
+    "hgvs",  # required by accession-based dataframe validator
+    "cdot",  # required by accession-based dataframe validator
 ]
 
 [project.urls]
