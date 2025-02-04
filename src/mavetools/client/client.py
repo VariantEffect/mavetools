@@ -2,9 +2,11 @@ import os
 import ssl
 import certifi
 import aiohttp
+import json
 import pandas as pd
 import humps
 from urllib.parse import urlparse
+from urllib.request import urlopen
 from aiohttp import ClientResponseError
 from mavedb.lib.validation.urn_re import (
     MAVEDB_SCORE_SET_URN_RE,
@@ -13,8 +15,9 @@ from mavedb.lib.validation.urn_re import (
 )
 from typing import Optional, Awaitable, Mapping
 from mavetools.client.util import infer_record_type, validate_dataset_with_create_model
-from mavedb.lib.validation.dataframe import validate_and_standardize_dataframe_pair
-from mavedb.lib.validation.exceptions import ValidationError
+
+# from mavedb.lib.validation.dataframe import validate_and_standardize_dataframe_pair
+# from mavedb.lib.validation.exceptions import ValidationError
 
 MAVEDB_API_URL = "MAVEDB_API_URL"
 
@@ -54,10 +57,11 @@ class Client:
         else:
             base_url = f"//{parse_result.netloc}/"
         self.api_root = parse_result.path
+        self.base_url = base_url
 
         connector = aiohttp.TCPConnector(ssl=ssl.create_default_context(cafile=certifi.where()), force_close=True)
         self.session = aiohttp.ClientSession(
-            base_url=base_url,
+            base_url=self.base_url,
             connector=connector,
             raise_for_status=True,
         )
@@ -72,6 +76,23 @@ class Client:
             "experiment": "experiments",
             "experiment_set": "experiment-sets",
         }
+
+    def api_version(self) -> str:
+        """
+        Return the API version number.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        str
+            The version number.
+        """
+        with urlopen(f"{self.base_url[:-1]}{self.api_root}api/version") as response:
+            r = response.read()
+            return json.loads(r)["version"]
 
     async def get_dataset(self, urn: str, record_type: Optional[str] = None) -> Awaitable[str]:
         """
@@ -208,7 +229,8 @@ class Client:
 
         """
         url_path = "/".join(
-            x.strip("/") for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data", "")
+            x.strip("/")
+            for x in ("", self.api_root, self.endpoints["score_set"], score_set["urn"], "variants", "data", "")
         )
         """
         # TODO: this needs to be updated for the current multi-target validator
