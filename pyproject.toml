@@ -64,6 +64,9 @@ line-length = 120
 extend-ignore = ["E203", "E501"]
 max-complexity = 10
 
+[tool.isort]
+profile = "black"
+
 [tool.hatch.version]
 path = "src/mavetools/__init__.py"
 
