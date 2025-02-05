@@ -4,7 +4,6 @@ import numpy as np
 
 from . import LOGGER, constants, utilities
 
-
 logger = logging.getLogger(LOGGER)
 
 

@@ -1,4 +1,5 @@
 import unittest
+
 from mavetools.util.codon import codon_sub_to_variant
 
 

@@ -1,16 +1,16 @@
+import logging
 import os
 import re
-import logging
-import numpy as np
 from abc import ABCMeta, abstractmethod
-from more_itertools import batched
-from fqfa.util.translate import translate_dna
 
-from mavehgvs import Variant
+import numpy as np
 from fqfa.constants.iupac.protein import AA_CODES
+from fqfa.util.translate import translate_dna
 from fqfa.validator.validator import dna_bases_validator
+from mavehgvs import Variant
+from more_itertools import batched
 
-from . import LOGGER, utilities, constants
+from . import LOGGER, constants, utilities
 
 logger = logging.getLogger(LOGGER)
 

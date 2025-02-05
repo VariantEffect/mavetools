@@ -1,22 +1,20 @@
-import re
-import os
-from itertools import groupby
 import logging
+import os
+import re
+from itertools import groupby
 from operator import itemgetter
 
-from mavehgvs.patterns import dna, protein
-from tqdm import tqdm
-from fqfa.constants.translation.table import CODON_TABLE
-from fqfa.constants.iupac.protein import AA_CODES
-
-import pandas as pd
 import numpy as np
+import pandas as pd
+from fqfa.constants.iupac.protein import AA_CODES
+from fqfa.constants.translation.table import CODON_TABLE
+from mavehgvs.patterns import dna, protein
 from pandas.testing import assert_index_equal
+from tqdm import tqdm
 
 from mavetools.convert.enrich2.format import *
 
-from . import LOGGER, constants, utilities, validators, base
-
+from . import LOGGER, base, constants, utilities, validators
 
 __all__ = [
     "Enrich2",

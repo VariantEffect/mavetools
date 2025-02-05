@@ -1,5 +1,7 @@
 import unittest
+
 from mavehgvs import Variant
+
 from mavetools.convert.enrich import seqid_to_variant
 
 

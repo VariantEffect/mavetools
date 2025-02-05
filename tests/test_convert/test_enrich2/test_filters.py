@@ -1,11 +1,9 @@
 import unittest
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-
-from mavetools.convert.enrich2 import constants
-from mavetools.convert.enrich2 import filters
+from mavetools.convert.enrich2 import constants, filters
 
 
 class TestDropNaColumns(unittest.TestCase):

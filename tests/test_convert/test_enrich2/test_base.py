@@ -3,8 +3,8 @@ import unittest
 from unittest.mock import patch
 
 from mavehgvs.exceptions import MaveHgvsParseError
-from mavetools.convert.enrich2 import base, exceptions
 
+from mavetools.convert.enrich2 import base, exceptions
 from tests import ProgramTestCase
 
 

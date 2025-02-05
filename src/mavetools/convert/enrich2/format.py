@@ -5,7 +5,6 @@ from pandas.testing import assert_index_equal
 
 from . import LOGGER, constants, filters, utilities, validators
 
-
 __all__ = [
     "apply_offset",
     "drop_null",

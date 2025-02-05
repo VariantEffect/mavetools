@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from mavetools.convert.enrich2 import utilities, constants, exceptions
+from mavetools.convert.enrich2 import constants, exceptions, utilities
 
 
 class TestIsNull(unittest.TestCase):

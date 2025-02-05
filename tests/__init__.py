@@ -1,11 +1,10 @@
+import logging
 import os
 import shutil
-import unittest
 import tempfile
+import unittest
 
 import pandas as pd
-
-import logging
 
 logging.disable(logging.CRITICAL)
 

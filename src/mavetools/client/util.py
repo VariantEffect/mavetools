@@ -1,7 +1,8 @@
 from typing import Mapping, Optional
-from mavedb.view_models.score_set import ScoreSetCreate
-from mavedb.view_models.experiment import ExperimentCreate
+
 import humps
+from mavedb.view_models.experiment import ExperimentCreate
+from mavedb.view_models.score_set import ScoreSetCreate
 
 
 def infer_record_type(record: Mapping) -> Optional[str]:

@@ -3,18 +3,14 @@ import logging
 import re
 from abc import ABCMeta, abstractmethod
 
-from mavehgvs.patterns import dna
-
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
+from mavehgvs.patterns import dna
 from numpy.testing import assert_array_equal
-
 from tqdm import tqdm
 
-from joblib import Parallel, delayed
-
-from mavetools.convert.enrich2 import constants, utilities, exceptions, LOGGER
-
+from mavetools.convert.enrich2 import LOGGER, constants, exceptions, utilities
 
 logger = logging.getLogger(LOGGER)
 

@@ -1,5 +1,5 @@
-from mavehgvs import Variant
 from fqfa.constants import AA_CODES
+from mavehgvs import Variant
 
 __all__ = ["seqid_to_variant"]
 

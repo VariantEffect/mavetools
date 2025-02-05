@@ -1,6 +1,6 @@
+import logging.config
 import os
 import sys
-import logging.config
 
 __all__ = [
     "base",

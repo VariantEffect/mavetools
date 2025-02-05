@@ -1,12 +1,11 @@
 import re
 from collections import OrderedDict
 
-from mavehgvs.patterns import dna, protein
-from mavehgvs import Variant
-
 import numpy as np
 import pandas as pd
 from fqfa.constants.translation.table import CODON_TABLE
+from mavehgvs import Variant
+from mavehgvs.patterns import dna, protein
 
 from . import constants, exceptions
 
