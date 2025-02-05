@@ -51,6 +51,7 @@ dev = [
     "pre-commit",
     "pytest",
     "Flake8-pyproject",
+    "flake8-bugbear",
     "isort",
     "mypy",
     "coverage",
@@ -61,8 +62,10 @@ dev = [
 line-length = 120
 
 [tool.flake8]
-extend-ignore = ["E203", "E501"]
+extend-select = ["B950"]
+extend-ignore = ["E203", "E501", "E701"]
 max-complexity = 10
+max-line-length = 120
 
 [tool.isort]
 profile = "black"
