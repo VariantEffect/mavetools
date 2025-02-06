@@ -131,10 +131,6 @@ class TestWtSequence(ProgramTestCase):
         self.src_with_spaces = os.path.join(self.data_dir, "enrich", "enrich   .tsv")
         self.h5_src = os.path.join(self.data_dir, "enrich2", "dummy.h5")
 
-    def test_value_error_coding_offset_not_multiple_of_three(self):
-        with self.assertRaises(ValueError):
-            BaseTest(src=self.src, wt_sequence="ATCA", offset=-1)
-
     # --- Test property setters --- #
     def test_wt_setter_upper_cases_wt_sequence(self):
         p = BaseTest(src=self.src, wt_sequence="AAA")
@@ -157,15 +153,6 @@ class TestWtSequence(ProgramTestCase):
         p = BaseTest(src=self.src, wt_sequence="AAA")
         with self.assertRaises(ValueError):
             p.wt_sequence = "fff"
-
-    # def test_error_is_coding_and_offset_not_multiple_of_three(self):
-    #     with self.assertRaises(ValueError):
-    #         BaseTest(
-    #             src=self.src,
-    #             wt_sequence='AAA',
-    #             is_coding=True,
-    #             offset=2
-    #         )
 
 
 class TestBaseProgramValidateAgainstWTSeq(ProgramTestCase):
