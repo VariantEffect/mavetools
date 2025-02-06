@@ -1,10 +1,10 @@
-convert
+Convert
 =======
+Convert contains functions to convert other output file formats into MaveDB's preferred format.
 
-convert contains useful data conversion functions.
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-.. automodule:: mavetools.convert.convert
-   :members:
-
-.. automodule:: mavetools.convert.enrich
-   :members:
+   enrich
+   enrich2

@@ -1,0 +1,83 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mavetools"
+dynamic = ["version"]
+description = "Useful functions for manipulating Multiplex Assay of Variant Effect datasets."
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">=3.8"
+authors = [
+    { name = "MaveDB Developers", email = "alan.rubin@wehi.edu.au" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "aiohttp",
+    "attrs",
+    "certifi",
+    "fqfa>=1.2.1",
+    "idutils",
+    "mavehgvs",
+    "numpy",
+    "pandas",
+    "requests",
+    "tables",
+    "joblib",
+    "mavedb>=2023.1",
+    "pyhumps",
+    "more-itertools",
+    "tqdm",
+    "hgvs",  # required by accession-based dataframe validator
+    "cdot",  # required by accession-based dataframe validator
+]
+
+[project.urls]
+repository = "https://github.com/VariantEffect/mavetools"
+documentation = "https://mavedb.org/docs/mavetools/"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "pre-commit",
+    "pytest",
+    "Flake8-pyproject",
+    "flake8-bugbear",
+    "isort",
+    "mypy",
+    "coverage",
+    "sphinx",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+extend-select = ["B950"]
+extend-ignore = ["E203", "E501", "E701"]
+max-complexity = 10
+max-line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.hatch.version]
+path = "src/mavetools/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mavetools"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "docs",
+    ".github",
+]

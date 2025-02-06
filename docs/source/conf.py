@@ -19,11 +19,11 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "mavetools"
-copyright = "2020-2021, Alan F Rubin"
+copyright = "2020-2025, MaveDB Developers"
 author = "Alan F Rubin"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.1"
+release = "0.3.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -35,7 +35,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.autosectionlabel",
 ]
 nbsphinx_allow_errors = True
 
