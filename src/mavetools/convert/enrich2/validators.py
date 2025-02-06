@@ -180,7 +180,7 @@ def validate_datasets_define_same_variants(scores_df, counts_df):
             )
 
 
-def validate_mavedb_compliance(df, df_type):
+def validate_mavedb_compliance(df, df_type):  # noqa: max-complexity 12
     """Runs MaveDB compliance checks."""
     tqdm.pandas(desc="Validating variants")
 

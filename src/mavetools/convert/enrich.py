@@ -4,7 +4,7 @@ from mavehgvs import Variant
 __all__ = ["seqid_to_variant"]
 
 
-def seqid_to_variant(seqid: str, wtseq: str) -> Variant:
+def seqid_to_variant(seqid: str, wtseq: str) -> Variant:  # noqa: max-complexity 11
     """Convert an Enrich seqid string to a mavehgvs Variant object.
 
     Enrich seqids consist of two comma-delimited lists separated by a '-' character.

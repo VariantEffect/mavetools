@@ -17,7 +17,7 @@ __all__ = [
 logger = logging.getLogger(LOGGER)
 
 
-def apply_offset(variant, offset, enrich2=None):
+def apply_offset(variant, offset, enrich2=None):  # noqa: max-complexity 12
     """
     Applies offset to the base position of a HGVS point mutation by
     subtraction. If `enrich2` is not None, then additional validation

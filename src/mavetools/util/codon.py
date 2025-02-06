@@ -4,7 +4,7 @@ from mavehgvs import Variant
 __all__ = ["codon_sub_to_variant"]
 
 
-def codon_sub_to_variant(
+def codon_sub_to_variant(  # noqa: max-complexity 14
     target_codon: str,
     variant_codon: str,
     aa_position: int,

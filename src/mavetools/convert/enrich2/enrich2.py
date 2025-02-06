@@ -12,7 +12,12 @@ from mavehgvs.patterns import dna, protein
 from pandas.testing import assert_index_equal
 from tqdm import tqdm
 
-from mavetools.convert.enrich2.format import *
+from mavetools.convert.enrich2.format import (
+    apply_offset,
+    drop_null,
+    get_count_dataframe_by_condition,
+    get_replicate_score_dataframes,
+)
 
 from . import LOGGER, base, constants, utilities, validators
 

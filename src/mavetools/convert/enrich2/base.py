@@ -207,23 +207,13 @@ class BaseProgram(metaclass=ABCMeta):
 
         zero_based_pos = variant.position - int(self.one_based)
         if zero_based_pos < 0:
-            raise IndexError(
-                ("Encountered a negative position in {}. " "Positions might not be one-based.").format(
-                    variant, self.one_based
-                )
-            )
+            raise IndexError((f"Encountered a negative position in {variant}."))
 
         if zero_based_pos >= len(self.wt_sequence):
             raise IndexError(
-                "Position {} (index {}) extends beyond the maximum index {} in "
-                "the wild-type sequence {} with length {}.".format(
-                    zero_based_pos + int(self.one_based),
-                    zero_based_pos,
-                    variant,
-                    len(self.wt_sequence) - 1,
-                    self.wt_sequence,
-                    len(self.wt_sequence),
-                )
+                f"Position {zero_based_pos + int(self.one_based)} (index {zero_based_pos}) in variant {variant} "
+                f"extends beyond the maximum index {len(self.wt_sequence) - 1} in the wild-type sequence "
+                f"{self.wt_sequence} with length {len(self.wt_sequence)}."
             )
 
         wt_ref_nt = self.wt_sequence[zero_based_pos]

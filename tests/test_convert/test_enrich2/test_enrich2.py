@@ -12,7 +12,7 @@ from mavehgvs.patterns import dna, protein
 from pandas.testing import assert_index_equal
 
 import mavetools
-from mavetools.convert.enrich2 import constants, enrich2, exceptions
+from mavetools.convert.enrich2 import constants, enrich2, exceptions, format
 from tests import ProgramTestCase
 
 
@@ -87,7 +87,7 @@ class TestFlattenColumnNames(unittest.TestCase):
         )
 
     def test_column_names_combine_columns_using_ordering(self):
-        cnames = enrich2.flatten_column_names(self.df.loc[:, pd.IndexSlice["c1", :, :]].columns, ordering=(2, 1))
+        cnames = format.flatten_column_names(self.df.loc[:, pd.IndexSlice["c1", :, :]].columns, ordering=(2, 1))
         self.assertListEqual(cnames, ["t0_rep1", "t1_rep1", "t0_rep2", "t1_rep2"])
 
 

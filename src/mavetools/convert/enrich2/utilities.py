@@ -3,7 +3,6 @@ from collections import OrderedDict
 
 import numpy as np
 import pandas as pd
-from fqfa.constants.translation.table import CODON_TABLE
 from mavehgvs import Variant
 from mavehgvs.patterns import dna, protein
 
@@ -138,7 +137,7 @@ class NucleotideSubstitutionEvent(object):
 
         """
         if self.silent:
-            return "{pos}=".format(ref=self.ref, pos=self.position)
+            return "{pos}=".format(pos=self.position)
         return "{pos}{ref}>{alt}".format(ref=self.ref, pos=self.position, alt=self.alt)
 
     def codon_position(self, one_based=True):
@@ -317,42 +316,6 @@ def split_variant(variant):
     if len(variant.split(";")) > 1:
         return ["{}.{}".format(prefix, e.strip()) for e in variant[3:-1].split(";")]
     return [variant]
-
-
-"""
-def normalize_variant(variant):
-    # TODO
-    # I do not think this function is actually used?
-    Replaces `???` for `Xaa` in protein variants and `X` for `N` in
-    nucleotide variants to be compliant with the `hgvs` biocommons package.
-    Use for enrich and enrich2 inputs.
-    Parameters
-    ----------
-    variant : str, optional.
-        HGVS_ formatted string.
-    Returns
-    -------
-    str
-    if variant is None:
-        return variant
-    variant = variant.strip()
-    if variant.startswith("p"):
-        # Sub groups of three first.
-        variant = re.sub(r"\?{3}", "Xaa", variant)
-        # Sub singular next.
-        variant = re.sub(r"\?", "X", variant)
-    elif (
-        variant.startswith("n")  # non-coding DNA sequence
-        or variant.startswith("c")  # coding DNA sequence
-        or variant.startswith("g")  # linear genomic DNA sequence
-        or variant.startswith("m")  # mitochondrial genomic DNA sequence
-        or variant.startswith("o")  # circular genomic DNA sequence
-    ):
-        variant = variant.replace(r"X", "N")
-    elif variant.startswith("r"):
-        variant = variant.replace(r"x", "n")
-    return variant.strip()
-"""
 
 
 def format_variant(variant):
