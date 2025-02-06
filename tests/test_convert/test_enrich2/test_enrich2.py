@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from fqfa.constants.iupac.protein import AA_CODES
 from fqfa.constants.translation.table import CODON_TABLE
-from mavehgvs.exceptions import *
+from mavehgvs.exceptions import MaveHgvsParseError
 from mavehgvs.patterns import dna, protein
 from pandas.testing import assert_index_equal
 
@@ -141,7 +141,7 @@ class TestReplicateScoreDataFrames(ProgramTestCase):
 
     def test_adds_rep_id_to_score_and_SE(self):
         cnd_dfs = enrich2.get_replicate_score_dataframes(self.store)
-        for cnd, df in cnd_dfs.items():
+        for _, df in cnd_dfs.items():
             for c_name in df.columns:
                 if c_name not in ("score", "SE", "epsilon"):
                     self.assertIn("rep", c_name.lower())
