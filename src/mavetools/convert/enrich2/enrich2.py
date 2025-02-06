@@ -243,8 +243,10 @@ class Enrich2(base.BaseProgram):
         Combine the destination, basename, condition name, and data frame type
         (expected to be "counts" or "scores") into a filepath for the output
         file.
-        Returns a file path in the form:
-            `<dst>/mavedb_<basename>_<counts|scores>_<element>_<condition>.csv`
+
+        Returns a file path in the form
+        `<dst>/mavedb_<basename>_<counts|scores>_<element>_<condition>.csv`
+
         All spaces in the file name (but NOT the destination path name) are
         replaced by underscores.
         """
@@ -328,8 +330,8 @@ class Enrich2(base.BaseProgram):
     def parse_mixed_variant(self, variant, element=None):
         """
         Parses a comma delimited string containing mixed HGVS syntax. Each
-        variant is expcted to follow the format:
-            c.<event> (p.<event>), c.<event> (p.<event>), ...
+        variant is expcted to follow the format
+        `c.<event> (p.<event>), c.<event> (p.<event>), ...`
         """
         variant = utilities.format_variant(variant)
         if variant in constants.special_variants:

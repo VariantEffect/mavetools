@@ -4,6 +4,10 @@ MaveTools is a pure Python Module for bioinformatics and computational biology.
 It features useful tools that can be applied to MAVE data, including that available
 from `MaveDB <https://www.mavedb.org/>`_.
 
+The installation process currently requires inclusion of several challenging dependencies
+including hgvs and cdot.
+These dependencies will be removed from mavetools in a future version.
+
 Install MaveTools using pip::
 
     pip3 install mavetools

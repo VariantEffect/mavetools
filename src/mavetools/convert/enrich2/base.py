@@ -19,7 +19,7 @@ __all__ = ["BaseProgram"]
 
 class BaseProgram(metaclass=ABCMeta):
     """
-    Convert an input file to MaveDB_ compliant counts or scores files.
+    Convert an input file to MaveDB-compliant counts or scores files.
     Attributes
     ----------
     src : str
@@ -28,25 +28,25 @@ class BaseProgram(metaclass=ABCMeta):
         A DNA wild-type sequence used for validation and inference of
         missing variants.
     offset : int, optional.
-        The number of bases to clip in `wt_seq`. The resulting sequence
+        The number of bases to clip in ``wt_seq``. The resulting sequence
         should be the coding sequence analyzed in your input file.
     dst : str, optional.
         Directory to save the output to. Inferred as input directory if not
         specified.
     one_based : bool, optional.
-        Set to `True` if input positions are `1-based` relative to the
+        Set to ``True`` if input positions are 1-based relative to the
         the wild-type sequence specified.
     skip_header_rows : int
         The number of lines to skip at the start of the input file. Only
-        applicable to `Excel` and `TSV` files.
-    skip_header_rows : int
+        applicable to Excel and TSV files.
+    skip_footer_rows : int
         The number of lines to skip at the end of the input file. Only
-        applicable to `Excel` and `TSV` files.
+        applicable to Excel and TSV files.
     sheet_name : str, optional.
         Name of the sheet to convert in an excel file.
     score_column : str, optional.
         The name of the column in the input column which you would like to
-        set as the MaveDB score column. Ignored if `input_type` is 'counts'.
+        set as the MaveDB score column. Ignored if ``input_type`` is ``'counts'``.
         Used when input is tsv.
 
     hgvs_column : str, optional.
@@ -55,7 +55,7 @@ class BaseProgram(metaclass=ABCMeta):
         dataset.
 
     is_coding : bool, optional.
-        Set as `True` if the input variants are contain coding HGVS syntax
+        Set as ``True`` if the input variants are contain coding HGVS syntax
         (c or p). Used only in Enrich2.
     input_type : str, optional.
         The MaveDB file type. Can be either 'scores' or 'counts'.
@@ -163,7 +163,7 @@ class BaseProgram(metaclass=ABCMeta):
 
     def convert(self):
         """
-        Runs `parse_input` and saves the Mavedb-compliant result to file.
+        Runs ``parse_input`` and saves the Mavedb-compliant result to file.
         """
         logger.info("Processing file {}".format(self.src))
         mave_df = self.parse_input(self.load_input_file())
